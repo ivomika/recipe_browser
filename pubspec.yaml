@@ -11,6 +11,9 @@ dependencies:
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.8
+  # navigation
+  go_router: ^14.8.1
+  url_strategy: ^0.3.0
 
 dev_dependencies:
   flutter_test:
