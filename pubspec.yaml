@@ -14,11 +14,27 @@ dependencies:
   # navigation
   go_router: ^14.8.1
   url_strategy: ^0.3.0
+  # storage
+  shared_preferences: ^2.5.3
+  drift: ^2.26.0
+  drift_flutter: ^0.2.4
+  json_annotation: ^4.9.0
+  #utils
+  equatable: ^2.0.7
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^5.0.0
+  # native
+  flutter_launcher_icons: ^0.14.3
+  flutter_native_splash: ^2.4.6
+  rename: ^3.0.2
+  # storage
+  drift_dev: ^2.26.0
+  json_serializable: ^6.9.4
+  # builder
+  build_runner: ^2.4.15
 
 flutter:
   uses-material-design: true
