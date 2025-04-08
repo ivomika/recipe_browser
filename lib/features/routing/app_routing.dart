@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:recipe_browser/features/not_found_page/widget/not_found_page.dart';
 
 final appRouting = GoRouter(
     initialLocation: '/home',
-    errorBuilder: (context, state) => Center(child: Text('error')),
+    errorBuilder: (context, state) => NotFoundPage(),
     routes: [
         // home,
         // sets,
