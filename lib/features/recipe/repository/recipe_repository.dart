@@ -52,7 +52,7 @@ class RecipeRepository implements IRecipeRepository{
     await (_database
         .update(_database.recipeModel)
         ..where((recipe) => recipe.uuid.equals(model.id)))
-        .replace(model.toDataModel());
+        .write(model.toDataModel());
 
     return await byId(model.id);
   }

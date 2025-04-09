@@ -11,12 +11,9 @@ class RecipeModel extends Table{
 }
 
 extension RecipeToModel on Recipe{
-  RecipeModelData toDataModel(){
-    return RecipeModelData(
-        id: 0,
-        uuid: id,
-        createdAt: createdAt,
-        title: title,
+  RecipeModelCompanion toDataModel(){
+    return RecipeModelCompanion(
+        title: Value(title)
     );
   }
 }

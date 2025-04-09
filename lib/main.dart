@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:recipe_browser/features/drift/drift.dart';
+import 'package:recipe_browser/features/recipe/bloc/recipe_bloc.dart';
 import 'package:recipe_browser/features/recipe/recipe.dart';
 import 'package:url_strategy/url_strategy.dart';
 
@@ -27,6 +28,9 @@ class MyApp extends StatelessWidget {
         RepositoryProvider<IRecipeRepository>(
           create: (context) => RecipeRepository(context.read<DriftAppDatabase>()),
         ),
+        BlocProvider<RecipeBloc>(
+          create: (context) => RecipeBloc(context.read<IRecipeRepository>())
+        )
       ],
       child: MaterialApp.router(
         title: 'Flutter Demo',

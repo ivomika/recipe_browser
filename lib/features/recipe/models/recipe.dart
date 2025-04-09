@@ -8,4 +8,9 @@ class Recipe extends BaseModel{
     required super.createdAt,
     required this.title,
   });
+
+  @override
+  String toString() {
+    return 'Recipe{id: $id, createdAt: $createdAt, title: $title}';
+  }
 }
