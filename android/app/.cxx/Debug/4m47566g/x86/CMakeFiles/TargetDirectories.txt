@@ -1,0 +1,2 @@
+C:/Users/ivomika/Documents/workspace/dev/recipe_browser/android/app/.cxx/Debug/4m47566g/x86/CMakeFiles/edit_cache.dir
+C:/Users/ivomika/Documents/workspace/dev/recipe_browser/android/app/.cxx/Debug/4m47566g/x86/CMakeFiles/rebuild_cache.dir
