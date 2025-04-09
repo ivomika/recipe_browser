@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:recipe_browser/features/not_found_page/widget/not_found_page.dart';
+import 'package:recipe_browser/features/home/home.dart';
+import 'package:recipe_browser/features/not_found/not_found.dart';
 
 final appRouting = GoRouter(
     initialLocation: '/home',
@@ -33,7 +34,7 @@ final appRouting = GoRouter(
                 StatefulShellBranch(
                     routes: [
                         GoRoute(
-                            builder: (context, state) => Center(child: Text('/home')),
+                            builder: (context, state) => HomePage(),
                             path: '/home'
                         )
                     ]
