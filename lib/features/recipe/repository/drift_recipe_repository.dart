@@ -1,31 +1,28 @@
 import 'package:recipe_browser/features/drift/drift.dart';
-import 'package:recipe_browser/features/recipe/models/recipe.dart';
-import 'package:recipe_browser/features/recipe/repository/i_recipe_repository.dart';
+import 'package:recipe_browser/features/recipe/recipe.dart';
 
-class RecipeRepository implements IRecipeRepository{
+class DriftRecipeRepository implements IRecipeRepository{
   final DriftAppDatabase _database;
 
-  const RecipeRepository(DriftAppDatabase database)
+  const DriftRecipeRepository(DriftAppDatabase database)
       : _database = database ;
 
   @override
   Future<List<Recipe>> all() async {
-    final query = _database.select(_database.recipeModel);
-    final results = await query.get();
+    final recipes = await _database.select(_database.recipeModel).get();
 
-    return results.map(
-        (e) => e.toLocalModel()
-    ).toList();
+    return recipes.map((e) => e.toLocalModel()).toList(growable: false);
   }
 
   @override
   Future<Recipe> byId(String id) async {
-    final model = await (_database
+    final recipe = await (_database
         .select(_database.recipeModel)
         ..where((recipe) => recipe.uuid.equals(id)))
         .getSingle();
 
-    return model.toLocalModel();
+
+    return recipe.toLocalModel();
   }
 
   @override

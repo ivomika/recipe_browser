@@ -8,22 +8,40 @@ class RecipeModel extends Table{
   TextColumn get uuid => text().clientDefault(() => Uuid().v4())();
   DateTimeColumn get createdAt => dateTime().clientDefault(() => DateTime.now())();
   TextColumn get title => text()();
+  TextColumn get description => text()();
+  IntColumn get cookingTime => integer()();
+  IntColumn get kilocalories => integer()();
+  TextColumn get ingredients => text().map(const IngredientConverter())();
 }
 
-extension RecipeToModel on Recipe{
+extension RecipeConverterToDataModel on Recipe{
   RecipeModelCompanion toDataModel(){
     return RecipeModelCompanion(
-        title: Value(title)
+        title: Value(title),
+        description: Value(description),
+        cookingTime: Value(cookingTime),
+        kilocalories: Value(kilocalories),
+        ingredients: Value(
+            ingredients.map(
+                (e) => e.toDataModel()
+            ).toList(growable: false)
+        )
     );
   }
 }
 
-extension ModelToRecipe on RecipeModelData{
+extension RecipeConverterToLocalModel on RecipeModelData{
   Recipe toLocalModel(){
     return Recipe(
         id: uuid,
         createdAt: createdAt,
-        title: title
+        title: title,
+        description: description,
+        cookingTime: cookingTime,
+        kilocalories: kilocalories,
+        ingredients: ingredients.map(
+            (e) => e.toLocalModel()
+        ).toList(growable: false)
     );
   }
 }

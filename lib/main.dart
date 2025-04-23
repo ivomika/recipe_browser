@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
           create: (context) => DriftAppDatabase(),
         ),
         RepositoryProvider<IRecipeRepository>(
-          create: (context) => RecipeRepository(context.read<DriftAppDatabase>()),
+          create: (context) => DriftRecipeRepository(context.read<DriftAppDatabase>()),
         ),
         BlocProvider<RecipeBloc>(
           create: (context) => RecipeBloc(context.read<IRecipeRepository>())

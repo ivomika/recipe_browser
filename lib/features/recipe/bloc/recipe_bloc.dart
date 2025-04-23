@@ -23,11 +23,11 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     await Future.delayed(Duration(seconds: 4));
     try{
       final recipes = await _repository.all();
+      print(recipes);
       emit(RecipeLoaded(recipes: recipes));
     } catch (e){
       emit(RecipeError(error: e.toString()));
     }
-
   }
 
   FutureOr<void> _createRecipe(CreateRecipe event, Emitter<RecipeState> emit) async {

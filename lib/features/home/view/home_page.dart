@@ -22,7 +22,22 @@ class HomePage extends StatelessWidget {
                   Recipe(
                             id: '',
                             createdAt: DateTime.now(),
-                            title: 'Title ${DateTime.now()}'
+                            title: 'Title ${DateTime.now()}',
+                            description: 'Description ${DateTime.now()}',
+                            cookingTime: 60,
+                            kilocalories: 550,
+                            ingredients: [
+                              Ingredient(
+                                  name: 'Курица',
+                                  count: 1,
+                                  type: CountType.piece
+                              ),
+                              Ingredient(
+                                  name: 'Мясо',
+                                  count: 1,
+                                  type: CountType.piece
+                              ),
+                            ]
                   )
                 ));
               },
@@ -43,9 +58,36 @@ class HomePage extends StatelessWidget {
                     return Expanded(
                         child: ListView.builder(
                             itemCount: state.recipes.length,
-                            itemBuilder: (context, index) => ListTile(
-                                title: Text(state.recipes.elementAt(index).title),
-                                subtitle: Text(state.recipes.elementAt(index).id),
+                            itemBuilder: (context, index) => Card(
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 8,
+                                    horizontal: 16
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'id: ${state.recipes.elementAt(index).id}'
+                                    ),
+                                    Text(
+                                      'Заголовок: ${state.recipes.elementAt(index).title}'
+                                    ),
+                                    Text(
+                                      'Описание: ${state.recipes.elementAt(index).description}'
+                                    ),
+                                    Text(
+                                      'Время готовки: ${state.recipes.elementAt(index).cookingTime.toString()}'
+                                    ),
+                                    Text(
+                                      'Калории: ${state.recipes.elementAt(index).kilocalories.toString()}'
+                                    ),
+                                    Text(
+                                      'Кол-во ингредиентов: ${state.recipes.elementAt(index).ingredients.length.toString()}'
+                                    ),
+                                  ],
+                                ),
+                              ),
                             )
                         )
                     );

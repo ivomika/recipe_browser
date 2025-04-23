@@ -38,8 +38,41 @@ class $RecipeModelTable extends RecipeModel
   late final GeneratedColumn<String> title = GeneratedColumn<String>(
       'title', aliasedName, false,
       type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _descriptionMeta =
+      const VerificationMeta('description');
   @override
-  List<GeneratedColumn> get $columns => [id, uuid, createdAt, title];
+  late final GeneratedColumn<String> description = GeneratedColumn<String>(
+      'description', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _cookingTimeMeta =
+      const VerificationMeta('cookingTime');
+  @override
+  late final GeneratedColumn<int> cookingTime = GeneratedColumn<int>(
+      'cooking_time', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _kilocaloriesMeta =
+      const VerificationMeta('kilocalories');
+  @override
+  late final GeneratedColumn<int> kilocalories = GeneratedColumn<int>(
+      'kilocalories', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  @override
+  late final GeneratedColumnWithTypeConverter<List<IngredientModel>, String>
+      ingredients = GeneratedColumn<String>('ingredients', aliasedName, false,
+              type: DriftSqlType.string, requiredDuringInsert: true)
+          .withConverter<List<IngredientModel>>(
+              $RecipeModelTable.$converteringredients);
+  @override
+  List<GeneratedColumn> get $columns => [
+        id,
+        uuid,
+        createdAt,
+        title,
+        description,
+        cookingTime,
+        kilocalories,
+        ingredients
+      ];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -67,6 +100,30 @@ class $RecipeModelTable extends RecipeModel
     } else if (isInserting) {
       context.missing(_titleMeta);
     }
+    if (data.containsKey('description')) {
+      context.handle(
+          _descriptionMeta,
+          description.isAcceptableOrUnknown(
+              data['description']!, _descriptionMeta));
+    } else if (isInserting) {
+      context.missing(_descriptionMeta);
+    }
+    if (data.containsKey('cooking_time')) {
+      context.handle(
+          _cookingTimeMeta,
+          cookingTime.isAcceptableOrUnknown(
+              data['cooking_time']!, _cookingTimeMeta));
+    } else if (isInserting) {
+      context.missing(_cookingTimeMeta);
+    }
+    if (data.containsKey('kilocalories')) {
+      context.handle(
+          _kilocaloriesMeta,
+          kilocalories.isAcceptableOrUnknown(
+              data['kilocalories']!, _kilocaloriesMeta));
+    } else if (isInserting) {
+      context.missing(_kilocaloriesMeta);
+    }
     return context;
   }
 
@@ -84,6 +141,15 @@ class $RecipeModelTable extends RecipeModel
           .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at'])!,
       title: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}title'])!,
+      description: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}description'])!,
+      cookingTime: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}cooking_time'])!,
+      kilocalories: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}kilocalories'])!,
+      ingredients: $RecipeModelTable.$converteringredients.fromSql(
+          attachedDatabase.typeMapping.read(
+              DriftSqlType.string, data['${effectivePrefix}ingredients'])!),
     );
   }
 
@@ -91,6 +157,9 @@ class $RecipeModelTable extends RecipeModel
   $RecipeModelTable createAlias(String alias) {
     return $RecipeModelTable(attachedDatabase, alias);
   }
+
+  static TypeConverter<List<IngredientModel>, String> $converteringredients =
+      const IngredientConverter();
 }
 
 class RecipeModelData extends DataClass implements Insertable<RecipeModelData> {
@@ -98,11 +167,19 @@ class RecipeModelData extends DataClass implements Insertable<RecipeModelData> {
   final String uuid;
   final DateTime createdAt;
   final String title;
+  final String description;
+  final int cookingTime;
+  final int kilocalories;
+  final List<IngredientModel> ingredients;
   const RecipeModelData(
       {required this.id,
       required this.uuid,
       required this.createdAt,
-      required this.title});
+      required this.title,
+      required this.description,
+      required this.cookingTime,
+      required this.kilocalories,
+      required this.ingredients});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -110,6 +187,13 @@ class RecipeModelData extends DataClass implements Insertable<RecipeModelData> {
     map['uuid'] = Variable<String>(uuid);
     map['created_at'] = Variable<DateTime>(createdAt);
     map['title'] = Variable<String>(title);
+    map['description'] = Variable<String>(description);
+    map['cooking_time'] = Variable<int>(cookingTime);
+    map['kilocalories'] = Variable<int>(kilocalories);
+    {
+      map['ingredients'] = Variable<String>(
+          $RecipeModelTable.$converteringredients.toSql(ingredients));
+    }
     return map;
   }
 
@@ -119,6 +203,10 @@ class RecipeModelData extends DataClass implements Insertable<RecipeModelData> {
       uuid: Value(uuid),
       createdAt: Value(createdAt),
       title: Value(title),
+      description: Value(description),
+      cookingTime: Value(cookingTime),
+      kilocalories: Value(kilocalories),
+      ingredients: Value(ingredients),
     );
   }
 
@@ -130,6 +218,11 @@ class RecipeModelData extends DataClass implements Insertable<RecipeModelData> {
       uuid: serializer.fromJson<String>(json['uuid']),
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
       title: serializer.fromJson<String>(json['title']),
+      description: serializer.fromJson<String>(json['description']),
+      cookingTime: serializer.fromJson<int>(json['cookingTime']),
+      kilocalories: serializer.fromJson<int>(json['kilocalories']),
+      ingredients:
+          serializer.fromJson<List<IngredientModel>>(json['ingredients']),
     );
   }
   @override
@@ -140,16 +233,31 @@ class RecipeModelData extends DataClass implements Insertable<RecipeModelData> {
       'uuid': serializer.toJson<String>(uuid),
       'createdAt': serializer.toJson<DateTime>(createdAt),
       'title': serializer.toJson<String>(title),
+      'description': serializer.toJson<String>(description),
+      'cookingTime': serializer.toJson<int>(cookingTime),
+      'kilocalories': serializer.toJson<int>(kilocalories),
+      'ingredients': serializer.toJson<List<IngredientModel>>(ingredients),
     };
   }
 
   RecipeModelData copyWith(
-          {int? id, String? uuid, DateTime? createdAt, String? title}) =>
+          {int? id,
+          String? uuid,
+          DateTime? createdAt,
+          String? title,
+          String? description,
+          int? cookingTime,
+          int? kilocalories,
+          List<IngredientModel>? ingredients}) =>
       RecipeModelData(
         id: id ?? this.id,
         uuid: uuid ?? this.uuid,
         createdAt: createdAt ?? this.createdAt,
         title: title ?? this.title,
+        description: description ?? this.description,
+        cookingTime: cookingTime ?? this.cookingTime,
+        kilocalories: kilocalories ?? this.kilocalories,
+        ingredients: ingredients ?? this.ingredients,
       );
   RecipeModelData copyWithCompanion(RecipeModelCompanion data) {
     return RecipeModelData(
@@ -157,6 +265,15 @@ class RecipeModelData extends DataClass implements Insertable<RecipeModelData> {
       uuid: data.uuid.present ? data.uuid.value : this.uuid,
       createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
       title: data.title.present ? data.title.value : this.title,
+      description:
+          data.description.present ? data.description.value : this.description,
+      cookingTime:
+          data.cookingTime.present ? data.cookingTime.value : this.cookingTime,
+      kilocalories: data.kilocalories.present
+          ? data.kilocalories.value
+          : this.kilocalories,
+      ingredients:
+          data.ingredients.present ? data.ingredients.value : this.ingredients,
     );
   }
 
@@ -166,13 +283,18 @@ class RecipeModelData extends DataClass implements Insertable<RecipeModelData> {
           ..write('id: $id, ')
           ..write('uuid: $uuid, ')
           ..write('createdAt: $createdAt, ')
-          ..write('title: $title')
+          ..write('title: $title, ')
+          ..write('description: $description, ')
+          ..write('cookingTime: $cookingTime, ')
+          ..write('kilocalories: $kilocalories, ')
+          ..write('ingredients: $ingredients')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(id, uuid, createdAt, title);
+  int get hashCode => Object.hash(id, uuid, createdAt, title, description,
+      cookingTime, kilocalories, ingredients);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -180,7 +302,11 @@ class RecipeModelData extends DataClass implements Insertable<RecipeModelData> {
           other.id == this.id &&
           other.uuid == this.uuid &&
           other.createdAt == this.createdAt &&
-          other.title == this.title);
+          other.title == this.title &&
+          other.description == this.description &&
+          other.cookingTime == this.cookingTime &&
+          other.kilocalories == this.kilocalories &&
+          other.ingredients == this.ingredients);
 }
 
 class RecipeModelCompanion extends UpdateCompanion<RecipeModelData> {
@@ -188,29 +314,53 @@ class RecipeModelCompanion extends UpdateCompanion<RecipeModelData> {
   final Value<String> uuid;
   final Value<DateTime> createdAt;
   final Value<String> title;
+  final Value<String> description;
+  final Value<int> cookingTime;
+  final Value<int> kilocalories;
+  final Value<List<IngredientModel>> ingredients;
   const RecipeModelCompanion({
     this.id = const Value.absent(),
     this.uuid = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.title = const Value.absent(),
+    this.description = const Value.absent(),
+    this.cookingTime = const Value.absent(),
+    this.kilocalories = const Value.absent(),
+    this.ingredients = const Value.absent(),
   });
   RecipeModelCompanion.insert({
     this.id = const Value.absent(),
     this.uuid = const Value.absent(),
     this.createdAt = const Value.absent(),
     required String title,
-  }) : title = Value(title);
+    required String description,
+    required int cookingTime,
+    required int kilocalories,
+    required List<IngredientModel> ingredients,
+  })  : title = Value(title),
+        description = Value(description),
+        cookingTime = Value(cookingTime),
+        kilocalories = Value(kilocalories),
+        ingredients = Value(ingredients);
   static Insertable<RecipeModelData> custom({
     Expression<int>? id,
     Expression<String>? uuid,
     Expression<DateTime>? createdAt,
     Expression<String>? title,
+    Expression<String>? description,
+    Expression<int>? cookingTime,
+    Expression<int>? kilocalories,
+    Expression<String>? ingredients,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
       if (uuid != null) 'uuid': uuid,
       if (createdAt != null) 'created_at': createdAt,
       if (title != null) 'title': title,
+      if (description != null) 'description': description,
+      if (cookingTime != null) 'cooking_time': cookingTime,
+      if (kilocalories != null) 'kilocalories': kilocalories,
+      if (ingredients != null) 'ingredients': ingredients,
     });
   }
 
@@ -218,12 +368,20 @@ class RecipeModelCompanion extends UpdateCompanion<RecipeModelData> {
       {Value<int>? id,
       Value<String>? uuid,
       Value<DateTime>? createdAt,
-      Value<String>? title}) {
+      Value<String>? title,
+      Value<String>? description,
+      Value<int>? cookingTime,
+      Value<int>? kilocalories,
+      Value<List<IngredientModel>>? ingredients}) {
     return RecipeModelCompanion(
       id: id ?? this.id,
       uuid: uuid ?? this.uuid,
       createdAt: createdAt ?? this.createdAt,
       title: title ?? this.title,
+      description: description ?? this.description,
+      cookingTime: cookingTime ?? this.cookingTime,
+      kilocalories: kilocalories ?? this.kilocalories,
+      ingredients: ingredients ?? this.ingredients,
     );
   }
 
@@ -242,6 +400,19 @@ class RecipeModelCompanion extends UpdateCompanion<RecipeModelData> {
     if (title.present) {
       map['title'] = Variable<String>(title.value);
     }
+    if (description.present) {
+      map['description'] = Variable<String>(description.value);
+    }
+    if (cookingTime.present) {
+      map['cooking_time'] = Variable<int>(cookingTime.value);
+    }
+    if (kilocalories.present) {
+      map['kilocalories'] = Variable<int>(kilocalories.value);
+    }
+    if (ingredients.present) {
+      map['ingredients'] = Variable<String>(
+          $RecipeModelTable.$converteringredients.toSql(ingredients.value));
+    }
     return map;
   }
 
@@ -251,7 +422,11 @@ class RecipeModelCompanion extends UpdateCompanion<RecipeModelData> {
           ..write('id: $id, ')
           ..write('uuid: $uuid, ')
           ..write('createdAt: $createdAt, ')
-          ..write('title: $title')
+          ..write('title: $title, ')
+          ..write('description: $description, ')
+          ..write('cookingTime: $cookingTime, ')
+          ..write('kilocalories: $kilocalories, ')
+          ..write('ingredients: $ingredients')
           ..write(')'))
         .toString();
   }
@@ -274,6 +449,10 @@ typedef $$RecipeModelTableCreateCompanionBuilder = RecipeModelCompanion
   Value<String> uuid,
   Value<DateTime> createdAt,
   required String title,
+  required String description,
+  required int cookingTime,
+  required int kilocalories,
+  required List<IngredientModel> ingredients,
 });
 typedef $$RecipeModelTableUpdateCompanionBuilder = RecipeModelCompanion
     Function({
@@ -281,6 +460,10 @@ typedef $$RecipeModelTableUpdateCompanionBuilder = RecipeModelCompanion
   Value<String> uuid,
   Value<DateTime> createdAt,
   Value<String> title,
+  Value<String> description,
+  Value<int> cookingTime,
+  Value<int> kilocalories,
+  Value<List<IngredientModel>> ingredients,
 });
 
 class $$RecipeModelTableFilterComposer
@@ -303,6 +486,21 @@ class $$RecipeModelTableFilterComposer
 
   ColumnFilters<String> get title => $composableBuilder(
       column: $table.title, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get description => $composableBuilder(
+      column: $table.description, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get cookingTime => $composableBuilder(
+      column: $table.cookingTime, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get kilocalories => $composableBuilder(
+      column: $table.kilocalories, builder: (column) => ColumnFilters(column));
+
+  ColumnWithTypeConverterFilters<List<IngredientModel>, List<IngredientModel>,
+          String>
+      get ingredients => $composableBuilder(
+          column: $table.ingredients,
+          builder: (column) => ColumnWithTypeConverterFilters(column));
 }
 
 class $$RecipeModelTableOrderingComposer
@@ -325,6 +523,19 @@ class $$RecipeModelTableOrderingComposer
 
   ColumnOrderings<String> get title => $composableBuilder(
       column: $table.title, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get description => $composableBuilder(
+      column: $table.description, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get cookingTime => $composableBuilder(
+      column: $table.cookingTime, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get kilocalories => $composableBuilder(
+      column: $table.kilocalories,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get ingredients => $composableBuilder(
+      column: $table.ingredients, builder: (column) => ColumnOrderings(column));
 }
 
 class $$RecipeModelTableAnnotationComposer
@@ -347,6 +558,19 @@ class $$RecipeModelTableAnnotationComposer
 
   GeneratedColumn<String> get title =>
       $composableBuilder(column: $table.title, builder: (column) => column);
+
+  GeneratedColumn<String> get description => $composableBuilder(
+      column: $table.description, builder: (column) => column);
+
+  GeneratedColumn<int> get cookingTime => $composableBuilder(
+      column: $table.cookingTime, builder: (column) => column);
+
+  GeneratedColumn<int> get kilocalories => $composableBuilder(
+      column: $table.kilocalories, builder: (column) => column);
+
+  GeneratedColumnWithTypeConverter<List<IngredientModel>, String>
+      get ingredients => $composableBuilder(
+          column: $table.ingredients, builder: (column) => column);
 }
 
 class $$RecipeModelTableTableManager extends RootTableManager<
@@ -379,24 +603,40 @@ class $$RecipeModelTableTableManager extends RootTableManager<
             Value<String> uuid = const Value.absent(),
             Value<DateTime> createdAt = const Value.absent(),
             Value<String> title = const Value.absent(),
+            Value<String> description = const Value.absent(),
+            Value<int> cookingTime = const Value.absent(),
+            Value<int> kilocalories = const Value.absent(),
+            Value<List<IngredientModel>> ingredients = const Value.absent(),
           }) =>
               RecipeModelCompanion(
             id: id,
             uuid: uuid,
             createdAt: createdAt,
             title: title,
+            description: description,
+            cookingTime: cookingTime,
+            kilocalories: kilocalories,
+            ingredients: ingredients,
           ),
           createCompanionCallback: ({
             Value<int> id = const Value.absent(),
             Value<String> uuid = const Value.absent(),
             Value<DateTime> createdAt = const Value.absent(),
             required String title,
+            required String description,
+            required int cookingTime,
+            required int kilocalories,
+            required List<IngredientModel> ingredients,
           }) =>
               RecipeModelCompanion.insert(
             id: id,
             uuid: uuid,
             createdAt: createdAt,
             title: title,
+            description: description,
+            cookingTime: cookingTime,
+            kilocalories: kilocalories,
+            ingredients: ingredients,
           ),
           withReferenceMapper: (p0) => p0
               .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
