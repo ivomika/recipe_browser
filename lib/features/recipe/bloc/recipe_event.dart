@@ -18,5 +18,5 @@ class CreateRecipe extends RecipeEvent{
   CreateRecipe(this.recipe);
 
   @override
-  List<Object?> get props => super.props..addAll([]);
+  List<Object?> get props => super.props..addAll([recipe]);
 }

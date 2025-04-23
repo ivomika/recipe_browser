@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:recipe_browser/features/drift/drift.dart';
 import 'package:recipe_browser/features/recipe/bloc/recipe_bloc.dart';
 import 'package:recipe_browser/features/recipe/recipe.dart';
+import 'package:recipe_browser/features/recipe_detail/bloc/recipe_detail_bloc.dart';
+import 'package:recipe_browser/features/theme/extension/offset_extension.dart';
 import 'package:url_strategy/url_strategy.dart';
 
 import 'features/routing/app_routing.dart';
@@ -30,6 +32,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<RecipeBloc>(
           create: (context) => RecipeBloc(context.read<IRecipeRepository>())
+        ),
+        BlocProvider<RecipeDetailBloc>(
+          create: (context) => RecipeDetailBloc(context.read<IRecipeRepository>())
         )
       ],
       child: MaterialApp.router(
@@ -37,6 +42,15 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true,
+          extensions: [
+            OffsetExtension(
+                verySmall: 4,
+                small: 8,
+                normal: 16,
+                large: 24,
+                veryLarge: 32
+            )
+          ]
         ),
         routerConfig: appRouting,
       ),

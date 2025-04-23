@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:recipe_browser/features/home/home.dart';
 import 'package:recipe_browser/features/not_found/not_found.dart';
+import 'package:recipe_browser/features/recipe_detail/recipe_detail.dart';
 
 final appRouting = GoRouter(
     initialLocation: '/home',
@@ -58,7 +59,6 @@ final appRouting = GoRouter(
         // /recipe/:id/detail,
         // /recipe/:id/steps,
         GoRoute(
-            // builder: (context, state) => Center(child: Text('/recipe/${state.pathParameters['id']}')),
             redirect: (context, state){
                 if (state.fullPath == '/recipe/:id') {
                     return '/recipe/${state.pathParameters['id']}/detail';
@@ -92,7 +92,9 @@ final appRouting = GoRouter(
                         StatefulShellBranch(
                             routes: [
                                 GoRoute(
-                                    builder: (context, state) => Center(child: Text('/${state.pathParameters['id']}/detail')),
+                                    builder: (context, state) => RecipeDetailPage(
+                                      id: state.pathParameters['id']
+                                    ),
                                     path: 'detail'
                                 )
                             ]

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:recipe_browser/features/recipe/bloc/recipe_bloc.dart';
 import 'package:recipe_browser/features/recipe/recipe.dart';
 
@@ -22,9 +23,9 @@ class HomePage extends StatelessWidget {
                   Recipe(
                             id: '',
                             createdAt: DateTime.now(),
-                            title: 'Title ${DateTime.now()}',
-                            description: 'Description ${DateTime.now()}',
-                            cookingTime: 60,
+                            title: 'Яичные конвертики с сыром и ветчиной в соусе из под',
+                            description: 'Jorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam eu turpis molestie, dictum est a, mattis tellus. Sed dignissim, metus nec fringilla accumsan, risus sem sollicitudin lacus, ut interdum tellus elit sed risus. Maecenas eget condimentum velit, sit amet feugiat lectus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Praesent auctor purus luctus enim egestas, ac scelerisque ante pulvinar. Donec ut rhoncus ex. Suspendisse ac rhoncus nisl, eu tempor urna. Curabitur vel bibendum lorem. Morbi convallis convallis diam sit amet lacinia. Aliquam in elementum tellus.',
+                            cookingTime: 35,
                             kilocalories: 550,
                             ingredients: [
                               Ingredient(
@@ -34,8 +35,8 @@ class HomePage extends StatelessWidget {
                               ),
                               Ingredient(
                                   name: 'Мясо',
-                                  count: 1,
-                                  type: CountType.piece
+                                  count: 200,
+                                  type: CountType.gram
                               ),
                             ]
                   )
@@ -58,36 +59,10 @@ class HomePage extends StatelessWidget {
                     return Expanded(
                         child: ListView.builder(
                             itemCount: state.recipes.length,
-                            itemBuilder: (context, index) => Card(
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 8,
-                                    horizontal: 16
-                                ),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'id: ${state.recipes.elementAt(index).id}'
-                                    ),
-                                    Text(
-                                      'Заголовок: ${state.recipes.elementAt(index).title}'
-                                    ),
-                                    Text(
-                                      'Описание: ${state.recipes.elementAt(index).description}'
-                                    ),
-                                    Text(
-                                      'Время готовки: ${state.recipes.elementAt(index).cookingTime.toString()}'
-                                    ),
-                                    Text(
-                                      'Калории: ${state.recipes.elementAt(index).kilocalories.toString()}'
-                                    ),
-                                    Text(
-                                      'Кол-во ингредиентов: ${state.recipes.elementAt(index).ingredients.length.toString()}'
-                                    ),
-                                  ],
-                                ),
-                              ),
+                            itemBuilder: (context, index) => ListTile(
+                              title: Text(state.recipes.elementAt(index).title),
+                              subtitle: Text(state.recipes.elementAt(index).id),
+                              onTap: () => context.push('/recipe/${state.recipes.elementAt(index).id}'),
                             )
                         )
                     );
