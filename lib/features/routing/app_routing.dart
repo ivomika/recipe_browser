@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:recipe_browser/features/create/create.dart';
 import 'package:recipe_browser/features/home/home.dart';
+import 'package:recipe_browser/features/layouts/layouts.dart';
 import 'package:recipe_browser/features/not_found/not_found.dart';
 import 'package:recipe_browser/features/recipe_detail/recipe_detail.dart';
 
 final appRouting = GoRouter(
     initialLocation: '/home',
+    debugLogDiagnostics: true,
     errorBuilder: (context, state) => NotFoundPage(),
     routes: [
         // home,
@@ -13,24 +16,24 @@ final appRouting = GoRouter(
         // sets/:id,
         StatefulShellRoute.indexedStack(
             builder: (context, state, shell) =>
-                Scaffold(
-                    appBar: AppBar(),
+                NavigationWithAppBarLayout(
                     body: shell,
-                    bottomNavigationBar: NavigationBar(
-                        selectedIndex: shell.currentIndex,
-                        onDestinationSelected: (index) => shell.goBranch(index),
-                        destinations: [
-                            NavigationDestination(
-                                icon: Icon(Icons.home),
-                                label: 'Главная'
-                            ),
-                            NavigationDestination(
-                                icon: Icon(Icons.list_alt),
-                                label: 'Сеты'
-                            ),
-                        ]
-                    ),
-               ),
+                    selectedIndex: shell.currentIndex,
+                    onDestinationSelected: (index) => shell.goBranch(index),
+                    // bottomSheetBuilder: (context, scrollController) => HomeBottomSheet(
+                    //   scrollController: scrollController
+                    // ),
+                    destinations: [
+                      NavigationDestination(
+                          icon: Icon(Icons.home),
+                          label: 'Главная'
+                      ),
+                      NavigationDestination(
+                          icon: Icon(Icons.list_alt),
+                          label: 'Сеты'
+                      ),
+                    ],
+                ),
             branches: [
                 StatefulShellBranch(
                     routes: [
@@ -71,7 +74,6 @@ final appRouting = GoRouter(
                 StatefulShellRoute.indexedStack(
                     builder: (context, state, shell) =>
                         Scaffold(
-                            appBar: AppBar(),
                             body: shell,
                             bottomNavigationBar: NavigationBar(
                                 selectedIndex: shell.currentIndex,
@@ -122,19 +124,27 @@ final appRouting = GoRouter(
         // create/sets,
         // create/tag,
         GoRoute(
-            builder: (context, state) => Center(child: Text('/create')),
+            builder: (context, state) => CreateMenuPage(),
             path: '/create',
             routes: [
               // create/recipe/detail, create/recipe/steps
-              StatefulShellRoute.indexedStack(
-                  builder: (context, state, shell) =>
-                      Scaffold(
-                          appBar: AppBar(),
-                          body: shell,
-                          bottomNavigationBar: NavigationBar(
-                              selectedIndex: shell.currentIndex,
-                              onDestinationSelected: (index) => shell.goBranch(index),
-                              destinations: [
+              GoRoute(
+                  path: 'recipe',
+                  redirect: (context, state) {
+                    if (state.fullPath == '/create/recipe') {
+                      return '/create/recipe/detail';
+                    }
+
+                    return null;
+                  },
+                  routes: [
+                    StatefulShellRoute.indexedStack(
+                        builder: (context, state, shell) =>
+                            NavigationWithAppBarLayout(
+                                body: shell,
+                                selectedIndex: shell.currentIndex,
+                                onDestinationSelected: (index) => shell.goBranch(index),
+                                destinations: [
                                   NavigationDestination(
                                       icon: Icon(Icons.description),
                                       label: 'Детальная'
@@ -143,24 +153,25 @@ final appRouting = GoRouter(
                                       icon: Icon(Icons.double_arrow),
                                       label: 'Шаги'
                                   ),
+                                ]
+                            ),
+                        branches: [
+                          StatefulShellBranch(
+                              routes: [
+                                GoRoute(
+                                    builder: (context, state) => CreateRecipeDetail(),
+                                    path: 'detail'
+                                )
                               ]
                           ),
-                      ),
-                  branches: [
-                    StatefulShellBranch(
-                        routes: [
-                          GoRoute(
-                              builder: (context, state) => Center(child: Text('/create/recipe/detail')),
-                              path: 'recipe/detail'
-                          )
-                        ]
-                    ),
-                    StatefulShellBranch(
-                        routes: [
-                          GoRoute(
-                              builder: (context, state) => Center(child: Text('/create/recipe/steps')),
-                              path: 'recipe/steps'
-                          )
+                          StatefulShellBranch(
+                              routes: [
+                                GoRoute(
+                                    builder: (context, state) => CreateRecipeSteps(),
+                                    path: 'steps'
+                                )
+                              ]
+                          ),
                         ]
                     ),
                   ]

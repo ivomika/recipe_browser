@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:recipe_browser/features/recipe/models/recipe.dart';
 import 'package:recipe_browser/features/recipe_detail/bloc/recipe_detail_bloc.dart';
 import 'package:recipe_browser/features/theme/theme.dart';
@@ -18,7 +19,6 @@ class RecipeDetailPage extends StatelessWidget {
 
     return BlocBuilder<RecipeDetailBloc, RecipeDetailState>(
       builder: (context, state) {
-        print(state.toString());
         switch (state) {
           case RecipeDetailInitial():
             return Center(
@@ -51,59 +51,86 @@ class _LoadedState extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+    return Stack(
       children: [
-        SizedBox(
-          width: double.maxFinite,
-          height: 220,
+        Positioned.fill(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(
+                width: double.maxFinite,
+                height: 220,
 
-          child: Placeholder(),
-        ),
-        Expanded(
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: context.offset.normal),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(height: context.offset.small,),
-                  Text(
-                      recipe.title,
-                      style: context.theme.textTheme.titleMedium,
-                  ),
-                  SizedBox(height: context.offset.small,),
-                  SizedBox(
-                    height: 24,
-                    width: double.maxFinite,
-                    child: SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
+                child: Image.network(
+                    fit: BoxFit.cover,
+                    'https://placehold.co/500x500/png'
+                ),
+              ),
+              Expanded(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: context.offset.normal),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(height: context.offset.small,),
+                        Text(
+                            recipe.title,
+                            style: context.theme.textTheme.titleMedium,
+                        ),
+                        SizedBox(height: context.offset.small,),
+                        SizedBox(
+                          height: 24,
+                          width: double.maxFinite,
+                          child: SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
 
-                      child: Row(
-                        children: [
-                          _Label(
-                              icon: Icons.timer_outlined,
-                              text: '${recipe.cookingTime} мин.'
+                            child: Row(
+                              children: [
+                                _Label(
+                                    icon: Icons.timer_outlined,
+                                    text: '${recipe.cookingTime} мин.'
+                                ),
+                                SizedBox(width: context.offset.small),
+                                _Label(
+                                    icon: Icons.cookie_outlined,
+                                    text: '${recipe.kilocalories} ккал.'
+                                ),
+                                SizedBox(width: context.offset.small),
+                                _Label(
+                                    icon: Icons.shopping_bag_outlined,
+                                    text: '${recipe.ingredients.length} шт.'
+                                ),
+                              ],
+                            ),
                           ),
-                          SizedBox(width: context.offset.small),
-                          _Label(
-                              icon: Icons.cookie_outlined,
-                              text: '${recipe.kilocalories} кал.'
-                          ),
-                          SizedBox(width: context.offset.small),
-                          _Label(
-                              icon: Icons.shopping_bag_outlined,
-                              text: '${recipe.ingredients.length} шт.'
-                          ),
-                        ],
-                      ),
+                        ),
+                        SizedBox(height: context.offset.normal,),
+                        Text(recipe.description)
+                      ],
                     ),
+                  )
+              )
+            ],
+          ),
+        ),
+
+        Positioned(
+            left: context.offset.normal,
+            top: 0,
+            child: SafeArea(
+              child: BackButton(
+                style: ButtonStyle(
+                  backgroundColor: WidgetStateProperty.all(
+                    context.theme.colorScheme.surface
                   ),
-                  SizedBox(height: context.offset.normal,),
-                  Text(recipe.description)
-                ],
+                  foregroundColor: WidgetStateProperty.all(
+                      context.theme.colorScheme.onSurface
+                  )
+                ),
+                onPressed: () => context.pop(),
               ),
             )
-        )
+        ),
       ],
     );
   }
