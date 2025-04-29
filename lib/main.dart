@@ -5,6 +5,7 @@ import 'package:recipe_browser/features/recipe/bloc/recipe_bloc.dart';
 import 'package:recipe_browser/features/recipe/recipe.dart';
 import 'package:recipe_browser/features/recipe_detail/bloc/recipe_detail_bloc.dart';
 import 'package:recipe_browser/features/theme/extension/offset_extension.dart';
+import 'package:recipe_browser/features/theme/theme.dart';
 import 'package:url_strategy/url_strategy.dart';
 
 import 'features/routing/app_routing.dart';
@@ -39,9 +40,8 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp.router(
         title: 'Flutter Demo',
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-          useMaterial3: true,
+        themeMode: ThemeMode.system,
+        theme: AppTheme.light.copyWith(
           extensions: [
             OffsetExtension(
                 verySmall: 4,
@@ -51,6 +51,17 @@ class MyApp extends StatelessWidget {
                 veryLarge: 32
             )
           ]
+        ),
+        darkTheme: AppTheme.dark.copyWith(
+            extensions: [
+              OffsetExtension(
+                  verySmall: 4,
+                  small: 8,
+                  normal: 16,
+                  large: 24,
+                  veryLarge: 32
+              )
+            ]
         ),
         routerConfig: appRouting,
       ),
