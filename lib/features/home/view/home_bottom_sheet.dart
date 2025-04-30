@@ -55,45 +55,15 @@ class _HomeBottomSheetState extends State<HomeBottomSheet> {
   }
 }
 
-class _Sheet extends StatefulWidget {
+class _Sheet extends StatelessWidget {
   final SheetController sheet;
 
   const _Sheet({required this.sheet});
 
   @override
-  State<_Sheet> createState() => _SheetState();
-}
-
-class _SheetState extends State<_Sheet> {
-  late double _animationValue;
-
-  @override
-  void initState() {
-    super.initState();
-    _animationValue = 0;
-    widget.sheet.addListener(_animationListener);
-  }
-
-  @override
-  void dispose() {
-    widget.sheet.removeListener(_animationListener);
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return CustomScrollView(slivers: [
-      SliverToBoxAdapter(
-        child: AnimatedRotation(
-          turns: _animationValue,
-          duration: Duration(microseconds: 10),
-          child: Icon(
-            size: 48,
-            Icons.keyboard_arrow_up,
-            color: context.theme.colorScheme.onSurface.withAlpha(60),
-          ),
-        ),
-      ),
+      SliverToBoxAdapter(child: _AnimationArrow(sheet: sheet)),
       SliverPadding(
           padding: EdgeInsets.all(context.offset.normal).copyWith(top: 0),
           sliver:
@@ -151,6 +121,45 @@ class _SheetState extends State<_Sheet> {
             }
           }))
     ]);
+  }
+}
+
+class _AnimationArrow extends StatefulWidget {
+  final SheetController sheet;
+
+  const _AnimationArrow({required this.sheet});
+
+  @override
+  State<_AnimationArrow> createState() => _AnimationArrowState();
+}
+
+class _AnimationArrowState extends State<_AnimationArrow> {
+  late double _animationValue;
+
+  @override
+  void initState() {
+    super.initState();
+    _animationValue = 0;
+    widget.sheet.addListener(_animationListener);
+  }
+
+  @override
+  void dispose() {
+    widget.sheet.removeListener(_animationListener);
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedRotation(
+      turns: _animationValue,
+      duration: Duration(microseconds: 10),
+      child: Icon(
+        size: 48,
+        Icons.keyboard_arrow_up,
+        color: context.theme.colorScheme.onSurface.withAlpha(60),
+      ),
+    );
   }
 
   double normalize(
