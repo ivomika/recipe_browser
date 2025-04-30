@@ -4,92 +4,178 @@ import 'package:recipe_browser/features/recipe/recipe.dart';
 import 'package:recipe_browser/features/theme/extension/theme_context_extension.dart';
 import 'package:smooth_sheets/smooth_sheets.dart';
 
-class HomeBottomSheet extends StatelessWidget {
+class HomeBottomSheet extends StatefulWidget {
   const HomeBottomSheet({
     super.key,
   });
 
   @override
+  State<HomeBottomSheet> createState() => _HomeBottomSheetState();
+}
+
+class _HomeBottomSheetState extends State<HomeBottomSheet> {
+  late final SheetController _sheetController;
+
+  @override
+  void initState() {
+    super.initState();
+    _sheetController = SheetController();
+  }
+
+  @override
+  void dispose() {
+    _sheetController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     context.read<RecipeBloc>().add(LoadingRecipes());
+
     return SheetViewport(
-      padding: EdgeInsets.only(top: 145),
-      child: Sheet(
-        decoration: MaterialSheetDecoration(
-          size: SheetSize.stretch,
-          borderRadius: BorderRadius.vertical(
-            top: Radius.circular(
-              context.offset.veryLarge + context.offset.normal
+        padding: EdgeInsets.only(top: 145),
+        child: Sheet(
+            controller: _sheetController,
+            decoration: MaterialSheetDecoration(
+                size: SheetSize.stretch,
+                borderRadius: BorderRadius.vertical(
+                  top: Radius.circular(
+                      context.offset.veryLarge + context.offset.normal),
+                ),
+                color: context.theme.colorScheme.surface,
+                elevation: 4,
+                clipBehavior: Clip.antiAlias),
+            snapGrid: const SheetSnapGrid(
+              snaps: [SheetOffset(0.8), SheetOffset(1)],
             ),
-          ),
-          color: context.theme.colorScheme.surface,
-          elevation: 4,
-          clipBehavior: Clip.antiAlias
-        ),
-        snapGrid: const SheetSnapGrid(
-          snaps: [SheetOffset(0.8), SheetOffset(1)],
-        ),
-        scrollConfiguration: const SheetScrollConfiguration(),
-        child: _Sheet()
-      )
-    );
+            scrollConfiguration: const SheetScrollConfiguration(),
+            child: _Sheet(
+              sheet: _sheetController,
+            )));
   }
 }
 
-class _Sheet extends StatelessWidget {
-  const _Sheet();
+class _Sheet extends StatefulWidget {
+  final SheetController sheet;
+
+  const _Sheet({required this.sheet});
+
+  @override
+  State<_Sheet> createState() => _SheetState();
+}
+
+class _SheetState extends State<_Sheet> {
+  late double _animationValue;
+
+  @override
+  void initState() {
+    super.initState();
+    _animationValue = 0;
+    widget.sheet.addListener(_animationListener);
+  }
+
+  @override
+  void dispose() {
+    widget.sheet.removeListener(_animationListener);
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return CustomScrollView(slivers: [
+      SliverToBoxAdapter(
+        child: AnimatedRotation(
+          turns: _animationValue,
+          duration: Duration(microseconds: 10),
+          child: Icon(
+            size: 48,
+            Icons.keyboard_arrow_up,
+            color: context.theme.colorScheme.onSurface.withAlpha(60),
+          ),
+        ),
+      ),
       SliverPadding(
-          padding: EdgeInsets.all(context.offset.normal),
-          sliver: BlocBuilder<RecipeBloc, RecipeState>(
-              builder: (context, state) {
-                switch (state) {
-                  case RecipeInitial():
-                    return SliverFillRemaining(
+          padding: EdgeInsets.all(context.offset.normal).copyWith(top: 0),
+          sliver:
+              BlocBuilder<RecipeBloc, RecipeState>(builder: (context, state) {
+            switch (state) {
+              case RecipeInitial():
+                return SliverToBoxAdapter(
+                  child: SizedBox(
+                    height: 200,
+                    child: Center(
+                      child: Text('Добавьте что нибудь новенькое!'),
+                    ),
+                  ),
+                );
+              case RecipeLoading():
+                return SliverList.separated(
+                  itemCount: 10,
+                  itemBuilder: (context, index) => RecipeTileSkeleton(),
+                  separatorBuilder: (BuildContext context, int index) =>
+                      SizedBox(
+                    height: context.offset.normal,
+                  ),
+                );
+              case RecipeLoaded():
+                if (state.recipes.isEmpty) {
+                  return SliverToBoxAdapter(
+                    child: SizedBox(
+                      height: 200,
                       child: Center(
                         child: Text('Добавьте что нибудь новенькое!'),
                       ),
-                    );
-                  case RecipeLoading():
-                    return SliverList.separated(
-                      itemCount: 10,
-                      itemBuilder: (context, index) => RecipeTileSkeleton(),
-                      separatorBuilder: (BuildContext context, int index) =>
-                          SizedBox(
-                            height: context.offset.normal,
-                          ),
-                    );
-                  case RecipeLoaded():
-                    if (state.recipes.isEmpty) {
-                      return SliverFillRemaining(
-                        child: Center(
-                          child: Text('Нет данных'),
-                        ),
-                      );
-                    }
-
-                    return SliverList.separated(
-                      itemCount: state.recipes.length,
-                      itemBuilder: (context, index) => RecipeTile(
-                        recipe: state.recipes.elementAt(index),
-                      ),
-                      separatorBuilder: (BuildContext context, int index) =>
-                          SizedBox(
-                            height: context.offset.normal,
-                          ),
-                    );
-                  case RecipeError():
-                    return SliverFillRemaining(
-                      child: Center(
-                        child: CircularProgressIndicator(),
-                      ),
-                    );
+                    ),
+                  );
                 }
-              }))
+
+                return SliverList.separated(
+                  itemCount: state.recipes.length,
+                  itemBuilder: (context, index) => RecipeTile(
+                    recipe: state.recipes.elementAt(index),
+                  ),
+                  separatorBuilder: (BuildContext context, int index) =>
+                      SizedBox(
+                    height: context.offset.normal,
+                  ),
+                );
+              case RecipeError():
+                return SliverToBoxAdapter(
+                  child: SizedBox(
+                    height: 500,
+                    child: Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  ),
+                );
+            }
+          }))
     ]);
   }
-}
 
+  double normalize(
+    double value, {
+    required double sourceMin,
+    required double sourceMax,
+    double targetMin = 0.0,
+    double targetMax = 0.5,
+  }) {
+    // Обработка случая, когда исходный диапазон невалиден
+    if (sourceMin == sourceMax) return targetMin;
+    if (value > sourceMax) return targetMax;
+    if (value < sourceMin) return targetMin;
+
+    // Вычисление нормализованного значения
+    final double ratio = (value - sourceMin) / (sourceMax - sourceMin);
+    return ratio * (targetMax - targetMin) + targetMin;
+  }
+
+  void _animationListener() {
+    setState(() => _animationValue = normalize(
+          widget.sheet.value ?? 0,
+          sourceMin: widget.sheet.metrics?.minOffset ?? 0,
+          sourceMax: widget.sheet.metrics?.maxOffset ?? 1,
+        )
+    );
+  }
+}
