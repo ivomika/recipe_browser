@@ -10,47 +10,49 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Column(
-          children: [
-            AppBar(
-              title: Text('Кухня в кармане'),
-            ),
-            Padding(
-                padding: EdgeInsets.all(context.offset.normal),
+    return SafeArea(
+      child: Stack(
+        children: [
+          Column(
+            children: [
+              AppBar(
+                title: Text('Кухня в кармане'),
+              ),
+              Padding(
+                  padding: EdgeInsets.all(context.offset.normal),
 
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    SearchBar(
-                      onTap: () => context.read<RecipeBloc>().add(LoadingRecipes()),
-                      hintText: 'Поиск...',
-                      leading: Icon(
-                        Icons.search_outlined
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      SearchBar(
+                        onTap: () => context.read<RecipeBloc>().add(LoadingRecipes()),
+                        hintText: 'Поиск...',
+                        leading: Icon(
+                          Icons.search_outlined
+                        ),
                       ),
-                    ),
-                    SizedBox(
-                      height: context.offset.normal,
-                    ),
-                    FilledButton(
-                        onPressed: () => context.push('/create'),
-                        child: Text('Добавить')
-                    ),
-                    SizedBox(
-                      height: context.offset.small,
-                    ),
-                    TextButton(
-                        onPressed: null,
-                        child: Text('Настройки')
-                    )
-                  ],
-                ),
-            )
-          ],
-        ),
-        HomeBottomSheet(),
-      ],
+                      SizedBox(
+                        height: context.offset.normal,
+                      ),
+                      FilledButton(
+                          onPressed: () => context.push('/create'),
+                          child: Text('Добавить')
+                      ),
+                      SizedBox(
+                        height: context.offset.small,
+                      ),
+                      TextButton(
+                          onPressed: null,
+                          child: Text('Настройки')
+                      )
+                    ],
+                  ),
+              )
+            ],
+          ),
+          HomeBottomSheet(),
+        ],
+      ),
     );
   }
 }

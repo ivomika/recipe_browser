@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:recipe_browser/features/recipe/models/recipe.dart';
 import 'package:recipe_browser/features/recipe_detail/bloc/recipe_detail_bloc.dart';
 import 'package:recipe_browser/features/theme/theme.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class RecipeDetailPage extends StatelessWidget {
   final String? id;
@@ -25,8 +26,18 @@ class RecipeDetailPage extends StatelessWidget {
               child: CircularProgressIndicator(),
             );
           case RecipeDetailLoading():
-            return Center(
-              child: CircularProgressIndicator(),
+            return Skeletonizer(
+                child: _LoadedState(
+                    recipe: Recipe(
+                        id: '',
+                        createdAt: DateTime.now(),
+                        title: BoneMock.words(30),
+                        description: BoneMock.words(300),
+                        cookingTime: 60,
+                        kilocalories: 600,
+                        ingredients: []
+                    )
+                )
             );
           case RecipeDetailLoaded():
             return _LoadedState(
@@ -115,8 +126,8 @@ class _LoadedState extends StatelessWidget {
         ),
 
         Positioned(
-            left: context.offset.normal,
-            top: 0,
+            left: context.offset.verySmall,
+            top: context.offset.verySmall,
             child: SafeArea(
               child: BackButton(
                 style: ButtonStyle(

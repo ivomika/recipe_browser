@@ -58,11 +58,11 @@ class RecipeTileSkeleton extends StatelessWidget {
                       ),
                       Row(
                         children: [
-                          Text(BoneMock.chars(10)),
+                          Text(BoneMock.chars(8)),
                           SizedBox(width: context.offset.small),
-                          Text(BoneMock.chars(10)),
+                          Text(BoneMock.chars(8)),
                           SizedBox(width: context.offset.small),
-                          Text(BoneMock.chars(10)),
+                          Text(BoneMock.chars(8)),
                         ],
                       )
                     ],
