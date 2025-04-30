@@ -20,6 +20,7 @@ class RecipeDetailBloc extends Bloc<RecipeDetailEvent, RecipeDetailState> {
     emit(RecipeDetailLoading());
 
     try{
+      await Future.delayed(Duration(seconds: 2));
       final recipe = await _repository.byId(event.id);
       emit(RecipeDetailLoaded(recipe));
     }catch(e){

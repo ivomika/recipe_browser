@@ -31,8 +31,8 @@ class RecipeDetailPage extends StatelessWidget {
                     recipe: Recipe(
                         id: '',
                         createdAt: DateTime.now(),
-                        title: BoneMock.words(30),
-                        description: BoneMock.words(300),
+                        title: BoneMock.words(10),
+                        description: BoneMock.words(50),
                         cookingTime: 60,
                         kilocalories: 600,
                         ingredients: []
@@ -66,7 +66,6 @@ class _LoadedState extends StatelessWidget {
       children: [
         Positioned.fill(
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(
                 width: double.maxFinite,
@@ -78,18 +77,20 @@ class _LoadedState extends StatelessWidget {
                 ),
               ),
               Expanded(
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: context.offset.normal),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(height: context.offset.small,),
-                        Text(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: context.offset.normal),
+                  child: CustomScrollView(
+                    slivers: [
+                      SliverToBoxAdapter(child: SizedBox(height: context.offset.small,)),
+                      SliverToBoxAdapter(
+                        child: Text(
                             recipe.title,
                             style: context.theme.textTheme.titleMedium,
                         ),
-                        SizedBox(height: context.offset.small,),
-                        SizedBox(
+                      ),
+                      SliverToBoxAdapter(child: SizedBox(height: context.offset.small,)),
+                      SliverToBoxAdapter(
+                        child: SizedBox(
                           height: 24,
                           width: double.maxFinite,
                           child: SingleChildScrollView(
@@ -115,11 +116,12 @@ class _LoadedState extends StatelessWidget {
                             ),
                           ),
                         ),
-                        SizedBox(height: context.offset.normal,),
-                        Text(recipe.description)
-                      ],
-                    ),
-                  )
+                      ),
+                      SliverToBoxAdapter(child: SizedBox(height: context.offset.normal,)),
+                      SliverToBoxAdapter(child: Text(recipe.description))
+                    ],
+                  ),
+                ),
               )
             ],
           ),
