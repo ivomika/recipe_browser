@@ -20,3 +20,12 @@ class CreateRecipe extends RecipeEvent{
   @override
   List<Object?> get props => super.props..addAll([recipe]);
 }
+
+final class DeleteRecipe extends RecipeEvent{
+  final Recipe recipe;
+
+  DeleteRecipe(this.recipe);
+
+  @override
+  List<Object?> get props => super.props..addAll([recipe]);
+}

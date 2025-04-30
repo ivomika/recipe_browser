@@ -6,7 +6,7 @@ sealed class RecipeDetailEvent extends Equatable{
   List<Object?> get props => [];
 }
 
-class LoadingRecipeDetail extends RecipeDetailEvent{
+final class LoadingRecipeDetail extends RecipeDetailEvent{
   final String id;
 
   LoadingRecipeDetail(this.id);

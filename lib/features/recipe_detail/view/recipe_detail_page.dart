@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:recipe_browser/features/recipe/models/recipe.dart';
+import 'package:recipe_browser/features/recipe/recipe.dart';
 import 'package:recipe_browser/features/recipe_detail/bloc/recipe_detail_bloc.dart';
 import 'package:recipe_browser/features/theme/theme.dart';
 import 'package:skeletonizer/skeletonizer.dart';
@@ -144,8 +145,34 @@ class _LoadedState extends StatelessWidget {
               ),
             )
         ),
+
+        Positioned(
+            right: context.offset.verySmall,
+            top: context.offset.verySmall,
+            child: SafeArea(
+              child: IconButton(
+                style: ButtonStyle(
+                    backgroundColor: WidgetStateProperty.all(
+                        context.theme.colorScheme.surface
+                    ),
+                    foregroundColor: WidgetStateProperty.all(
+                        context.theme.colorScheme.error
+                    )
+                ),
+                onPressed: () => _deleteRecipe(context),
+                icon: Icon(Icons.delete),
+              ),
+            )
+        ),
       ],
     );
+  }
+
+  void _deleteRecipe(BuildContext context) {
+    context.read<RecipeBloc>().add(
+        DeleteRecipe(recipe)
+    );
+    context.pop();
   }
 }
 

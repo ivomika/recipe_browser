@@ -36,12 +36,12 @@ class DriftRecipeRepository implements IRecipeRepository{
 
   @override
   Future<bool> delete(Recipe model) async {
-    await (_database
+    final deleteCount = await (_database
         .delete(_database.recipeModel)
         ..where((recipe) => recipe.uuid.equals(model.id)))
         .go();
 
-    return true;
+    return deleteCount != 0;
   }
 
   @override
