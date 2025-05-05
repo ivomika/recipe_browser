@@ -46,7 +46,7 @@ abstract final class AppTheme {
       defaultRadius: 32.0,
       inputDecoratorContentPadding: EdgeInsetsDirectional.fromSTEB(24, 20, 24, 12),
       inputDecoratorBorderType: FlexInputBorderType.outline,
-      alignedDropdown: true,
+      popupMenuRadius: 12.0,
       appBarScrolledUnderElevation: 0.0,
       navigationRailUseIndicator: true,
     ),
@@ -88,7 +88,7 @@ abstract final class AppTheme {
       thinBorderWidth: 2.0,
       inputDecoratorContentPadding: EdgeInsetsDirectional.fromSTEB(24, 20, 24, 12),
       inputDecoratorBorderType: FlexInputBorderType.outline,
-      alignedDropdown: true,
+      popupMenuRadius: 12.0,
       navigationRailUseIndicator: true,
     ),
     // ColorScheme seed configuration setup for dark mode.

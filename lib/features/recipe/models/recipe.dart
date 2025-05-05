@@ -23,6 +23,18 @@ class Recipe extends BaseModel{
     required this.ingredients,
   });
 
+
+  Recipe.create({
+    required this.title,
+    required this.description,
+    required this.cookingTime,
+    required this.kilocalories,
+    required this.ingredients,
+  }) : super(
+    id: '',
+    createdAt: DateTime.now()
+  );
+
   @override
   String toString() {
     return 'Recipe{title: $title, description: $description, cookingTime: $cookingTime, kilocalories: $kilocalories, ingredients: $ingredients}';

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:recipe_browser/features/create/create.dart';
+import 'package:recipe_browser/features/create/pages/create_recipe/bloc/create_recipe_cubit.dart';
 import 'package:recipe_browser/features/recipe/recipe.dart';
 import 'package:recipe_browser/features/theme/theme.dart';
 
@@ -18,7 +20,13 @@ class CreateRecipeDetail extends StatelessWidget {
           title: Text('Новый рецепт'),
         ),
         SliverToBoxAdapter(
-          child: _Form()
+            child: BlocProvider(
+              create: (context) => CreateRecipeCubit(
+                GlobalKey<FormState>(),
+                context.read<IRecipeRepository>()
+              ),
+              child: _Form(),
+            )
         ),
       ],
     );
@@ -26,28 +34,13 @@ class CreateRecipeDetail extends StatelessWidget {
 }
 
 
-class _Form extends StatefulWidget {
+class _Form extends StatelessWidget {
   const _Form();
-
-  @override
-  State<_Form> createState() => _FormState();
-}
-
-class _FormState extends State<_Form> {
-  late final GlobalKey<FormState> _formKey;
-  late Map<String, String> _data;
-
-  @override
-  void initState() {
-    super.initState();
-    _formKey = GlobalKey<FormState>();
-    _data = {};
-  }
 
   @override
   Widget build(BuildContext context) {
     return Form(
-        key: _formKey,
+        key: context.read<CreateRecipeCubit>().formKey,
         child: Padding(
           padding: EdgeInsets.all(
               context.offset.normal
@@ -62,7 +55,7 @@ class _FormState extends State<_Form> {
                     hintText: 'Крабовый салат'
                 ),
                 validator: _titleValidator,
-                onSaved: _titleSave,
+                onSaved: (value) => _titleSave(value, context),
               ),
               SizedBox(
                 height: context.offset.normal,
@@ -75,7 +68,7 @@ class _FormState extends State<_Form> {
                     labelText: 'Описание',
                     hintText: 'Дополнительная информация для Вас!'
                 ),
-                onSaved: _descriptionSave,
+                onSaved: (value) => _descriptionSave(value, context),
               ),
               SizedBox(
                 height: context.offset.normal,
@@ -89,7 +82,7 @@ class _FormState extends State<_Form> {
                 ),
                 keyboardType: TextInputType.number,
                 validator: _cookingTimeValidator,
-                onSaved: _cookingTimeSave,
+                onSaved: (value) => _cookingTimeSave(value, context),
               ),
               SizedBox(
                 height: context.offset.normal,
@@ -103,71 +96,80 @@ class _FormState extends State<_Form> {
                 ),
                 keyboardType: TextInputType.number,
                 validator: _kilocaloriesValidator,
-                onSaved: _kilocaloriesSave,
+                onSaved: (value) => _kilocaloriesSave(value, context),
               ),
               SizedBox(
                 height: context.offset.normal,
               ),
+              Divider(),
+              SizedBox(
+                height: context.offset.normal,
+              ),
+              IngredientListInput(),
+              SizedBox(
+                height: context.offset.normal,
+              ),
+              Divider(),
+              SizedBox(
+                height: context.offset.normal,
+              ),
               FilledButton(
-                  onPressed: _formSubmit,
+                  onPressed: () => _formSubmit(context),
                   child: Text('Добавить')
-              )
+              ),
             ],
           ),
         )
     );
   }
 
-  void _formSubmit() {
-    if(_formKey.currentState!.validate() == false) return;
+  void _formSubmit(BuildContext context) {
+    final createCubit = context.read<CreateRecipeCubit>();
+    if (createCubit.formKey.currentState!.validate() == false) return;
 
-    _formKey.currentState!.save();
-    context.read<RecipeBloc>().add(CreateRecipe(
-        Recipe(
-            id: '',
-            createdAt: DateTime.now(),
-            title: _data['title']!,
-            description: _data['description']!,
-            cookingTime: int.parse(_data['cookingTime']!),
-            kilocalories: int.parse(_data['kilocalories']!),
-            ingredients: []
-        )
-    ));
+    createCubit.formKey.currentState!.save();
+    createCubit.create();
 
     context.go('/home');
   }
 
   String? _titleValidator(String? value) {
-    if(value == null || value.isEmpty) return 'Название должно быть заполнено';
+    if (value == null || value.isEmpty) {
+      return 'Название должно быть заполнено';
+    }
 
     return null;
   }
 
-  void _titleSave(String? newValue) {
-    _data['title'] = newValue!;
+  void _titleSave(String? newValue, BuildContext context) {
+    context.read<CreateRecipeCubit>().state.data.title = newValue!;
   }
 
-  void _descriptionSave(String? newValue) {
-    _data['description'] = newValue ?? '';
+  void _descriptionSave(String? newValue, BuildContext context) {
+    context.read<CreateRecipeCubit>().state.data.description = newValue ?? '';
   }
 
   String? _cookingTimeValidator(String? value) {
-    if(value == null || value.isEmpty) return 'Время готовки должно быть заполнено';
+    if (value == null || value.isEmpty) {
+      return 'Время готовки должно быть заполнено';
+    }
 
     return null;
   }
 
-  void _cookingTimeSave(String? newValue) {
-    _data['cookingTime'] = newValue!;
+  void _cookingTimeSave(String? newValue, BuildContext context) {
+    context.read<CreateRecipeCubit>().state.data.cookingTime = int.parse(newValue!);
   }
 
   String? _kilocaloriesValidator(String? value) {
-    if(value == null || value.isEmpty) return 'Килокалории должны быть заполнено';
+    if (value == null || value.isEmpty) {
+      return 'Килокалории должны быть заполнено';
+    }
 
     return null;
   }
 
-  void _kilocaloriesSave(String? newValue) {
-    _data['kilocalories'] = newValue!;
+  void _kilocaloriesSave(String? newValue, BuildContext context) {
+    context.read<CreateRecipeCubit>().state.data.kilocalories = int.parse(newValue!);
   }
 }

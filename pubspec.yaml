@@ -16,14 +16,14 @@ dependencies:
   url_strategy: ^0.3.0
   # storage
   shared_preferences: ^2.5.3
-  drift: ^2.26.0
+  drift: ^2.26.1
   drift_flutter: ^0.2.4
   json_annotation: ^4.9.0
   path_provider: ^2.1.5
   # state
   provider: ^6.1.5
   bloc: ^9.0.0
-  flutter_bloc: ^9.1.0
+  flutter_bloc: ^9.1.1
   #utils
   equatable: ^2.0.7
   uuid: ^4.5.1
@@ -32,6 +32,7 @@ dependencies:
   # ui
   skeletonizer: ^1.4.3
   smooth_sheets: ^0.11.3
+  flutter_dismissible_tile: ^1.1.0
 
 dev_dependencies:
   flutter_test:
@@ -42,7 +43,7 @@ dev_dependencies:
   flutter_native_splash: ^2.4.6
   rename: ^3.0.2
   # storage
-  drift_dev: ^2.26.0
+  drift_dev: ^2.26.1
   json_serializable: ^6.9.5
   # builder
   build_runner: ^2.4.15
