@@ -4,12 +4,26 @@ import 'package:recipe_browser/features/create/create.dart';
 import 'package:recipe_browser/features/recipe/recipe.dart';
 import 'package:recipe_browser/features/theme/theme.dart';
 
-class IngredientInput extends StatelessWidget {
+class IngredientInput extends StatefulWidget {
   final String index;
+
   const IngredientInput({
     super.key,
     required this.index,
   });
+
+  @override
+  State<IngredientInput> createState() => _IngredientInputState();
+}
+
+class _IngredientInputState extends State<IngredientInput> {
+  late final CreateIngredientModel model;
+
+  @override
+  void initState() {
+    super.initState();
+    model = CreateIngredientModel();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -84,11 +98,15 @@ class IngredientInput extends StatelessWidget {
   }
 
   void _ingredientNameSaved(String? newValue, BuildContext context) {
+    model.name = newValue!;
   }
 
   void _ingredientCountSaved(String? newValue, BuildContext context) {
+    model.count = double.parse(newValue!);
   }
 
   void _countTypeSaved(CountType? newValue, BuildContext context) {
+    model.type = newValue!;
+    context.read<CreateRecipeCubit>().state.data.ingredients?.add(model);
   }
 }

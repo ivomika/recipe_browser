@@ -30,7 +30,14 @@ class CreateRecipeCubit extends Cubit<CreateRecipeState> {
             description: state.data.description!,
             cookingTime: state.data.cookingTime!,
             kilocalories: state.data.kilocalories!,
-            ingredients: state.data.ingredients!
+            ingredients: state.data.ingredients!.map(
+                (e) =>
+                    Ingredient(
+                        name: e.name!,
+                        count: e.count!,
+                        type: e.type!
+                    )
+            ).toList(growable: false)
         )
       );
     }catch(e){
