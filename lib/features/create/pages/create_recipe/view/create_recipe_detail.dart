@@ -130,6 +130,7 @@ class _Form extends StatelessWidget {
     createCubit.formKey.currentState!.save();
     createCubit.create();
 
+    context.read<RecipeBloc>().add(LoadingRecipes());
     context.go('/home');
   }
 

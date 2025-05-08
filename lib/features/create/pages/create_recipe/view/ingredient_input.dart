@@ -5,11 +5,8 @@ import 'package:recipe_browser/features/recipe/recipe.dart';
 import 'package:recipe_browser/features/theme/theme.dart';
 
 class IngredientInput extends StatefulWidget {
-  final String index;
-
   const IngredientInput({
     super.key,
-    required this.index,
   });
 
   @override

@@ -119,7 +119,19 @@ class _LoadedState extends StatelessWidget {
                         ),
                       ),
                       SliverToBoxAdapter(child: SizedBox(height: context.offset.normal,)),
-                      SliverToBoxAdapter(child: Text(recipe.description))
+                      SliverToBoxAdapter(child: Text(recipe.description)),
+                      SliverToBoxAdapter(child: SizedBox(height: context.offset.normal,)),
+                      SliverToBoxAdapter(
+                        child: Divider(),
+                      ),
+                      SliverList.separated(
+                          itemCount: recipe.ingredients.length,
+                          itemBuilder: (BuildContext context, int index) => Text('${recipe.ingredients.elementAt(index).name} - ${recipe.ingredients.elementAt(index).count} ${recipe.ingredients.elementAt(index).type.name}'),
+                          separatorBuilder: (BuildContext context, int index) =>
+                              SizedBox(
+                                height: context.offset.normal,
+                              ),
+                      )
                     ],
                   ),
                 ),

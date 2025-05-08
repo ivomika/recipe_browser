@@ -4,10 +4,12 @@ import 'package:recipe_browser/features/theme/theme.dart';
 
 class IngredientInputDismissible extends StatelessWidget {
   final String index;
+  final void Function(DismissDirection direction) onDismissed;
 
   const IngredientInputDismissible({
     super.key,
-    required this.index
+    required this.index,
+    required this.onDismissed
    });
 
   @override
@@ -15,7 +17,7 @@ class IngredientInputDismissible extends StatelessWidget {
     return Dismissible(
         key: ValueKey(index),
         direction: DismissDirection.endToStart,
-        onDismissed: _onDismissed,
+        onDismissed: onDismissed,
         background: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(
@@ -30,12 +32,7 @@ class IngredientInputDismissible extends StatelessWidget {
             ),
           ),
         ),
-        child: IngredientInput(
-          index: index,
-        )
+        child: IngredientInput()
     );
-  }
-
-  void _onDismissed(DismissDirection direction) {
   }
 }

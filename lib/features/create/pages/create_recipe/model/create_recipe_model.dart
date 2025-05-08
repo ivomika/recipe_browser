@@ -12,7 +12,7 @@ class CreateRecipeModel{
     this.description,
     this.cookingTime,
     this.kilocalories,
-    this.ingredients = const [],
+    this.ingredients,
   });
 
   @override
