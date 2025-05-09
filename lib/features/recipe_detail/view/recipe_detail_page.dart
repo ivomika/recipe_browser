@@ -36,7 +36,14 @@ class RecipeDetailPage extends StatelessWidget {
                         description: BoneMock.words(50),
                         cookingTime: 60,
                         kilocalories: 600,
-                        ingredients: []
+                        ingredients: List.generate(
+                            10,
+                            (index) => Ingredient(
+                                name: BoneMock.words(1),
+                                count: 10,
+                                type: CountType.gram
+                            )
+                        )
                     )
                 )
             );
@@ -126,11 +133,21 @@ class _LoadedState extends StatelessWidget {
                       ),
                       SliverList.separated(
                           itemCount: recipe.ingredients.length,
-                          itemBuilder: (BuildContext context, int index) => Text('${recipe.ingredients.elementAt(index).name} - ${recipe.ingredients.elementAt(index).count} ${recipe.ingredients.elementAt(index).type.name}'),
+                          itemBuilder: (BuildContext context, int index) => Card(
+                              margin: EdgeInsets.zero,
+                              child: ListTile(
+                                  title: Text(
+                                      _buildTileText(recipe, index)
+                                  )
+                              )
+                          ),
                           separatorBuilder: (BuildContext context, int index) =>
                               SizedBox(
                                 height: context.offset.normal,
                               ),
+                      ),
+                      SliverToBoxAdapter(
+                        child: SizedBox(height: context.offset.normal,),
                       )
                     ],
                   ),
@@ -185,6 +202,12 @@ class _LoadedState extends StatelessWidget {
         DeleteRecipe(recipe)
     );
     context.pop();
+  }
+
+  String _buildTileText(Recipe recipe, int index) {
+    return '${recipe.ingredients.elementAt(index).name} - '
+            '${recipe.ingredients.elementAt(index).count} '
+            '${recipe.ingredients.elementAt(index).type.name}';
   }
 }
 
