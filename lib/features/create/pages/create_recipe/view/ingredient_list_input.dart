@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:recipe_browser/features/create/create.dart';
 import 'package:recipe_browser/features/theme/extension/theme_context_extension.dart';
-import 'package:uuid/uuid.dart';
 
 class IngredientListInput extends StatefulWidget {
   const IngredientListInput({super.key});
@@ -11,23 +10,33 @@ class IngredientListInput extends StatefulWidget {
 }
 
 class _IngredientListInputState extends State<IngredientListInput> {
-  final List<IngredientInputDismissible> _inputs = [];
+  final IngredientInputController mainIngredientController = IngredientInputController();
+  final List<IngredientInputController> _inputs = [];
+
+  @override
+  void dispose() {
+    mainIngredientController.dispose();
+    for(var input in _inputs){
+      input.dispose();
+    }
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        IngredientInput(),
+        IngredientInput(
+          controller: mainIngredientController,
+        ),
         SizedBox(
           height: context.offset.normal,
         ),
         ..._inputs.map(
-            (e) => Padding(
-                padding: EdgeInsets.only(
-                  bottom: context.offset.normal,
-                ),
-                child: e,
+            (e) => IngredientInputDismissible(
+                controller: e,
+                onDismissed: (direction) => _removeIngredient(e),
             )
         ),
         OutlinedButton.icon(
@@ -40,17 +49,12 @@ class _IngredientListInputState extends State<IngredientListInput> {
   }
 
   void _addIngredient() {
-    final index = Uuid().v1();
-    _inputs.add(IngredientInputDismissible(
-        index: index,
-        onDismissed: (DismissDirection direction) => _removeIngredient(index),
-    ));
+    _inputs.add(IngredientInputController());
     setState(() {});
   }
 
-  void _removeIngredient(String index) {
-    _inputs.removeWhere(
-        (e) => e.index == index
-    );
+  void _removeIngredient(IngredientInputController controller) {
+    _inputs.remove(controller);
+    setState(() {});
   }
 }

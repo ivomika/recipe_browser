@@ -3,22 +3,25 @@ import 'package:recipe_browser/features/create/create.dart';
 import 'package:recipe_browser/features/theme/theme.dart';
 
 class IngredientInputDismissible extends StatelessWidget {
-  final String index;
+  final IngredientInputController controller;
   final void Function(DismissDirection direction) onDismissed;
 
   const IngredientInputDismissible({
     super.key,
-    required this.index,
-    required this.onDismissed
+    required this.controller,
+    required this.onDismissed,
    });
 
   @override
   Widget build(BuildContext context) {
     return Dismissible(
-        key: ValueKey(index),
+        key: ValueKey(controller),
         direction: DismissDirection.endToStart,
         onDismissed: onDismissed,
         background: Container(
+          margin: EdgeInsets.only(
+            bottom: context.offset.normal,
+          ),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(
                 context.offset.veryLarge
@@ -32,7 +35,14 @@ class IngredientInputDismissible extends StatelessWidget {
             ),
           ),
         ),
-        child: IngredientInput()
+        child: Padding(
+          padding: EdgeInsets.only(
+            bottom: context.offset.normal,
+          ),
+          child: IngredientInput(
+            controller: controller,
+          ),
+        )
     );
   }
 }

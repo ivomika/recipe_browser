@@ -1,26 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:recipe_browser/features/create/create.dart';
+import 'package:recipe_browser/features/create/pages/create_recipe/view/ingredient_input_controller.dart';
 import 'package:recipe_browser/features/recipe/recipe.dart';
 import 'package:recipe_browser/features/theme/theme.dart';
 
-class IngredientInput extends StatefulWidget {
+class IngredientInput extends StatelessWidget {
+  final IngredientInputController controller;
+
   const IngredientInput({
     super.key,
+    required this.controller,
   });
-
-  @override
-  State<IngredientInput> createState() => _IngredientInputState();
-}
-
-class _IngredientInputState extends State<IngredientInput> {
-  late final CreateIngredientModel model;
-
-  @override
-  void initState() {
-    super.initState();
-    model = CreateIngredientModel();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,6 +20,7 @@ class _IngredientInputState extends State<IngredientInput> {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         TextFormField(
+          controller: controller.name,
           decoration: InputDecoration(
               labelText: 'Название',
               hintText: 'Курица'
@@ -43,12 +35,14 @@ class _IngredientInputState extends State<IngredientInput> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Flexible(
-              flex: 2,
+              flex: 3,
               child: TextFormField(
+                controller: controller.count,
                 decoration: InputDecoration(
                     labelText: 'Количество',
                     hintText: '100'
                 ),
+                keyboardType: TextInputType.number,
                 validator: _ingredientCountValidator,
                 onSaved: (value) => _ingredientCountSaved(value, context),
               ),
@@ -57,7 +51,7 @@ class _IngredientInputState extends State<IngredientInput> {
               width: context.offset.small,
             ),
             Flexible(
-              flex: 1,
+              flex: 2,
               child: DropdownButtonFormField(
                   items: CountType.values.map(
                           (e) => DropdownMenuItem(
@@ -65,7 +59,7 @@ class _IngredientInputState extends State<IngredientInput> {
                           child: Text(e.name)
                       )
                   ).toList(growable: false),
-                  value: CountType.gram,
+                  value: controller.type,
                   borderRadius: BorderRadius.circular(
                       context.offset.normal
                   ),
@@ -80,8 +74,6 @@ class _IngredientInputState extends State<IngredientInput> {
     );
   }
 
-  void _countTypeChanged(CountType? value) {}
-
   String? _ingredientNameValidator(String? value) {
     if(value == null || value.isEmpty) return 'Название ингредиента должно быть заполнено';
 
@@ -95,15 +87,17 @@ class _IngredientInputState extends State<IngredientInput> {
   }
 
   void _ingredientNameSaved(String? newValue, BuildContext context) {
-    model.name = newValue!;
+    controller.model.name = newValue!;
   }
 
   void _ingredientCountSaved(String? newValue, BuildContext context) {
-    model.count = double.parse(newValue!);
+    controller.model.count = double.parse(newValue!);
   }
 
   void _countTypeSaved(CountType? newValue, BuildContext context) {
-    model.type = newValue!;
-    context.read<CreateRecipeCubit>().state.data.ingredients?.add(model);
+    controller.model.type = newValue!;
+    context.read<CreateRecipeCubit>().state.data.ingredients?.add(controller.model);
   }
+
+  void _countTypeChanged(CountType? value) {}
 }

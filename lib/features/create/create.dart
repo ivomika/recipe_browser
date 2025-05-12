@@ -4,6 +4,7 @@ export 'pages/create_recipe/view/create_recipe_steps.dart';
 export 'pages/create_recipe/view/ingredient_input.dart';
 export 'pages/create_recipe/view/ingredient_list_input.dart';
 export 'pages/create_recipe/view/ingredient_input_dismissible.dart';
+export 'pages/create_recipe/view/ingredient_input_controller.dart';
 export 'pages/create_recipe/model/create_recipe_model.dart';
 export 'pages/create_recipe/model/create_ingredient_model.dart';
 export 'pages/create_recipe/bloc/create_recipe_cubit.dart';
