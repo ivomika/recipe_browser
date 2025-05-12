@@ -15,3 +15,16 @@ final class LoadingRecipeDetail extends RecipeDetailEvent{
   List<Object?> get props => super.props..addAll([id]);
 }
 
+final class ConfirmRecipeDetailStep extends RecipeDetailEvent{
+  final String id;
+  final int index;
+
+  ConfirmRecipeDetailStep(
+      this.id,
+      this.index
+  );
+
+  @override
+  List<Object?> get props => super.props..addAll([id, index]);
+}
+

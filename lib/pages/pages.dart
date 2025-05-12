@@ -10,7 +10,8 @@ export './create_page/child/create_recipe_page/view/ingredient_input_dismissible
 export './create_page/child/create_recipe_page/view/ingredient_list_input.dart'; 
 export './create_page/view/create_page.dart';
 export './detail_page/bloc/recipe_detail_bloc.dart'; 
-export './detail_page/view/recipe_detail_page.dart'; 
+export './detail_page/view/recipe_detail_page.dart';
+export './detail_page/view/recipe_cooking_page.dart';
 export './home_page/bloc/recipe_list_bloc.dart';
 export './home_page/view/home_bottom_sheet.dart'; 
 export './home_page/view/home_page.dart'; 

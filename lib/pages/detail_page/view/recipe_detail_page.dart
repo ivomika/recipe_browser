@@ -7,7 +7,7 @@ import 'package:recipe_browser/pages/home_page/bloc/recipe_list_bloc.dart';
 import 'package:recipe_browser/shared/models/models.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
-class RecipeDetailPage extends StatelessWidget {
+class RecipeDetailPage extends StatefulWidget {
   final String? id;
 
   const RecipeDetailPage({
@@ -16,9 +16,18 @@ class RecipeDetailPage extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
-    context.read<RecipeDetailBloc>().add(LoadingRecipeDetail(id!));
+  State<RecipeDetailPage> createState() => _RecipeDetailPageState();
+}
 
+class _RecipeDetailPageState extends State<RecipeDetailPage> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<RecipeDetailBloc>().add(LoadingRecipeDetail(widget.id!));
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return BlocBuilder<RecipeDetailBloc, RecipeDetailState>(
       builder: (context, state) {
         switch (state) {
@@ -147,7 +156,7 @@ class _LoadedState extends StatelessWidget {
                               ),
                       ),
                       SliverToBoxAdapter(
-                        child: SizedBox(height: context.offset.normal,),
+                        child: SizedBox(height: context.offset.veryLarge,),
                       )
                     ],
                   ),
@@ -192,6 +201,15 @@ class _LoadedState extends StatelessWidget {
                 icon: Icon(Icons.delete),
               ),
             )
+        ),
+
+        Align(
+          alignment: Alignment.bottomCenter,
+          child: FilledButton.tonalIcon(
+            onPressed: () => context.go('/recipe/${recipe.id}/cooking'),
+            icon: Icon(Icons.play_arrow),
+            label: Text('Готовить!'),
+          ),
         ),
       ],
     );
