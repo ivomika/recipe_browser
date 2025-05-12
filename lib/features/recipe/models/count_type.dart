@@ -3,7 +3,9 @@ enum CountType{
   milliliter('мл.'),
   liter('л.'),
   gram('гр.'),
-  piece('шт');
+  kilograms('кг.'),
+  pinch('щеп.'),
+  piece('шт.');
 
   final String name;
   const CountType(this.name);
