@@ -132,7 +132,7 @@ class _Form extends StatelessWidget {
     createCubit.create();
 
     context.read<RecipeListBloc>().add(LoadingRecipes());
-    context.go('/home');
+    context.go('/');
   }
 
   String? _titleValidator(String? value) {

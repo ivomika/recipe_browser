@@ -24,7 +24,7 @@ class RecipeTile extends StatelessWidget {
             context.offset.veryLarge
         ),
         child: InkWell(
-          onTap: () => context.push('/recipe/${recipe.id}'),
+          onTap: () => context.go('/recipe/${recipe.id}'),
           child: Stack(
             children: [
               SizedBox(

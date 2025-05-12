@@ -26,7 +26,7 @@ class CreatePage extends StatelessWidget {
                     children: [
                       _Tile(
                           title: 'Рецепт',
-                          onTap: () => context.push('/create/recipe'),
+                          onTap: () => context.go('/create/recipe'),
                       ),
                       _Tile(
                           title: 'Сет',

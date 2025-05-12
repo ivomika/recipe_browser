@@ -22,6 +22,7 @@ class _HomeBottomSheetState extends State<HomeBottomSheet> {
   void initState() {
     super.initState();
     _sheetController = SheetController();
+    context.read<RecipeListBloc>().add(LoadingRecipes());
   }
 
   @override
@@ -32,8 +33,6 @@ class _HomeBottomSheetState extends State<HomeBottomSheet> {
 
   @override
   Widget build(BuildContext context) {
-    context.read<RecipeListBloc>().add(LoadingRecipes());
-
     return SheetViewport(
         padding: EdgeInsets.only(top: 145),
         child: Sheet(

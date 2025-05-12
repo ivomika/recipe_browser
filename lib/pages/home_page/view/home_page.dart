@@ -35,7 +35,7 @@ class HomePage extends StatelessWidget {
                         height: context.offset.normal,
                       ),
                       FilledButton(
-                          onPressed: () => context.push('/create'),
+                          onPressed: () => context.go('/create'),
                           child: Text('Добавить')
                       ),
                       SizedBox(

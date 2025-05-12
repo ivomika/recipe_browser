@@ -4,22 +4,16 @@ import 'package:recipe_browser/pages/pages.dart';
 import 'package:recipe_browser/shared/layouts/layouts.dart';
 
 final appRouting = GoRouter(
-    initialLocation: '/home',
+    initialLocation: '/',
     debugLogDiagnostics: true,
     errorBuilder: (context, state) => NotFoundPage(),
     routes: [
-        // home,
-        // sets,
-        // sets/:id,
         StatefulShellRoute.indexedStack(
             builder: (context, state, shell) =>
                 BottomNavigationLayout(
                     body: shell,
                     selectedIndex: shell.currentIndex,
                     onDestinationSelected: (index) => shell.goBranch(index),
-                    // bottomSheetBuilder: (context, scrollController) => HomeBottomSheet(
-                    //   scrollController: scrollController
-                    // ),
                     destinations: [
                       NavigationDestination(
                           icon: Icon(Icons.home),
@@ -36,7 +30,33 @@ final appRouting = GoRouter(
                     routes: [
                         GoRoute(
                             builder: (context, state) => HomePage(),
-                            path: '/home'
+                            path: '/',
+                            routes: [
+                                GoRoute(
+                                    path: 'create',
+                                    builder: (context, state) => CreatePage(),
+                                    routes: [
+                                      GoRoute(
+                                        path: 'recipe',
+                                        builder: (context, state) => CreateRecipeDetail(),
+                                      )
+                                    ]
+                                ),
+                                GoRoute(
+                                    path: 'recipe/:id',
+                                    builder: (context, state) => RecipeDetailPage(
+                                      id: state.pathParameters['id'],
+                                    ),
+                                    routes: [
+                                      GoRoute(
+                                          path: 'cooking',
+                                          builder: (context, state) => RecipeCookingPage(
+                                              id: state.pathParameters['id']
+                                          ),
+                                      )
+                                    ]
+                                )
+                            ]
                         )
                     ]
                 ),
@@ -56,132 +76,5 @@ final appRouting = GoRouter(
                 ),
             ],
         ),
-        // /recipe/:id/detail,
-        // /recipe/:id/steps,
-        GoRoute(
-            redirect: (context, state){
-                if (state.fullPath == '/recipe/:id') {
-                    return '/recipe/${state.pathParameters['id']}/detail';
-                }
-
-                return null;
-            },
-            path: '/recipe/:id',
-            routes: [
-                StatefulShellRoute.indexedStack(
-                    builder: (context, state, shell) =>
-                        BottomNavigationLayout(
-                            body: shell,
-                            selectedIndex: shell.currentIndex,
-                            onDestinationSelected: (index) => shell.goBranch(index),
-                            destinations: [
-                              NavigationDestination(
-                                  icon: Icon(Icons.description),
-                                  label: 'Детальная'
-                              ),
-                              NavigationDestination(
-                                  icon: Icon(Icons.double_arrow),
-                                  label: 'Шаги'
-                              ),
-                            ]
-                        ),
-                    branches: [
-                        StatefulShellBranch(
-                            routes: [
-                                GoRoute(
-                                    builder: (context, state) => RecipeDetailPage(
-                                      id: state.pathParameters['id']
-                                    ),
-                                    path: 'detail'
-                                )
-                            ]
-                        ),
-                        StatefulShellBranch(
-                            routes: [
-                                GoRoute(
-                                    builder: (context, state) => Center(child: Text('/${state.pathParameters['id']}/steps')),
-                                    path: 'steps'
-                                )
-                            ]
-                        ),
-                    ]
-                ),
-            ]
-        ),
-        // settings
-        GoRoute(
-            builder: (context, state) => Center(child: Text('/settings')),
-            path: '/settings'
-        ),
-        // create,
-        // create/recipe/detail,
-        // create/recipe/steps,
-        // create/sets,
-        // create/tag,
-        GoRoute(
-            builder: (context, state) => CreatePage(),
-            path: '/create',
-            routes: [
-              // create/recipe/detail, create/recipe/steps
-              GoRoute(
-                  path: 'recipe',
-                  redirect: (context, state) {
-                    if (state.fullPath == '/create/recipe') {
-                      return '/create/recipe/detail';
-                    }
-
-                    return null;
-                  },
-                  routes: [
-                    StatefulShellRoute.indexedStack(
-                        builder: (context, state, shell) =>
-                            BottomNavigationLayout(
-                                body: shell,
-                                selectedIndex: shell.currentIndex,
-                                onDestinationSelected: (index) => shell.goBranch(index),
-                                destinations: [
-                                  NavigationDestination(
-                                      icon: Icon(Icons.description),
-                                      label: 'Детальная'
-                                  ),
-                                  NavigationDestination(
-                                      icon: Icon(Icons.double_arrow),
-                                      label: 'Шаги'
-                                  ),
-                                ]
-                            ),
-                        branches: [
-                          StatefulShellBranch(
-                              routes: [
-                                GoRoute(
-                                    builder: (context, state) => CreateRecipeDetail(),
-                                    path: 'detail'
-                                )
-                              ]
-                          ),
-                          StatefulShellBranch(
-                              routes: [
-                                GoRoute(
-                                    builder: (context, state) => CreateRecipeSteps(),
-                                    path: 'steps'
-                                )
-                              ]
-                          ),
-                        ]
-                    ),
-                  ]
-              ),
-              // set
-              GoRoute(
-                  builder: (context, state) => Center(child: Text('/create/set')),
-                  path: 'set'
-              ),
-              // tag
-              GoRoute(
-                  builder: (context, state) => Center(child: Text('/create/tag')),
-                  path: 'tag'
-              ),
-            ]
-        )
     ]
 );
