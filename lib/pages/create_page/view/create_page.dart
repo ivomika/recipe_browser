@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:recipe_browser/features/theme/theme.dart';
 
-class CreateMenuPage extends StatelessWidget {
-  const CreateMenuPage({super.key});
+class CreatePage extends StatelessWidget {
+  const CreatePage({super.key});
 
   @override
   Widget build(BuildContext context) {

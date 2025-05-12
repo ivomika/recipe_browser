@@ -70,22 +70,20 @@ final appRouting = GoRouter(
             routes: [
                 StatefulShellRoute.indexedStack(
                     builder: (context, state, shell) =>
-                        Scaffold(
+                        BottomNavigationLayout(
                             body: shell,
-                            bottomNavigationBar: NavigationBar(
-                                selectedIndex: shell.currentIndex,
-                                onDestinationSelected: (index) => shell.goBranch(index),
-                                destinations: [
-                                    NavigationDestination(
-                                        icon: Icon(Icons.description),
-                                        label: 'Детальная'
-                                    ),
-                                    NavigationDestination(
-                                        icon: Icon(Icons.double_arrow),
-                                        label: 'Шаги'
-                                    ),
-                                ]
-                            ),
+                            selectedIndex: shell.currentIndex,
+                            onDestinationSelected: (index) => shell.goBranch(index),
+                            destinations: [
+                              NavigationDestination(
+                                  icon: Icon(Icons.description),
+                                  label: 'Детальная'
+                              ),
+                              NavigationDestination(
+                                  icon: Icon(Icons.double_arrow),
+                                  label: 'Шаги'
+                              ),
+                            ]
                         ),
                     branches: [
                         StatefulShellBranch(
@@ -121,7 +119,7 @@ final appRouting = GoRouter(
         // create/sets,
         // create/tag,
         GoRoute(
-            builder: (context, state) => CreateMenuPage(),
+            builder: (context, state) => CreatePage(),
             path: '/create',
             routes: [
               // create/recipe/detail, create/recipe/steps

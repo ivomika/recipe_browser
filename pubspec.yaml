@@ -31,7 +31,7 @@ dependencies:
   flex_color_scheme: ^8.2.0
   # ui
   skeletonizer: ^1.4.3
-  smooth_sheets: ^0.11.3
+  smooth_sheets: ^0.11.5
   flutter_dismissible_tile: ^1.1.0
 
 dev_dependencies:
@@ -41,7 +41,7 @@ dev_dependencies:
   # native
   flutter_launcher_icons: ^0.14.3
   flutter_native_splash: ^2.4.6
-  rename: ^3.0.2
+  rename: ^3.1.0
   # storage
   drift_dev: ^2.26.1
   json_serializable: ^6.9.5
@@ -52,9 +52,9 @@ flutter:
   uses-material-design: true
 
   assets:
-    - assets/not_found_page/not_found_desktop.png
-    - assets/not_found_page/not_found_tablet.png
-    - assets/not_found_page/not_found_mobile.png
+    - assets/not_found/not_found_desktop.png
+    - assets/not_found/not_found_tablet.png
+    - assets/not_found/not_found_mobile.png
 
   # fonts:
   #   - family: Schyler
