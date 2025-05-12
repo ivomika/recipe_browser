@@ -1,4 +1,4 @@
-import 'package:recipe_browser/features/recipe/recipe.dart';
+import 'package:recipe_browser/shared/models/models.dart';
 
 class IngredientModel{
   final String name;

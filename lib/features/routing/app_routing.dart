@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:recipe_browser/features/create/create.dart';
-import 'package:recipe_browser/features/home/home.dart';
-import 'package:recipe_browser/features/layouts/layouts.dart';
-import 'package:recipe_browser/features/not_found/not_found.dart';
-import 'package:recipe_browser/features/recipe_detail/recipe_detail.dart';
+import 'package:recipe_browser/pages/pages.dart';
+import 'package:recipe_browser/shared/layouts/layouts.dart';
 
 final appRouting = GoRouter(
     initialLocation: '/home',
@@ -16,7 +13,7 @@ final appRouting = GoRouter(
         // sets/:id,
         StatefulShellRoute.indexedStack(
             builder: (context, state, shell) =>
-                NavigationWithAppBarLayout(
+                BottomNavigationLayout(
                     body: shell,
                     selectedIndex: shell.currentIndex,
                     onDestinationSelected: (index) => shell.goBranch(index),
@@ -140,7 +137,7 @@ final appRouting = GoRouter(
                   routes: [
                     StatefulShellRoute.indexedStack(
                         builder: (context, state, shell) =>
-                            NavigationWithAppBarLayout(
+                            BottomNavigationLayout(
                                 body: shell,
                                 selectedIndex: shell.currentIndex,
                                 onDestinationSelected: (index) => shell.goBranch(index),

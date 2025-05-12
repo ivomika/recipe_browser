@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:recipe_browser/features/drift/drift.dart';
-import 'package:recipe_browser/features/recipe/bloc/recipe_bloc.dart';
-import 'package:recipe_browser/features/recipe/recipe.dart';
-import 'package:recipe_browser/features/recipe_detail/bloc/recipe_detail_bloc.dart';
-import 'package:recipe_browser/features/theme/extension/offset_extension.dart';
+import 'package:recipe_browser/features/routing/app_routing.dart';
 import 'package:recipe_browser/features/theme/theme.dart';
+import 'package:recipe_browser/pages/pages.dart';
+import 'package:recipe_browser/shared/repositories/repositories.dart';
 import 'package:url_strategy/url_strategy.dart';
-
-import 'features/routing/app_routing.dart';
 
 void main() {
   //remove # from url
@@ -31,8 +28,8 @@ class MyApp extends StatelessWidget {
         RepositoryProvider<IRecipeRepository>(
           create: (context) => DriftRecipeRepository(context.read<DriftAppDatabase>()),
         ),
-        BlocProvider<RecipeBloc>(
-          create: (context) => RecipeBloc(context.read<IRecipeRepository>())
+        BlocProvider<RecipeListBloc>(
+          create: (context) => RecipeListBloc(context.read<IRecipeRepository>())
         ),
         BlocProvider<RecipeDetailBloc>(
           create: (context) => RecipeDetailBloc(context.read<IRecipeRepository>())
@@ -43,7 +40,7 @@ class MyApp extends StatelessWidget {
         themeMode: ThemeMode.system,
         theme: AppTheme.light.copyWith(
           extensions: [
-            OffsetExtension(
+            OffsetThemeExtension(
                 verySmall: 4,
                 small: 8,
                 normal: 16,
@@ -54,7 +51,7 @@ class MyApp extends StatelessWidget {
         ),
         darkTheme: AppTheme.dark.copyWith(
             extensions: [
-              OffsetExtension(
+              OffsetThemeExtension(
                   verySmall: 4,
                   small: 8,
                   normal: 16,
