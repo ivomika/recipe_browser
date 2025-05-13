@@ -19,13 +19,15 @@ class CreateRecipeCubit extends Cubit<CreateRecipeState> {
       ) : _recipeRepository = recipeRepository, super(
       CreateRecipeInitial(
           CreateRecipeModel(
-            ingredients: []
+            ingredients: [],
+            cookingSteps: []
           )
       )
   );
 
   FutureOr<void> create() async {
     try{
+      print(state.data);
       await _recipeRepository.create(
         Recipe.create(
             title: state.data.title!,

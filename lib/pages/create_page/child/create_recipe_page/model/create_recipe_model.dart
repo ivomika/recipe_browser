@@ -13,8 +13,8 @@ class CreateRecipeModel{
     this.description,
     this.cookingTime,
     this.kilocalories,
-    this.ingredients,
-    this.cookingSteps
+    required this.ingredients,
+    required this.cookingSteps
   });
 
   @override

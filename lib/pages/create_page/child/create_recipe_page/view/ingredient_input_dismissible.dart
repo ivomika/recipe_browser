@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:recipe_browser/features/theme/theme.dart';
 import 'package:recipe_browser/pages/create_page/child/create_recipe_page/view/ingredient_input.dart';
 import 'package:recipe_browser/pages/create_page/child/create_recipe_page/view/ingredient_input_controller.dart';
+import 'package:recipe_browser/utils/utils.dart';
 
 class IngredientInputDismissible extends StatelessWidget {
   final IngredientInputController controller;

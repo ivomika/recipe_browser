@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:recipe_browser/features/theme/theme.dart';
+import 'package:recipe_browser/features/cooking_step_list_input/cooking_step_list_input.dart';
 import 'package:recipe_browser/pages/create_page/child/create_recipe_page/bloc/create_recipe_cubit.dart';
 import 'package:recipe_browser/pages/create_page/child/create_recipe_page/view/ingredient_list_input.dart';
 import 'package:recipe_browser/pages/home_page/bloc/recipe_list_bloc.dart';
+import 'package:recipe_browser/pages/pages.dart';
 import 'package:recipe_browser/shared/repositories/repositories.dart';
+import 'package:recipe_browser/utils/utils.dart';
 
 class CreateRecipeDetail extends StatelessWidget {
   const CreateRecipeDetail({super.key});
@@ -114,6 +116,9 @@ class _Form extends StatelessWidget {
               SizedBox(
                 height: context.offset.normal,
               ),
+              CookingStepListInput(
+                  onSaved: (value) => _cookingStepSave(value, context)
+              ),
               FilledButton(
                   onPressed: () => _formSubmit(context),
                   child: Text('Добавить')
@@ -173,5 +178,13 @@ class _Form extends StatelessWidget {
 
   void _kilocaloriesSave(String? newValue, BuildContext context) {
     context.read<CreateRecipeCubit>().state.data.kilocalories = int.parse(newValue!);
+  }
+
+  void _cookingStepSave(String? newValue, BuildContext context) {
+    context.read<CreateRecipeCubit>().state.data.cookingSteps?.add(
+      CreateCookingStepModel(
+        description: newValue
+      )
+    );
   }
 }

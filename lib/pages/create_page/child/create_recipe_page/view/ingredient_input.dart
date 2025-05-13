@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:recipe_browser/features/theme/theme.dart';
 import 'package:recipe_browser/pages/create_page/child/create_recipe_page/bloc/create_recipe_cubit.dart';
 import 'package:recipe_browser/pages/create_page/child/create_recipe_page/view/ingredient_input_controller.dart';
 import 'package:recipe_browser/shared/models/models.dart';
+import 'package:recipe_browser/utils/utils.dart';
 
 class IngredientInput extends StatelessWidget {
   final IngredientInputController controller;
