@@ -30,9 +30,9 @@ class RecipeTile extends StatelessWidget {
               SizedBox(
                 width: double.maxFinite,
                 height: 220,
-                child: Image.network(
+                child: Image.asset(
                     fit: BoxFit.cover,
-                    'https://placehold.co/500x500/png'
+                    'assets/placeholder/recipe_placeholder.jpg'
                 ),
               ),
               Align(

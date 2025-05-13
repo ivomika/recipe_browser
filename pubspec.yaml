@@ -55,6 +55,7 @@ flutter:
     - assets/not_found/not_found_desktop.png
     - assets/not_found/not_found_tablet.png
     - assets/not_found/not_found_mobile.png
+    - assets/placeholder/recipe_placeholder.jpg
 
   # fonts:
   #   - family: Schyler
