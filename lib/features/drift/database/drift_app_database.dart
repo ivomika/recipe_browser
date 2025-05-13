@@ -11,7 +11,7 @@ class DriftAppDatabase extends _$DriftAppDatabase {
   DriftAppDatabase([QueryExecutor? executor]) : super(executor ?? _openConnection());
 
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 2;
 
   static QueryExecutor _openConnection() {
     return driftDatabase(
@@ -23,5 +23,24 @@ class DriftAppDatabase extends _$DriftAppDatabase {
       ),
       // If you need web support, see https://drift.simonbinder.eu/platforms/web/
     );
+  }
+
+  @override
+  MigrationStrategy get migration {
+    return MigrationStrategy(
+      onUpgrade: _migration
+    );
+  }
+
+  Future<void> _migration(Migrator m, int from, int to) async {
+    if (from == 1) {
+      await m.alterTable(TableMigration(
+        recipeModel,
+        newColumns: [recipeModel.cookingSteps],
+        columnTransformer: {
+          recipeModel.cookingSteps: const Constant<String>('[]')
+        }
+      ));
+    }
   }
 }
