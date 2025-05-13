@@ -1,10 +1,8 @@
-import 'package:drift_flutter/drift_flutter.dart';
-import 'package:uuid/uuid.dart';
 import 'package:drift/drift.dart';
-import 'package:recipe_browser/features/drift/converter/ingredient_converter.dart';
-import 'package:recipe_browser/features/drift/models/ingredient_model.dart';
-import 'package:recipe_browser/features/drift/models/recipe_model.dart';
+import 'package:drift_flutter/drift_flutter.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:recipe_browser/features/drift/drift.dart';
+import 'package:uuid/uuid.dart';
 
 part 'drift_app_database.g.dart';
 

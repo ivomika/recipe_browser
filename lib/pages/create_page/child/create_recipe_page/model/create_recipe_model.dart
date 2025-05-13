@@ -1,4 +1,4 @@
-import 'package:recipe_browser/pages/create_page/child/create_recipe_page/model/create_ingredient_model.dart';
+import 'package:recipe_browser/pages/pages.dart';
 
 class CreateRecipeModel{
   String? title;
@@ -6,6 +6,7 @@ class CreateRecipeModel{
   int? cookingTime;
   int? kilocalories;
   List<CreateIngredientModel>? ingredients;
+  List<CreateCookingStepModel>? cookingSteps;
 
   CreateRecipeModel({
     this.title,
@@ -13,10 +14,11 @@ class CreateRecipeModel{
     this.cookingTime,
     this.kilocalories,
     this.ingredients,
+    this.cookingSteps
   });
 
   @override
   String toString() {
-    return 'CreateRecipeModel{title: $title, description: $description, cookingTime: $cookingTime, kilocalories: $kilocalories, ingredients: $ingredients}';
+    return 'CreateRecipeModel{title: $title, description: $description, cookingTime: $cookingTime, kilocalories: $kilocalories, ingredients: $ingredients, cookingSteps: $cookingSteps}';
   }
 }

@@ -12,6 +12,7 @@ class RecipeModel extends Table{
   IntColumn get cookingTime => integer()();
   IntColumn get kilocalories => integer()();
   TextColumn get ingredients => text().map(const IngredientConverter())();
+  TextColumn get cookingSteps => text().map(const CookingStepConverter())();
 }
 
 extension RecipeConverterToDataModel on Recipe{
@@ -25,6 +26,11 @@ extension RecipeConverterToDataModel on Recipe{
             ingredients.map(
                 (e) => e.toDataModel()
             ).toList(growable: false)
+        ),
+        cookingSteps: Value(
+          cookingSteps.map(
+              (e) => e.toDataModel()
+          ).toList(growable: false)
         )
     );
   }
@@ -40,6 +46,9 @@ extension RecipeConverterToLocalModel on RecipeModelData{
         cookingTime: cookingTime,
         kilocalories: kilocalories,
         ingredients: ingredients.map(
+            (e) => e.toLocalModel()
+        ).toList(growable: false),
+        cookingSteps: cookingSteps.map(
             (e) => e.toLocalModel()
         ).toList(growable: false)
     );

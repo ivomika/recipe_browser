@@ -63,6 +63,13 @@ class $RecipeModelTable extends RecipeModel
           .withConverter<List<IngredientModel>>(
               $RecipeModelTable.$converteringredients);
   @override
+  late final GeneratedColumnWithTypeConverter<List<CookingStepModel>, String>
+      cookingSteps = GeneratedColumn<String>(
+              'cooking_steps', aliasedName, false,
+              type: DriftSqlType.string, requiredDuringInsert: true)
+          .withConverter<List<CookingStepModel>>(
+              $RecipeModelTable.$convertercookingSteps);
+  @override
   List<GeneratedColumn> get $columns => [
         id,
         uuid,
@@ -71,7 +78,8 @@ class $RecipeModelTable extends RecipeModel
         description,
         cookingTime,
         kilocalories,
-        ingredients
+        ingredients,
+        cookingSteps
       ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -150,6 +158,9 @@ class $RecipeModelTable extends RecipeModel
       ingredients: $RecipeModelTable.$converteringredients.fromSql(
           attachedDatabase.typeMapping.read(
               DriftSqlType.string, data['${effectivePrefix}ingredients'])!),
+      cookingSteps: $RecipeModelTable.$convertercookingSteps.fromSql(
+          attachedDatabase.typeMapping.read(
+              DriftSqlType.string, data['${effectivePrefix}cooking_steps'])!),
     );
   }
 
@@ -160,6 +171,8 @@ class $RecipeModelTable extends RecipeModel
 
   static TypeConverter<List<IngredientModel>, String> $converteringredients =
       const IngredientConverter();
+  static TypeConverter<List<CookingStepModel>, String> $convertercookingSteps =
+      const CookingStepConverter();
 }
 
 class RecipeModelData extends DataClass implements Insertable<RecipeModelData> {
@@ -171,6 +184,7 @@ class RecipeModelData extends DataClass implements Insertable<RecipeModelData> {
   final int cookingTime;
   final int kilocalories;
   final List<IngredientModel> ingredients;
+  final List<CookingStepModel> cookingSteps;
   const RecipeModelData(
       {required this.id,
       required this.uuid,
@@ -179,7 +193,8 @@ class RecipeModelData extends DataClass implements Insertable<RecipeModelData> {
       required this.description,
       required this.cookingTime,
       required this.kilocalories,
-      required this.ingredients});
+      required this.ingredients,
+      required this.cookingSteps});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -194,6 +209,10 @@ class RecipeModelData extends DataClass implements Insertable<RecipeModelData> {
       map['ingredients'] = Variable<String>(
           $RecipeModelTable.$converteringredients.toSql(ingredients));
     }
+    {
+      map['cooking_steps'] = Variable<String>(
+          $RecipeModelTable.$convertercookingSteps.toSql(cookingSteps));
+    }
     return map;
   }
 
@@ -207,6 +226,7 @@ class RecipeModelData extends DataClass implements Insertable<RecipeModelData> {
       cookingTime: Value(cookingTime),
       kilocalories: Value(kilocalories),
       ingredients: Value(ingredients),
+      cookingSteps: Value(cookingSteps),
     );
   }
 
@@ -223,6 +243,8 @@ class RecipeModelData extends DataClass implements Insertable<RecipeModelData> {
       kilocalories: serializer.fromJson<int>(json['kilocalories']),
       ingredients:
           serializer.fromJson<List<IngredientModel>>(json['ingredients']),
+      cookingSteps:
+          serializer.fromJson<List<CookingStepModel>>(json['cookingSteps']),
     );
   }
   @override
@@ -237,6 +259,7 @@ class RecipeModelData extends DataClass implements Insertable<RecipeModelData> {
       'cookingTime': serializer.toJson<int>(cookingTime),
       'kilocalories': serializer.toJson<int>(kilocalories),
       'ingredients': serializer.toJson<List<IngredientModel>>(ingredients),
+      'cookingSteps': serializer.toJson<List<CookingStepModel>>(cookingSteps),
     };
   }
 
@@ -248,7 +271,8 @@ class RecipeModelData extends DataClass implements Insertable<RecipeModelData> {
           String? description,
           int? cookingTime,
           int? kilocalories,
-          List<IngredientModel>? ingredients}) =>
+          List<IngredientModel>? ingredients,
+          List<CookingStepModel>? cookingSteps}) =>
       RecipeModelData(
         id: id ?? this.id,
         uuid: uuid ?? this.uuid,
@@ -258,6 +282,7 @@ class RecipeModelData extends DataClass implements Insertable<RecipeModelData> {
         cookingTime: cookingTime ?? this.cookingTime,
         kilocalories: kilocalories ?? this.kilocalories,
         ingredients: ingredients ?? this.ingredients,
+        cookingSteps: cookingSteps ?? this.cookingSteps,
       );
   RecipeModelData copyWithCompanion(RecipeModelCompanion data) {
     return RecipeModelData(
@@ -274,6 +299,9 @@ class RecipeModelData extends DataClass implements Insertable<RecipeModelData> {
           : this.kilocalories,
       ingredients:
           data.ingredients.present ? data.ingredients.value : this.ingredients,
+      cookingSteps: data.cookingSteps.present
+          ? data.cookingSteps.value
+          : this.cookingSteps,
     );
   }
 
@@ -287,14 +315,15 @@ class RecipeModelData extends DataClass implements Insertable<RecipeModelData> {
           ..write('description: $description, ')
           ..write('cookingTime: $cookingTime, ')
           ..write('kilocalories: $kilocalories, ')
-          ..write('ingredients: $ingredients')
+          ..write('ingredients: $ingredients, ')
+          ..write('cookingSteps: $cookingSteps')
           ..write(')'))
         .toString();
   }
 
   @override
   int get hashCode => Object.hash(id, uuid, createdAt, title, description,
-      cookingTime, kilocalories, ingredients);
+      cookingTime, kilocalories, ingredients, cookingSteps);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -306,7 +335,8 @@ class RecipeModelData extends DataClass implements Insertable<RecipeModelData> {
           other.description == this.description &&
           other.cookingTime == this.cookingTime &&
           other.kilocalories == this.kilocalories &&
-          other.ingredients == this.ingredients);
+          other.ingredients == this.ingredients &&
+          other.cookingSteps == this.cookingSteps);
 }
 
 class RecipeModelCompanion extends UpdateCompanion<RecipeModelData> {
@@ -318,6 +348,7 @@ class RecipeModelCompanion extends UpdateCompanion<RecipeModelData> {
   final Value<int> cookingTime;
   final Value<int> kilocalories;
   final Value<List<IngredientModel>> ingredients;
+  final Value<List<CookingStepModel>> cookingSteps;
   const RecipeModelCompanion({
     this.id = const Value.absent(),
     this.uuid = const Value.absent(),
@@ -327,6 +358,7 @@ class RecipeModelCompanion extends UpdateCompanion<RecipeModelData> {
     this.cookingTime = const Value.absent(),
     this.kilocalories = const Value.absent(),
     this.ingredients = const Value.absent(),
+    this.cookingSteps = const Value.absent(),
   });
   RecipeModelCompanion.insert({
     this.id = const Value.absent(),
@@ -337,11 +369,13 @@ class RecipeModelCompanion extends UpdateCompanion<RecipeModelData> {
     required int cookingTime,
     required int kilocalories,
     required List<IngredientModel> ingredients,
+    required List<CookingStepModel> cookingSteps,
   })  : title = Value(title),
         description = Value(description),
         cookingTime = Value(cookingTime),
         kilocalories = Value(kilocalories),
-        ingredients = Value(ingredients);
+        ingredients = Value(ingredients),
+        cookingSteps = Value(cookingSteps);
   static Insertable<RecipeModelData> custom({
     Expression<int>? id,
     Expression<String>? uuid,
@@ -351,6 +385,7 @@ class RecipeModelCompanion extends UpdateCompanion<RecipeModelData> {
     Expression<int>? cookingTime,
     Expression<int>? kilocalories,
     Expression<String>? ingredients,
+    Expression<String>? cookingSteps,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -361,6 +396,7 @@ class RecipeModelCompanion extends UpdateCompanion<RecipeModelData> {
       if (cookingTime != null) 'cooking_time': cookingTime,
       if (kilocalories != null) 'kilocalories': kilocalories,
       if (ingredients != null) 'ingredients': ingredients,
+      if (cookingSteps != null) 'cooking_steps': cookingSteps,
     });
   }
 
@@ -372,7 +408,8 @@ class RecipeModelCompanion extends UpdateCompanion<RecipeModelData> {
       Value<String>? description,
       Value<int>? cookingTime,
       Value<int>? kilocalories,
-      Value<List<IngredientModel>>? ingredients}) {
+      Value<List<IngredientModel>>? ingredients,
+      Value<List<CookingStepModel>>? cookingSteps}) {
     return RecipeModelCompanion(
       id: id ?? this.id,
       uuid: uuid ?? this.uuid,
@@ -382,6 +419,7 @@ class RecipeModelCompanion extends UpdateCompanion<RecipeModelData> {
       cookingTime: cookingTime ?? this.cookingTime,
       kilocalories: kilocalories ?? this.kilocalories,
       ingredients: ingredients ?? this.ingredients,
+      cookingSteps: cookingSteps ?? this.cookingSteps,
     );
   }
 
@@ -413,6 +451,10 @@ class RecipeModelCompanion extends UpdateCompanion<RecipeModelData> {
       map['ingredients'] = Variable<String>(
           $RecipeModelTable.$converteringredients.toSql(ingredients.value));
     }
+    if (cookingSteps.present) {
+      map['cooking_steps'] = Variable<String>(
+          $RecipeModelTable.$convertercookingSteps.toSql(cookingSteps.value));
+    }
     return map;
   }
 
@@ -426,7 +468,8 @@ class RecipeModelCompanion extends UpdateCompanion<RecipeModelData> {
           ..write('description: $description, ')
           ..write('cookingTime: $cookingTime, ')
           ..write('kilocalories: $kilocalories, ')
-          ..write('ingredients: $ingredients')
+          ..write('ingredients: $ingredients, ')
+          ..write('cookingSteps: $cookingSteps')
           ..write(')'))
         .toString();
   }
@@ -453,6 +496,7 @@ typedef $$RecipeModelTableCreateCompanionBuilder = RecipeModelCompanion
   required int cookingTime,
   required int kilocalories,
   required List<IngredientModel> ingredients,
+  required List<CookingStepModel> cookingSteps,
 });
 typedef $$RecipeModelTableUpdateCompanionBuilder = RecipeModelCompanion
     Function({
@@ -464,6 +508,7 @@ typedef $$RecipeModelTableUpdateCompanionBuilder = RecipeModelCompanion
   Value<int> cookingTime,
   Value<int> kilocalories,
   Value<List<IngredientModel>> ingredients,
+  Value<List<CookingStepModel>> cookingSteps,
 });
 
 class $$RecipeModelTableFilterComposer
@@ -501,6 +546,12 @@ class $$RecipeModelTableFilterComposer
       get ingredients => $composableBuilder(
           column: $table.ingredients,
           builder: (column) => ColumnWithTypeConverterFilters(column));
+
+  ColumnWithTypeConverterFilters<List<CookingStepModel>, List<CookingStepModel>,
+          String>
+      get cookingSteps => $composableBuilder(
+          column: $table.cookingSteps,
+          builder: (column) => ColumnWithTypeConverterFilters(column));
 }
 
 class $$RecipeModelTableOrderingComposer
@@ -536,6 +587,10 @@ class $$RecipeModelTableOrderingComposer
 
   ColumnOrderings<String> get ingredients => $composableBuilder(
       column: $table.ingredients, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get cookingSteps => $composableBuilder(
+      column: $table.cookingSteps,
+      builder: (column) => ColumnOrderings(column));
 }
 
 class $$RecipeModelTableAnnotationComposer
@@ -571,6 +626,10 @@ class $$RecipeModelTableAnnotationComposer
   GeneratedColumnWithTypeConverter<List<IngredientModel>, String>
       get ingredients => $composableBuilder(
           column: $table.ingredients, builder: (column) => column);
+
+  GeneratedColumnWithTypeConverter<List<CookingStepModel>, String>
+      get cookingSteps => $composableBuilder(
+          column: $table.cookingSteps, builder: (column) => column);
 }
 
 class $$RecipeModelTableTableManager extends RootTableManager<
@@ -607,6 +666,7 @@ class $$RecipeModelTableTableManager extends RootTableManager<
             Value<int> cookingTime = const Value.absent(),
             Value<int> kilocalories = const Value.absent(),
             Value<List<IngredientModel>> ingredients = const Value.absent(),
+            Value<List<CookingStepModel>> cookingSteps = const Value.absent(),
           }) =>
               RecipeModelCompanion(
             id: id,
@@ -617,6 +677,7 @@ class $$RecipeModelTableTableManager extends RootTableManager<
             cookingTime: cookingTime,
             kilocalories: kilocalories,
             ingredients: ingredients,
+            cookingSteps: cookingSteps,
           ),
           createCompanionCallback: ({
             Value<int> id = const Value.absent(),
@@ -627,6 +688,7 @@ class $$RecipeModelTableTableManager extends RootTableManager<
             required int cookingTime,
             required int kilocalories,
             required List<IngredientModel> ingredients,
+            required List<CookingStepModel> cookingSteps,
           }) =>
               RecipeModelCompanion.insert(
             id: id,
@@ -637,6 +699,7 @@ class $$RecipeModelTableTableManager extends RootTableManager<
             cookingTime: cookingTime,
             kilocalories: kilocalories,
             ingredients: ingredients,
+            cookingSteps: cookingSteps,
           ),
           withReferenceMapper: (p0) => p0
               .map((e) => (e.readTable(table), BaseReferences(db, table, e)))

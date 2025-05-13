@@ -52,7 +52,8 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                                 count: 10,
                                 type: CountType.gram
                             )
-                        )
+                        ),
+                        cookingSteps: []
                     )
                 )
             );

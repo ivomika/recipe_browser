@@ -26,7 +26,6 @@ class CreateRecipeCubit extends Cubit<CreateRecipeState> {
 
   FutureOr<void> create() async {
     try{
-      print(state.data);
       await _recipeRepository.create(
         Recipe.create(
             title: state.data.title!,
@@ -40,6 +39,11 @@ class CreateRecipeCubit extends Cubit<CreateRecipeState> {
                         count: e.count!,
                         type: e.type!
                     )
+            ).toList(growable: false),
+            cookingSteps: state.data.cookingSteps!.map(
+                (e) => CookingStep(
+                    description: e.description!
+                )
             ).toList(growable: false)
         )
       );
