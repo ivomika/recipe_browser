@@ -115,7 +115,7 @@ class _Sheet extends StatelessWidget {
                   child: SizedBox(
                     height: 500,
                     child: Center(
-                      child: CircularProgressIndicator(),
+                      child: Text(state.error),
                     ),
                   ),
                 );
