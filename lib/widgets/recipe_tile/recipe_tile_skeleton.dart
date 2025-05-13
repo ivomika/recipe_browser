@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:recipe_browser/features/theme/theme.dart';
+import 'package:recipe_browser/utils/utils.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class RecipeTileSkeleton extends StatelessWidget {
