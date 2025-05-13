@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:recipe_browser/features/recipe_tile/recipe_tile.dart';
 import 'package:recipe_browser/pages/home_page/bloc/recipe_list_bloc.dart';
 import 'package:recipe_browser/utils/extensions/theme_context_extension.dart';
-import 'package:recipe_browser/widgets/recipe_tile/recipe_tile.dart';
-import 'package:recipe_browser/widgets/recipe_tile/recipe_tile_skeleton.dart';
 import 'package:smooth_sheets/smooth_sheets.dart';
 
 class HomeBottomSheet extends StatefulWidget {
