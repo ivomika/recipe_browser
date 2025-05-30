@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:recipe_browser/features/animated_arrow/view/animated_arrow.dart';
+import 'package:recipe_browser/features/animated_arrow/animated_arrow.dart';
 import 'package:recipe_browser/features/recipe_list/recipe_list.dart';
 import 'package:recipe_browser/features/recipe_tile/recipe_tile.dart';
 import 'package:recipe_browser/utils/utils.dart';
