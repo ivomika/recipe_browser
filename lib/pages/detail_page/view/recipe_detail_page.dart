@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:recipe_browser/features/recipe_list/recipe_list.dart';
 import 'package:recipe_browser/pages/detail_page/bloc/recipe_detail_bloc.dart';
-import 'package:recipe_browser/pages/home_page/bloc/recipe_list_bloc.dart';
 import 'package:recipe_browser/shared/models/models.dart';
 import 'package:recipe_browser/utils/utils.dart';
 import 'package:skeletonizer/skeletonizer.dart';

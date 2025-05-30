@@ -21,7 +21,7 @@ class RecipeListBloc extends Bloc<RecipeListEvent, RecipeListState> {
   FutureOr<void> _loadingRecipes(LoadingRecipes event, Emitter<RecipeListState> emit) async {
     emit(RecipeLoading());
 
-    await Future.delayed(Duration(seconds: 4));
+    await Future.delayed(Duration(seconds: 2));
     try{
       final recipes = await _repository.all();
       emit(RecipeLoaded(recipes: recipes.reversed.toList(growable: false)));

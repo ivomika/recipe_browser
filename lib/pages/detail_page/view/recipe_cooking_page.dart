@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:recipe_browser/features/cooking_step/cooking_step.dart';
+import 'package:recipe_browser/features/cooking_stepper/cooking_stepper.dart';
 import 'package:recipe_browser/pages/pages.dart';
 import 'package:recipe_browser/utils/utils.dart';
 

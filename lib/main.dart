@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:recipe_browser/features/drift/drift.dart';
+import 'package:recipe_browser/features/recipe_list/recipe_list.dart';
 import 'package:recipe_browser/features/routing/app_routing.dart';
 import 'package:recipe_browser/features/theme/theme.dart';
 import 'package:recipe_browser/pages/pages.dart';
@@ -29,7 +30,9 @@ class MyApp extends StatelessWidget {
           create: (context) => DriftRecipeRepository(context.read<DriftAppDatabase>()),
         ),
         BlocProvider<RecipeListBloc>(
-          create: (context) => RecipeListBloc(context.read<IRecipeRepository>())
+          create: (context) => RecipeListBloc(
+              context.read<IRecipeRepository>()
+          )..add(LoadingRecipes())
         ),
         BlocProvider<RecipeDetailBloc>(
           create: (context) => RecipeDetailBloc(context.read<IRecipeRepository>())
