@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class CookingStepInput extends StatelessWidget {
   final TextEditingController controller;
-  final void Function(String?) onSaved;
+  final void Function(String? value) onSaved;
   final int number;
 
   const CookingStepInput({

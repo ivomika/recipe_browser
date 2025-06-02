@@ -4,7 +4,7 @@ import 'package:recipe_browser/utils/utils.dart';
 
 class CookingStepInputDismissible extends StatelessWidget {
   final TextEditingController controller;
-  final void Function(String?) onSaved;
+  final void Function(String? value) onSaved;
   final void Function() onDismissed;
   final int number;
 

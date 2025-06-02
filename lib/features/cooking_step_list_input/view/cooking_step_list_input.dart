@@ -3,7 +3,7 @@ import 'package:recipe_browser/features/cooking_step_list_input/cooking_step_lis
 import 'package:recipe_browser/utils/utils.dart';
 
 class CookingStepListInput extends StatefulWidget {
-  final void Function(String?) onSaved;
+  final void Function(String? value) onSaved;
 
   const CookingStepListInput({
     super.key,
