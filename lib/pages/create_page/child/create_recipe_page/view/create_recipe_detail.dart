@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:recipe_browser/features/cooking_step_list_input/cooking_step_list_input.dart';
+import 'package:recipe_browser/features/ingredient_list_input/ingredient_list_input.dart';
 import 'package:recipe_browser/features/recipe_list/recipe_list.dart';
 import 'package:recipe_browser/pages/pages.dart';
 import 'package:recipe_browser/shared/repositories/repositories.dart';
 import 'package:recipe_browser/utils/utils.dart';
+import 'package:recipe_browser/shared/models/models.dart';
 
 class CreateRecipeDetail extends StatelessWidget {
   const CreateRecipeDetail({super.key});
@@ -106,7 +108,9 @@ class _Form extends StatelessWidget {
               SizedBox(
                 height: context.offset.normal,
               ),
-              IngredientListInput(),
+              IngredientListInput(
+                onSaved: (value) => _onSaveIngredient(value, context),
+              ),
               SizedBox(
                 height: context.offset.normal,
               ),
@@ -182,6 +186,16 @@ class _Form extends StatelessWidget {
     context.read<CreateRecipeCubit>().state.data.cookingSteps?.add(
       CreateCookingStepModel(
         description: newValue
+      )
+    );
+  }
+
+  void _onSaveIngredient(Ingredient value, BuildContext context) {
+    context.read<CreateRecipeCubit>().state.data.ingredients?.add(
+      CreateIngredientModel(
+        name: value.name,
+        count: value.count,
+        type: value.type
       )
     );
   }
