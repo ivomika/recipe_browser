@@ -28,3 +28,14 @@ final class ConfirmRecipeDetailStep extends RecipeDetailEvent{
   List<Object?> get props => super.props..addAll([id, index]);
 }
 
+final class DeleteRecipeDetail extends RecipeDetailEvent{
+  final Recipe recipe;
+
+  DeleteRecipeDetail(
+      this.recipe,
+  );
+
+  @override
+  List<Object?> get props => super.props..addAll([recipe]);
+}
+

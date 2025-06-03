@@ -1,5 +1,4 @@
-//GENERATED BARREL FILE 
-export './detail_page/bloc/recipe_detail_bloc.dart'; 
+//GENERATED BARREL FILE
 export './detail_page/view/recipe_cooking_page.dart'; 
 export './detail_page/view/recipe_detail_page.dart'; 
 export './home_page/view/home_page.dart'; 

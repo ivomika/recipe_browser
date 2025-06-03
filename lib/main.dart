@@ -4,8 +4,8 @@ import 'package:recipe_browser/features/drift/drift.dart';
 import 'package:recipe_browser/features/recipe_list/recipe_list.dart';
 import 'package:recipe_browser/features/routing/app_routing.dart';
 import 'package:recipe_browser/features/theme/theme.dart';
-import 'package:recipe_browser/pages/pages.dart';
 import 'package:recipe_browser/shared/repositories/repositories.dart';
+import 'package:recipe_browser/widgets/recipe_info/recipe_info.dart';
 import 'package:url_strategy/url_strategy.dart';
 
 void main() {

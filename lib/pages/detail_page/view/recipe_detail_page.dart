@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:recipe_browser/features/recipe_image/recipe_image.dart';
 import 'package:recipe_browser/features/recipe_list/recipe_list.dart';
-import 'package:recipe_browser/pages/detail_page/bloc/recipe_detail_bloc.dart';
 import 'package:recipe_browser/shared/models/models.dart';
 import 'package:recipe_browser/utils/utils.dart';
+import 'package:recipe_browser/widgets/recipe_info/recipe_info.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class RecipeDetailPage extends StatefulWidget {
@@ -82,89 +83,59 @@ class _LoadedState extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        Positioned.fill(
+        Positioned(
+            top: 0,
+            left: 0,
+            right: 0,
+            child: RecipeImage(
+                recipe: recipe
+            )
+        ),
+        Positioned(
+          top: 220,
+          left: 0,
+          right: 0,
+          bottom: 0,
           child: Column(
             children: [
-              SizedBox(
-                width: double.maxFinite,
-                height: 220,
-
-                child: Image.asset(
-                    fit: BoxFit.cover,
-                    'assets/placeholder/recipe_placeholder.jpg'
-                ),
-              ),
               Expanded(
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: context.offset.normal),
-                  child: CustomScrollView(
-                    slivers: [
-                      SliverToBoxAdapter(child: SizedBox(height: context.offset.small,)),
-                      SliverToBoxAdapter(
-                        child: Text(
-                            recipe.title,
-                            style: context.theme.textTheme.titleMedium,
+                  child: RecipeInfo(recipe: recipe)
+              ),
+              Padding(
+                padding: EdgeInsets.all(context.offset.normal),
+                child: Row(
+                  // spacing: context.offset.normal,
+                  children: [
+                    Expanded(
+                        child: FilledButton.tonalIcon(
+                          onPressed: () => context.go('/recipe/${recipe.id}/cooking'),
+                          icon: Icon(Icons.play_arrow),
+                          label: Text('Готовить!'),
                         ),
-                      ),
-                      SliverToBoxAdapter(child: SizedBox(height: context.offset.small,)),
-                      SliverToBoxAdapter(
-                        child: SizedBox(
-                          height: 24,
-                          width: double.maxFinite,
-                          child: SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-
-                            child: Row(
-                              children: [
-                                _Label(
-                                    icon: Icons.timer_outlined,
-                                    text: '${recipe.cookingTime} мин.'
-                                ),
-                                SizedBox(width: context.offset.small),
-                                _Label(
-                                    icon: Icons.cookie_outlined,
-                                    text: '${recipe.kilocalories} ккал.'
-                                ),
-                                SizedBox(width: context.offset.small),
-                                _Label(
-                                    icon: Icons.shopping_bag_outlined,
-                                    text: '${recipe.ingredients.length} шт.'
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                      SliverToBoxAdapter(child: SizedBox(height: context.offset.normal,)),
-                      SliverToBoxAdapter(child: Text(recipe.description)),
-                      SliverToBoxAdapter(child: SizedBox(height: context.offset.normal,)),
-                      SliverToBoxAdapter(
-                        child: Divider(),
-                      ),
-                      SliverList.separated(
-                          itemCount: recipe.ingredients.length,
-                          itemBuilder: (BuildContext context, int index) => Card(
-                              margin: EdgeInsets.zero,
+                    ),
+                    PopupMenuButton(
+                        itemBuilder: (popContext) => [
+                          PopupMenuItem(
+                              onTap: () => _deleteRecipe(context),
                               child: ListTile(
-                                  title: Text(
-                                      _buildTileText(recipe, index)
-                                  )
+                                leading: Icon(Icons.delete),
+                                title: Text('Удалить'),
                               )
                           ),
-                          separatorBuilder: (BuildContext context, int index) =>
-                              SizedBox(
-                                height: context.offset.normal,
-                              ),
-                      ),
-                      SliverToBoxAdapter(
-                        child: SizedBox(height: context.offset.veryLarge,),
-                      )
-                    ],
-                  ),
+                          PopupMenuItem(
+                              enabled: false,
+                              child: ListTile(
+                                leading: Icon(Icons.edit),
+                                title: Text('Редактировать'),
+                              )
+                          ),
+                        ]
+                    )
+                  ],
                 ),
               )
             ],
-          ),
+          )
         ),
 
         Positioned(
@@ -184,82 +155,18 @@ class _LoadedState extends StatelessWidget {
               ),
             )
         ),
-
-        Positioned(
-            right: context.offset.verySmall,
-            top: context.offset.verySmall,
-            child: SafeArea(
-              child: IconButton(
-                style: ButtonStyle(
-                    backgroundColor: WidgetStateProperty.all(
-                        context.theme.colorScheme.surface
-                    ),
-                    foregroundColor: WidgetStateProperty.all(
-                        context.theme.colorScheme.error
-                    )
-                ),
-                onPressed: () => _deleteRecipe(context),
-                icon: Icon(Icons.delete),
-              ),
-            )
-        ),
-
-        Align(
-          alignment: Alignment.bottomCenter,
-          child: FilledButton.tonalIcon(
-            onPressed: () => context.go('/recipe/${recipe.id}/cooking'),
-            icon: Icon(Icons.play_arrow),
-            label: Text('Готовить!'),
-          ),
-        ),
       ],
     );
   }
 
   void _deleteRecipe(BuildContext context) {
+    context.read<RecipeDetailBloc>().add(
+        DeleteRecipeDetail(recipe)
+    );
     context.read<RecipeListBloc>().add(
-        DeleteRecipe(recipe)
+        LoadingRecipes()
     );
     context.pop();
-  }
-
-  String _buildTileText(Recipe recipe, int index) {
-    return '${recipe.ingredients.elementAt(index).name} - '
-            '${recipe.ingredients.elementAt(index).count} '
-            '${recipe.ingredients.elementAt(index).type.name}';
-  }
-}
-
-class _Label extends StatelessWidget {
-  final IconData icon;
-  final String text;
-
-  const _Label({
-    required this.icon,
-    required this.text,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.center,
-
-      children: [
-        Icon(
-          icon,
-          color: context.theme.colorScheme.outline,
-        ),
-        SizedBox(width: context.offset.verySmall),
-        Text(
-          text,
-          style: context.theme.textTheme.labelMedium?.copyWith(
-            color: context.theme.colorScheme.outline
-          ),
-        )
-      ],
-    );
   }
 }
 
