@@ -3,9 +3,9 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:recipe_browser/pages/create_page/child/create_recipe_page/model/create_recipe_model.dart';
 import 'package:recipe_browser/shared/models/models.dart';
 import 'package:recipe_browser/shared/repositories/repositories.dart';
+import 'package:recipe_browser/widgets/create_forms/recipe/model/create_recipe_model.dart';
 
 part 'create_recipe_state.dart';
 

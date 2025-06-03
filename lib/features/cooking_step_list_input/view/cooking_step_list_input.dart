@@ -48,7 +48,7 @@ class _CookingStepListInputState extends State<CookingStepListInput> {
             ),
             growable: false
         ),
-        FilledButton.icon(
+        OutlinedButton.icon(
             onPressed: _addInput,
             icon: Icon(Icons.add),
             label: Text('Добавить шаг'),

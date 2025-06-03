@@ -1,4 +1,5 @@
-import 'package:recipe_browser/pages/pages.dart';
+import 'package:recipe_browser/widgets/create_forms/recipe/model/create_cooking_step_model.dart';
+import 'package:recipe_browser/widgets/create_forms/recipe/model/create_ingredient_model.dart';
 
 class CreateRecipeModel{
   String? title;

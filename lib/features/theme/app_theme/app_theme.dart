@@ -48,6 +48,7 @@ abstract final class AppTheme {
       inputDecoratorBorderType: FlexInputBorderType.outline,
       popupMenuRadius: 12.0,
       appBarScrolledUnderElevation: 0.0,
+      snackBarRadius: 32,
       navigationRailUseIndicator: true,
     ),
     // ColorScheme seed generation configuration for light mode.
@@ -89,6 +90,7 @@ abstract final class AppTheme {
       inputDecoratorContentPadding: EdgeInsetsDirectional.fromSTEB(24, 20, 24, 12),
       inputDecoratorBorderType: FlexInputBorderType.outline,
       popupMenuRadius: 12.0,
+      snackBarRadius: 32,
       navigationRailUseIndicator: true,
     ),
     // ColorScheme seed configuration setup for dark mode.

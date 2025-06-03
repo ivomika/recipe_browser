@@ -38,7 +38,51 @@ final appRouting = GoRouter(
                                     routes: [
                                       GoRoute(
                                         path: 'recipe',
-                                        builder: (context, state) => CreateRecipeDetail(),
+                                        redirect: (context, state) {
+                                          if (state.fullPath == '/create/recipe') {
+                                            return '/create/recipe/detail';
+                                          }
+
+                                          return null;
+                                        },
+                                        routes: [
+                                          StatefulShellRoute.indexedStack(
+                                              branches: [
+                                                StatefulShellBranch(
+                                                    preload: true,
+                                                    routes: [
+                                                      GoRoute(
+                                                          path: 'detail',
+                                                          builder: (context, state) => CreateRecipeDetailScreen()
+                                                      )
+                                                    ]
+                                                ),
+                                                StatefulShellBranch(
+                                                    preload: true,
+                                                    routes: [
+                                                      GoRoute(
+                                                          path: 'ingredient',
+                                                          builder: (context, state) => CreateRecipeIngredientScreen()
+                                                      )
+                                                    ]
+                                                ),
+                                                StatefulShellBranch(
+                                                    preload: true,
+                                                    routes: [
+                                                      GoRoute(
+                                                          path: 'step',
+                                                          builder: (context, state) => CreateRecipeStepScreen()
+                                                      )
+                                                    ]
+                                                ),
+                                              ],
+                                              builder: (context, state, shell) =>
+                                                  CreateRecipePage(
+                                                      onTabTap: shell.goBranch,
+                                                      child: shell
+                                                  )
+                                          )
+                                        ],
                                       )
                                     ]
                                 ),
