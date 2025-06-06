@@ -12,9 +12,10 @@ part 'recipe_detail_state.dart';
 
 class RecipeDetailBloc extends Bloc<RecipeDetailEvent, RecipeDetailState> {
 
-  final IRecipeRepository _repository;
+  final IRecipeRepository _recipeRepository;
+  final ISetRepository _setRepository;
 
-  RecipeDetailBloc(IRecipeRepository repository) : _repository = repository, super(RecipeDetailInitial()) {
+  RecipeDetailBloc(this._recipeRepository, this._setRepository) : super(RecipeDetailInitial()) {
     on<LoadingRecipeDetail>(_loadingRecipeDetail);
     on<ConfirmRecipeDetailStep>(_confirmRecipeDetailStep);
     on<DeleteRecipeDetail>(_deleteRecipe);
@@ -24,22 +25,24 @@ class RecipeDetailBloc extends Bloc<RecipeDetailEvent, RecipeDetailState> {
     emit(RecipeDetailLoading());
 
     try{
-      await Future.delayed(Duration(seconds: 2));
-      final recipe = await _repository.byId(event.id);
-      emit(RecipeDetailLoaded(recipe, 0));
+      final recipe = await _recipeRepository.byId(event.id);
+      final sets = await _setRepository.byRecipeId(event.id);
+      emit(RecipeDetailLoaded(recipe, sets, 0));
     }catch(e){
       emit(RecipeDetailError(error: e.toString()));
     }
   }
 
   FutureOr<void> _confirmRecipeDetailStep(ConfirmRecipeDetailStep event, Emitter<RecipeDetailState> emit) async {
-    final recipe = await _repository.byId(event.id);
-    emit(RecipeDetailLoaded(recipe, event.index));
+    final recipe = await _recipeRepository.byId(event.id);
+    final sets = await _setRepository.byRecipeId(event.id);
+
+    emit(RecipeDetailLoaded(recipe, sets, event.index));
   }
 
   FutureOr<void> _deleteRecipe(DeleteRecipeDetail event, Emitter<RecipeDetailState> emit) async {
     try{
-      final result = await _repository.delete(event.recipe);
+      final result = await _recipeRepository.delete(event.recipe);
       if(result == false) throw InvalidDataException('Нет подходящего объекта для удаления');
     }catch(e){
       emit(RecipeDetailError(error: e.toString()));

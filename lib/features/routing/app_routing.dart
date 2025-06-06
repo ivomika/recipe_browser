@@ -107,11 +107,13 @@ final appRouting = GoRouter(
                 StatefulShellBranch(
                     routes: [
                         GoRoute(
-                            builder: (context, state) => Center(child: Text('/sets')),
+                            builder: (context, state) => SetsPage(),
                             path: '/sets',
                             routes: [
                                 GoRoute(
-                                    builder: (context, state) => Center(child: Text('/sets/${state.pathParameters['id']}')),
+                                    builder: (context, state) => SetDetailPage(
+                                      id: state.pathParameters['id']
+                                    ),
                                     path: ':id'
                                 )
                             ]

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:recipe_browser/features/animated_arrow/animated_arrow.dart';
 import 'package:recipe_browser/features/recipe_list/recipe_list.dart';
 import 'package:recipe_browser/features/recipe_tile/recipe_tile.dart';
@@ -54,7 +55,8 @@ class _RecipeBottomSheetState extends State<RecipeBottomSheet> {
                   Expanded(
                     child: RecipeList(
                         itemBuilder: (context, index, state) => RecipeTile(
-                            recipe: state.recipes.elementAt(index)
+                            recipe: state.recipes.elementAt(index),
+                            onTap: () =>context.go('/recipe/${state.recipes.elementAt(index).id}'),
                         ),
                         skeletonBuilder: (context, index) => RecipeTileSkeleton()
                     ),

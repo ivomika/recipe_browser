@@ -13,6 +13,7 @@ class Recipe extends BaseModel{
   final int kilocalories;
   /// list of ingredients
   final List<Ingredient> ingredients;
+  /// list of steps
   final List<CookingStep> cookingSteps;
 
   const Recipe({

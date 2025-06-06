@@ -6,12 +6,12 @@ import 'package:uuid/uuid.dart';
 
 part 'drift_app_database.g.dart';
 
-@DriftDatabase(tables: [RecipeModel])
+@DriftDatabase(tables: [RecipeModel, SetModel])
 class DriftAppDatabase extends _$DriftAppDatabase {
   DriftAppDatabase([QueryExecutor? executor]) : super(executor ?? _openConnection());
 
   @override
-  int get schemaVersion => 2;
+  int get schemaVersion => 3;
 
   static QueryExecutor _openConnection() {
     return driftDatabase(
@@ -41,6 +41,10 @@ class DriftAppDatabase extends _$DriftAppDatabase {
           recipeModel.cookingSteps: const Constant<String>('[]')
         }
       ));
+    }
+
+    if (from == 2) {
+      await m.createTable(setModel);
     }
   }
 }

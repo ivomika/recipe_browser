@@ -5,10 +5,12 @@ import 'package:recipe_browser/utils/extensions/theme_context_extension.dart';
 
 class RecipeTile extends StatelessWidget {
   final Recipe recipe;
+  final VoidCallback onTap;
 
   const RecipeTile({
     super.key,
-    required this.recipe
+    required this.recipe,
+    required this.onTap
   });
 
   @override
@@ -24,7 +26,7 @@ class RecipeTile extends StatelessWidget {
             context.offset.veryLarge
         ),
         child: InkWell(
-          onTap: () => context.go('/recipe/${recipe.id}'),
+          onTap: onTap,
           child: Stack(
             children: [
               SizedBox(

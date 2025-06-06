@@ -475,15 +475,311 @@ class RecipeModelCompanion extends UpdateCompanion<RecipeModelData> {
   }
 }
 
+class $SetModelTable extends SetModel
+    with TableInfo<$SetModelTable, SetModelData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $SetModelTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+      'id', aliasedName, false,
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _uuidMeta = const VerificationMeta('uuid');
+  @override
+  late final GeneratedColumn<String> uuid = GeneratedColumn<String>(
+      'uuid', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: false,
+      clientDefault: () => Uuid().v4());
+  static const VerificationMeta _createdAtMeta =
+      const VerificationMeta('createdAt');
+  @override
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+      'created_at', aliasedName, false,
+      type: DriftSqlType.dateTime,
+      requiredDuringInsert: false,
+      clientDefault: () => DateTime.now());
+  static const VerificationMeta _titleMeta = const VerificationMeta('title');
+  @override
+  late final GeneratedColumn<String> title = GeneratedColumn<String>(
+      'title', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  @override
+  late final GeneratedColumnWithTypeConverter<List<String>, String> recipeIds =
+      GeneratedColumn<String>('recipe_ids', aliasedName, false,
+              type: DriftSqlType.string, requiredDuringInsert: true)
+          .withConverter<List<String>>($SetModelTable.$converterrecipeIds);
+  @override
+  List<GeneratedColumn> get $columns => [id, uuid, createdAt, title, recipeIds];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'set_model';
+  @override
+  VerificationContext validateIntegrity(Insertable<SetModelData> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('uuid')) {
+      context.handle(
+          _uuidMeta, uuid.isAcceptableOrUnknown(data['uuid']!, _uuidMeta));
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(_createdAtMeta,
+          createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta));
+    }
+    if (data.containsKey('title')) {
+      context.handle(
+          _titleMeta, title.isAcceptableOrUnknown(data['title']!, _titleMeta));
+    } else if (isInserting) {
+      context.missing(_titleMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  SetModelData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return SetModelData(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      uuid: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}uuid'])!,
+      createdAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at'])!,
+      title: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}title'])!,
+      recipeIds: $SetModelTable.$converterrecipeIds.fromSql(attachedDatabase
+          .typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}recipe_ids'])!),
+    );
+  }
+
+  @override
+  $SetModelTable createAlias(String alias) {
+    return $SetModelTable(attachedDatabase, alias);
+  }
+
+  static TypeConverter<List<String>, String> $converterrecipeIds =
+      const RecipeListConverter();
+}
+
+class SetModelData extends DataClass implements Insertable<SetModelData> {
+  final int id;
+  final String uuid;
+  final DateTime createdAt;
+  final String title;
+  final List<String> recipeIds;
+  const SetModelData(
+      {required this.id,
+      required this.uuid,
+      required this.createdAt,
+      required this.title,
+      required this.recipeIds});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['uuid'] = Variable<String>(uuid);
+    map['created_at'] = Variable<DateTime>(createdAt);
+    map['title'] = Variable<String>(title);
+    {
+      map['recipe_ids'] =
+          Variable<String>($SetModelTable.$converterrecipeIds.toSql(recipeIds));
+    }
+    return map;
+  }
+
+  SetModelCompanion toCompanion(bool nullToAbsent) {
+    return SetModelCompanion(
+      id: Value(id),
+      uuid: Value(uuid),
+      createdAt: Value(createdAt),
+      title: Value(title),
+      recipeIds: Value(recipeIds),
+    );
+  }
+
+  factory SetModelData.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return SetModelData(
+      id: serializer.fromJson<int>(json['id']),
+      uuid: serializer.fromJson<String>(json['uuid']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+      title: serializer.fromJson<String>(json['title']),
+      recipeIds: serializer.fromJson<List<String>>(json['recipeIds']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'uuid': serializer.toJson<String>(uuid),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
+      'title': serializer.toJson<String>(title),
+      'recipeIds': serializer.toJson<List<String>>(recipeIds),
+    };
+  }
+
+  SetModelData copyWith(
+          {int? id,
+          String? uuid,
+          DateTime? createdAt,
+          String? title,
+          List<String>? recipeIds}) =>
+      SetModelData(
+        id: id ?? this.id,
+        uuid: uuid ?? this.uuid,
+        createdAt: createdAt ?? this.createdAt,
+        title: title ?? this.title,
+        recipeIds: recipeIds ?? this.recipeIds,
+      );
+  SetModelData copyWithCompanion(SetModelCompanion data) {
+    return SetModelData(
+      id: data.id.present ? data.id.value : this.id,
+      uuid: data.uuid.present ? data.uuid.value : this.uuid,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+      title: data.title.present ? data.title.value : this.title,
+      recipeIds: data.recipeIds.present ? data.recipeIds.value : this.recipeIds,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('SetModelData(')
+          ..write('id: $id, ')
+          ..write('uuid: $uuid, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('title: $title, ')
+          ..write('recipeIds: $recipeIds')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, uuid, createdAt, title, recipeIds);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is SetModelData &&
+          other.id == this.id &&
+          other.uuid == this.uuid &&
+          other.createdAt == this.createdAt &&
+          other.title == this.title &&
+          other.recipeIds == this.recipeIds);
+}
+
+class SetModelCompanion extends UpdateCompanion<SetModelData> {
+  final Value<int> id;
+  final Value<String> uuid;
+  final Value<DateTime> createdAt;
+  final Value<String> title;
+  final Value<List<String>> recipeIds;
+  const SetModelCompanion({
+    this.id = const Value.absent(),
+    this.uuid = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.title = const Value.absent(),
+    this.recipeIds = const Value.absent(),
+  });
+  SetModelCompanion.insert({
+    this.id = const Value.absent(),
+    this.uuid = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    required String title,
+    required List<String> recipeIds,
+  })  : title = Value(title),
+        recipeIds = Value(recipeIds);
+  static Insertable<SetModelData> custom({
+    Expression<int>? id,
+    Expression<String>? uuid,
+    Expression<DateTime>? createdAt,
+    Expression<String>? title,
+    Expression<String>? recipeIds,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (uuid != null) 'uuid': uuid,
+      if (createdAt != null) 'created_at': createdAt,
+      if (title != null) 'title': title,
+      if (recipeIds != null) 'recipe_ids': recipeIds,
+    });
+  }
+
+  SetModelCompanion copyWith(
+      {Value<int>? id,
+      Value<String>? uuid,
+      Value<DateTime>? createdAt,
+      Value<String>? title,
+      Value<List<String>>? recipeIds}) {
+    return SetModelCompanion(
+      id: id ?? this.id,
+      uuid: uuid ?? this.uuid,
+      createdAt: createdAt ?? this.createdAt,
+      title: title ?? this.title,
+      recipeIds: recipeIds ?? this.recipeIds,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (uuid.present) {
+      map['uuid'] = Variable<String>(uuid.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    if (title.present) {
+      map['title'] = Variable<String>(title.value);
+    }
+    if (recipeIds.present) {
+      map['recipe_ids'] = Variable<String>(
+          $SetModelTable.$converterrecipeIds.toSql(recipeIds.value));
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('SetModelCompanion(')
+          ..write('id: $id, ')
+          ..write('uuid: $uuid, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('title: $title, ')
+          ..write('recipeIds: $recipeIds')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$DriftAppDatabase extends GeneratedDatabase {
   _$DriftAppDatabase(QueryExecutor e) : super(e);
   $DriftAppDatabaseManager get managers => $DriftAppDatabaseManager(this);
   late final $RecipeModelTable recipeModel = $RecipeModelTable(this);
+  late final $SetModelTable setModel = $SetModelTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
-  List<DatabaseSchemaEntity> get allSchemaEntities => [recipeModel];
+  List<DatabaseSchemaEntity> get allSchemaEntities => [recipeModel, setModel];
 }
 
 typedef $$RecipeModelTableCreateCompanionBuilder = RecipeModelCompanion
@@ -723,10 +1019,179 @@ typedef $$RecipeModelTableProcessedTableManager = ProcessedTableManager<
     ),
     RecipeModelData,
     PrefetchHooks Function()>;
+typedef $$SetModelTableCreateCompanionBuilder = SetModelCompanion Function({
+  Value<int> id,
+  Value<String> uuid,
+  Value<DateTime> createdAt,
+  required String title,
+  required List<String> recipeIds,
+});
+typedef $$SetModelTableUpdateCompanionBuilder = SetModelCompanion Function({
+  Value<int> id,
+  Value<String> uuid,
+  Value<DateTime> createdAt,
+  Value<String> title,
+  Value<List<String>> recipeIds,
+});
+
+class $$SetModelTableFilterComposer
+    extends Composer<_$DriftAppDatabase, $SetModelTable> {
+  $$SetModelTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get uuid => $composableBuilder(
+      column: $table.uuid, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+      column: $table.createdAt, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get title => $composableBuilder(
+      column: $table.title, builder: (column) => ColumnFilters(column));
+
+  ColumnWithTypeConverterFilters<List<String>, List<String>, String>
+      get recipeIds => $composableBuilder(
+          column: $table.recipeIds,
+          builder: (column) => ColumnWithTypeConverterFilters(column));
+}
+
+class $$SetModelTableOrderingComposer
+    extends Composer<_$DriftAppDatabase, $SetModelTable> {
+  $$SetModelTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get uuid => $composableBuilder(
+      column: $table.uuid, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+      column: $table.createdAt, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get title => $composableBuilder(
+      column: $table.title, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get recipeIds => $composableBuilder(
+      column: $table.recipeIds, builder: (column) => ColumnOrderings(column));
+}
+
+class $$SetModelTableAnnotationComposer
+    extends Composer<_$DriftAppDatabase, $SetModelTable> {
+  $$SetModelTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get uuid =>
+      $composableBuilder(column: $table.uuid, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  GeneratedColumn<String> get title =>
+      $composableBuilder(column: $table.title, builder: (column) => column);
+
+  GeneratedColumnWithTypeConverter<List<String>, String> get recipeIds =>
+      $composableBuilder(column: $table.recipeIds, builder: (column) => column);
+}
+
+class $$SetModelTableTableManager extends RootTableManager<
+    _$DriftAppDatabase,
+    $SetModelTable,
+    SetModelData,
+    $$SetModelTableFilterComposer,
+    $$SetModelTableOrderingComposer,
+    $$SetModelTableAnnotationComposer,
+    $$SetModelTableCreateCompanionBuilder,
+    $$SetModelTableUpdateCompanionBuilder,
+    (
+      SetModelData,
+      BaseReferences<_$DriftAppDatabase, $SetModelTable, SetModelData>
+    ),
+    SetModelData,
+    PrefetchHooks Function()> {
+  $$SetModelTableTableManager(_$DriftAppDatabase db, $SetModelTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$SetModelTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$SetModelTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$SetModelTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            Value<String> uuid = const Value.absent(),
+            Value<DateTime> createdAt = const Value.absent(),
+            Value<String> title = const Value.absent(),
+            Value<List<String>> recipeIds = const Value.absent(),
+          }) =>
+              SetModelCompanion(
+            id: id,
+            uuid: uuid,
+            createdAt: createdAt,
+            title: title,
+            recipeIds: recipeIds,
+          ),
+          createCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            Value<String> uuid = const Value.absent(),
+            Value<DateTime> createdAt = const Value.absent(),
+            required String title,
+            required List<String> recipeIds,
+          }) =>
+              SetModelCompanion.insert(
+            id: id,
+            uuid: uuid,
+            createdAt: createdAt,
+            title: title,
+            recipeIds: recipeIds,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ));
+}
+
+typedef $$SetModelTableProcessedTableManager = ProcessedTableManager<
+    _$DriftAppDatabase,
+    $SetModelTable,
+    SetModelData,
+    $$SetModelTableFilterComposer,
+    $$SetModelTableOrderingComposer,
+    $$SetModelTableAnnotationComposer,
+    $$SetModelTableCreateCompanionBuilder,
+    $$SetModelTableUpdateCompanionBuilder,
+    (
+      SetModelData,
+      BaseReferences<_$DriftAppDatabase, $SetModelTable, SetModelData>
+    ),
+    SetModelData,
+    PrefetchHooks Function()>;
 
 class $DriftAppDatabaseManager {
   final _$DriftAppDatabase _db;
   $DriftAppDatabaseManager(this._db);
   $$RecipeModelTableTableManager get recipeModel =>
       $$RecipeModelTableTableManager(_db, _db.recipeModel);
+  $$SetModelTableTableManager get setModel =>
+      $$SetModelTableTableManager(_db, _db.setModel);
 }

@@ -12,15 +12,17 @@ final class RecipeDetailLoading extends RecipeDetailState{}
 
 final class RecipeDetailLoaded extends RecipeDetailState{
   final Recipe recipe;
+  final List<Set> sets;
   final int stepIndex;
 
   RecipeDetailLoaded(
       this.recipe,
-      this.stepIndex
+      this.sets,
+      this.stepIndex,
   );
 
   @override
-  List<Object?> get props => super.props..addAll([recipe, stepIndex]);
+  List<Object?> get props => super.props..addAll([recipe, sets, stepIndex]);
 }
 
 final class RecipeDetailError extends RecipeDetailState{

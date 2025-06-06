@@ -27,6 +27,17 @@ class DriftRecipeRepository implements IRecipeRepository{
   }
 
   @override
+  Future<List<Recipe>> byIds(List<String> ids) async {
+    final recipe = await (_database
+        .select(_database.recipeModel)
+        ..where((recipe) => recipe.uuid.isIn(ids)))
+        .get();
+
+
+    return recipe.map((e) => e.toLocalModel()).toList(growable: false);
+  }
+
+  @override
   Future<Recipe> create(Recipe model) async {
     final resultId = await _database
         .into(_database.recipeModel)
@@ -61,5 +72,4 @@ class DriftRecipeRepository implements IRecipeRepository{
         ..where((recipe) => recipe.id.equals(id)))
         .getSingle();
   }
-
 }

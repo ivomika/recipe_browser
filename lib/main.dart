@@ -3,9 +3,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:recipe_browser/features/drift/drift.dart';
 import 'package:recipe_browser/features/recipe_list/recipe_list.dart';
 import 'package:recipe_browser/features/routing/app_routing.dart';
+import 'package:recipe_browser/features/set_list/set_list.dart';
 import 'package:recipe_browser/features/theme/theme.dart';
 import 'package:recipe_browser/shared/repositories/repositories.dart';
 import 'package:recipe_browser/widgets/recipe_info/recipe_info.dart';
+import 'package:recipe_browser/widgets/set_info/set_info.dart';
 import 'package:url_strategy/url_strategy.dart';
 
 void main() {
@@ -29,14 +31,31 @@ class MyApp extends StatelessWidget {
         RepositoryProvider<IRecipeRepository>(
           create: (context) => DriftRecipeRepository(context.read<DriftAppDatabase>()),
         ),
+        RepositoryProvider<ISetRepository>(
+          create: (context) => DriftSetRepository(context.read<DriftAppDatabase>())
+        ),
         BlocProvider<RecipeListBloc>(
           create: (context) => RecipeListBloc(
               context.read<IRecipeRepository>()
           )..add(LoadingRecipes())
         ),
+        BlocProvider<SetListBloc>(
+          create: (context) => SetListBloc(
+              context.read<ISetRepository>()
+          )..add(LoadingSetList())
+        ),
         BlocProvider<RecipeDetailBloc>(
-          create: (context) => RecipeDetailBloc(context.read<IRecipeRepository>())
-        )
+          create: (context) => RecipeDetailBloc(
+              context.read<IRecipeRepository>(),
+              context.read<ISetRepository>(),
+          )
+        ),
+        BlocProvider<SetDetailBloc>(
+          create: (context) => SetDetailBloc(
+              context.read<ISetRepository>(),
+              context.read<IRecipeRepository>(),
+          )
+        ),
       ],
       child: MaterialApp.router(
         title: 'Flutter Demo',

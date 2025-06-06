@@ -6,6 +6,7 @@ import 'package:recipe_browser/features/recipe_list/recipe_list.dart';
 import 'package:recipe_browser/shared/models/models.dart';
 import 'package:recipe_browser/utils/utils.dart';
 import 'package:recipe_browser/widgets/recipe_info/recipe_info.dart';
+import 'package:recipe_browser/widgets/set_info/set_info.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class RecipeDetailPage extends StatefulWidget {
@@ -55,12 +56,14 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                             )
                         ),
                         cookingSteps: []
-                    )
+                    ),
+                    sets: [],
                 )
             );
           case RecipeDetailLoaded():
             return _LoadedState(
-                recipe: state.recipe
+                recipe: state.recipe,
+                sets: state.sets
             );
           case RecipeDetailError():
             return Center(
@@ -74,9 +77,10 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
 
 class _LoadedState extends StatelessWidget {
   final Recipe recipe;
+  final List<Set> sets;
 
   const _LoadedState({
-    required this.recipe
+    required this.recipe, required this.sets
   });
 
   @override
@@ -104,7 +108,6 @@ class _LoadedState extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.all(context.offset.normal),
                 child: Row(
-                  // spacing: context.offset.normal,
                   children: [
                     Expanded(
                         child: FilledButton.tonalIcon(
@@ -113,23 +116,9 @@ class _LoadedState extends StatelessWidget {
                           label: Text('Готовить!'),
                         ),
                     ),
-                    PopupMenuButton(
-                        itemBuilder: (popContext) => [
-                          PopupMenuItem(
-                              onTap: () => _deleteRecipe(context),
-                              child: ListTile(
-                                leading: Icon(Icons.delete),
-                                title: Text('Удалить'),
-                              )
-                          ),
-                          PopupMenuItem(
-                              enabled: false,
-                              child: ListTile(
-                                leading: Icon(Icons.edit),
-                                title: Text('Редактировать'),
-                              )
-                          ),
-                        ]
+                    _PopUpButton(
+                      recipe: recipe,
+                      sets: sets,
                     )
                   ],
                 ),
@@ -158,10 +147,78 @@ class _LoadedState extends StatelessWidget {
       ],
     );
   }
+}
+
+class _PopUpButton extends StatefulWidget {
+  final Recipe recipe;
+  final List<Set> sets;
+
+  const _PopUpButton({
+    required this.recipe,
+    required this.sets
+  });
+
+  @override
+  State<_PopUpButton> createState() => _PopUpButtonState();
+}
+
+class _PopUpButtonState extends State<_PopUpButton> {
+  late bool isFavorite;
+
+  @override
+  void initState() {
+    isFavorite = widget.sets.isNotEmpty;
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return PopupMenuButton(
+        itemBuilder: (popContext) => [
+          PopupMenuItem(
+              onTap: () => _deleteRecipe(context),
+              child: ListTile(
+                leading: Icon(Icons.delete),
+                title: Text('Удалить'),
+              )
+          ),
+          PopupMenuItem(
+              enabled: false,
+              child: ListTile(
+                leading: Icon(Icons.edit),
+                title: Text('Редактировать'),
+              )
+          ),
+          PopupMenuItem(
+              onTap: () => _toggleRecipe(context),
+              child: ListTile(
+                leading: Icon(
+                    isFavorite
+                        ? Icons.star
+                        : Icons.star_border
+                ),
+                title: Text('Избранное'),
+              )
+          ),
+        ]
+    );
+  }
+
+  void _toggleRecipe(BuildContext context) {
+    print(isFavorite);
+    if(isFavorite == false){
+      context.read<SetDetailBloc>().add(AddRecipeSetDetail(widget.recipe.id));
+      setState(() => isFavorite = !isFavorite);
+      return;
+    }
+    context.read<SetDetailBloc>().add(RemoveRecipeSetDetail(widget.recipe.id));
+    setState(() => isFavorite = !isFavorite);
+  }
+
 
   void _deleteRecipe(BuildContext context) {
     context.read<RecipeDetailBloc>().add(
-        DeleteRecipeDetail(recipe)
+        DeleteRecipeDetail(widget.recipe)
     );
     context.read<RecipeListBloc>().add(
         LoadingRecipes()
@@ -169,5 +226,6 @@ class _LoadedState extends StatelessWidget {
     context.pop();
   }
 }
+
 
 
