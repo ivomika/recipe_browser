@@ -49,6 +49,6 @@ class Recipe extends BaseModel{
 
   @override
   String toString() {
-    return 'Recipe{title: $title, description: $description, cookingTime: $cookingTime, kilocalories: $kilocalories, ingredients: $ingredients, cookingSteps: $cookingSteps}';
+    return 'Recipe{id: $id, createdAt: $createdAt, title: $title, description: $description, cookingTime: $cookingTime, kilocalories: $kilocalories, servings: $servings, difficulty: $difficulty, ingredients: $ingredients, cookingSteps: $cookingSteps}';
   }
 }

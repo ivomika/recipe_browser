@@ -9,6 +9,10 @@ class CountType extends BaseModel{
     required this.name,
   });
 
+  CountType.create({
+    required this.name
+  }) : super.create();
+
   @override
   List<Object?> get props => super.props..addAll([name]);
 

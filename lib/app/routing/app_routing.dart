@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:recipe_browser/features/test/ui/test_page.dart';
 
 final appRouting = GoRouter(
     initialLocation: '/',
@@ -21,7 +22,7 @@ final appRouting = GoRouter(
                     routes: [
                         GoRoute(
                             builder: (context, state) => Placeholder(),
-                            path: '/group',
+                            path: '/collections',
                         )
                     ]
                 ),
