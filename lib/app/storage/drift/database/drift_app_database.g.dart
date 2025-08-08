@@ -1331,6 +1331,477 @@ class IngredientTableCompanion extends UpdateCompanion<IngredientTableData> {
   }
 }
 
+class $CollectionTableTable extends CollectionTable
+    with TableInfo<$CollectionTableTable, CollectionTableData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $CollectionTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+      'id', aliasedName, false,
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _uuidMeta = const VerificationMeta('uuid');
+  @override
+  late final GeneratedColumn<String> uuid = GeneratedColumn<String>(
+      'uuid', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: false,
+      clientDefault: () => Uuid().v4());
+  static const VerificationMeta _createdAtMeta =
+      const VerificationMeta('createdAt');
+  @override
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+      'created_at', aliasedName, false,
+      type: DriftSqlType.dateTime,
+      requiredDuringInsert: false,
+      clientDefault: () => DateTime.now());
+  static const VerificationMeta _titleMeta = const VerificationMeta('title');
+  @override
+  late final GeneratedColumn<String> title = GeneratedColumn<String>(
+      'title', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  @override
+  List<GeneratedColumn> get $columns => [id, uuid, createdAt, title];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'collection_table';
+  @override
+  VerificationContext validateIntegrity(
+      Insertable<CollectionTableData> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('uuid')) {
+      context.handle(
+          _uuidMeta, uuid.isAcceptableOrUnknown(data['uuid']!, _uuidMeta));
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(_createdAtMeta,
+          createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta));
+    }
+    if (data.containsKey('title')) {
+      context.handle(
+          _titleMeta, title.isAcceptableOrUnknown(data['title']!, _titleMeta));
+    } else if (isInserting) {
+      context.missing(_titleMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  CollectionTableData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return CollectionTableData(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      uuid: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}uuid'])!,
+      createdAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at'])!,
+      title: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}title'])!,
+    );
+  }
+
+  @override
+  $CollectionTableTable createAlias(String alias) {
+    return $CollectionTableTable(attachedDatabase, alias);
+  }
+}
+
+class CollectionTableData extends DataClass
+    implements Insertable<CollectionTableData> {
+  final int id;
+  final String uuid;
+  final DateTime createdAt;
+  final String title;
+  const CollectionTableData(
+      {required this.id,
+      required this.uuid,
+      required this.createdAt,
+      required this.title});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['uuid'] = Variable<String>(uuid);
+    map['created_at'] = Variable<DateTime>(createdAt);
+    map['title'] = Variable<String>(title);
+    return map;
+  }
+
+  CollectionTableCompanion toCompanion(bool nullToAbsent) {
+    return CollectionTableCompanion(
+      id: Value(id),
+      uuid: Value(uuid),
+      createdAt: Value(createdAt),
+      title: Value(title),
+    );
+  }
+
+  factory CollectionTableData.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return CollectionTableData(
+      id: serializer.fromJson<int>(json['id']),
+      uuid: serializer.fromJson<String>(json['uuid']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+      title: serializer.fromJson<String>(json['title']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'uuid': serializer.toJson<String>(uuid),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
+      'title': serializer.toJson<String>(title),
+    };
+  }
+
+  CollectionTableData copyWith(
+          {int? id, String? uuid, DateTime? createdAt, String? title}) =>
+      CollectionTableData(
+        id: id ?? this.id,
+        uuid: uuid ?? this.uuid,
+        createdAt: createdAt ?? this.createdAt,
+        title: title ?? this.title,
+      );
+  CollectionTableData copyWithCompanion(CollectionTableCompanion data) {
+    return CollectionTableData(
+      id: data.id.present ? data.id.value : this.id,
+      uuid: data.uuid.present ? data.uuid.value : this.uuid,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+      title: data.title.present ? data.title.value : this.title,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('CollectionTableData(')
+          ..write('id: $id, ')
+          ..write('uuid: $uuid, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('title: $title')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, uuid, createdAt, title);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is CollectionTableData &&
+          other.id == this.id &&
+          other.uuid == this.uuid &&
+          other.createdAt == this.createdAt &&
+          other.title == this.title);
+}
+
+class CollectionTableCompanion extends UpdateCompanion<CollectionTableData> {
+  final Value<int> id;
+  final Value<String> uuid;
+  final Value<DateTime> createdAt;
+  final Value<String> title;
+  const CollectionTableCompanion({
+    this.id = const Value.absent(),
+    this.uuid = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.title = const Value.absent(),
+  });
+  CollectionTableCompanion.insert({
+    this.id = const Value.absent(),
+    this.uuid = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    required String title,
+  }) : title = Value(title);
+  static Insertable<CollectionTableData> custom({
+    Expression<int>? id,
+    Expression<String>? uuid,
+    Expression<DateTime>? createdAt,
+    Expression<String>? title,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (uuid != null) 'uuid': uuid,
+      if (createdAt != null) 'created_at': createdAt,
+      if (title != null) 'title': title,
+    });
+  }
+
+  CollectionTableCompanion copyWith(
+      {Value<int>? id,
+      Value<String>? uuid,
+      Value<DateTime>? createdAt,
+      Value<String>? title}) {
+    return CollectionTableCompanion(
+      id: id ?? this.id,
+      uuid: uuid ?? this.uuid,
+      createdAt: createdAt ?? this.createdAt,
+      title: title ?? this.title,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (uuid.present) {
+      map['uuid'] = Variable<String>(uuid.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    if (title.present) {
+      map['title'] = Variable<String>(title.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('CollectionTableCompanion(')
+          ..write('id: $id, ')
+          ..write('uuid: $uuid, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('title: $title')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $RecipeCollectionsTableTable extends RecipeCollectionsTable
+    with TableInfo<$RecipeCollectionsTableTable, RecipeCollectionsTableData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $RecipeCollectionsTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _recipeUuidMeta =
+      const VerificationMeta('recipeUuid');
+  @override
+  late final GeneratedColumn<String> recipeUuid = GeneratedColumn<String>(
+      'recipe_uuid', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: true,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('REFERENCES recipe_table (uuid)'));
+  static const VerificationMeta _collectionUuidMeta =
+      const VerificationMeta('collectionUuid');
+  @override
+  late final GeneratedColumn<String> collectionUuid = GeneratedColumn<String>(
+      'collection_uuid', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: true,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'REFERENCES collection_table (uuid)'));
+  @override
+  List<GeneratedColumn> get $columns => [recipeUuid, collectionUuid];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'recipe_collections_table';
+  @override
+  VerificationContext validateIntegrity(
+      Insertable<RecipeCollectionsTableData> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('recipe_uuid')) {
+      context.handle(
+          _recipeUuidMeta,
+          recipeUuid.isAcceptableOrUnknown(
+              data['recipe_uuid']!, _recipeUuidMeta));
+    } else if (isInserting) {
+      context.missing(_recipeUuidMeta);
+    }
+    if (data.containsKey('collection_uuid')) {
+      context.handle(
+          _collectionUuidMeta,
+          collectionUuid.isAcceptableOrUnknown(
+              data['collection_uuid']!, _collectionUuidMeta));
+    } else if (isInserting) {
+      context.missing(_collectionUuidMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {recipeUuid, collectionUuid};
+  @override
+  RecipeCollectionsTableData map(Map<String, dynamic> data,
+      {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return RecipeCollectionsTableData(
+      recipeUuid: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}recipe_uuid'])!,
+      collectionUuid: attachedDatabase.typeMapping.read(
+          DriftSqlType.string, data['${effectivePrefix}collection_uuid'])!,
+    );
+  }
+
+  @override
+  $RecipeCollectionsTableTable createAlias(String alias) {
+    return $RecipeCollectionsTableTable(attachedDatabase, alias);
+  }
+}
+
+class RecipeCollectionsTableData extends DataClass
+    implements Insertable<RecipeCollectionsTableData> {
+  final String recipeUuid;
+  final String collectionUuid;
+  const RecipeCollectionsTableData(
+      {required this.recipeUuid, required this.collectionUuid});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['recipe_uuid'] = Variable<String>(recipeUuid);
+    map['collection_uuid'] = Variable<String>(collectionUuid);
+    return map;
+  }
+
+  RecipeCollectionsTableCompanion toCompanion(bool nullToAbsent) {
+    return RecipeCollectionsTableCompanion(
+      recipeUuid: Value(recipeUuid),
+      collectionUuid: Value(collectionUuid),
+    );
+  }
+
+  factory RecipeCollectionsTableData.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return RecipeCollectionsTableData(
+      recipeUuid: serializer.fromJson<String>(json['recipeUuid']),
+      collectionUuid: serializer.fromJson<String>(json['collectionUuid']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'recipeUuid': serializer.toJson<String>(recipeUuid),
+      'collectionUuid': serializer.toJson<String>(collectionUuid),
+    };
+  }
+
+  RecipeCollectionsTableData copyWith(
+          {String? recipeUuid, String? collectionUuid}) =>
+      RecipeCollectionsTableData(
+        recipeUuid: recipeUuid ?? this.recipeUuid,
+        collectionUuid: collectionUuid ?? this.collectionUuid,
+      );
+  RecipeCollectionsTableData copyWithCompanion(
+      RecipeCollectionsTableCompanion data) {
+    return RecipeCollectionsTableData(
+      recipeUuid:
+          data.recipeUuid.present ? data.recipeUuid.value : this.recipeUuid,
+      collectionUuid: data.collectionUuid.present
+          ? data.collectionUuid.value
+          : this.collectionUuid,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('RecipeCollectionsTableData(')
+          ..write('recipeUuid: $recipeUuid, ')
+          ..write('collectionUuid: $collectionUuid')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(recipeUuid, collectionUuid);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is RecipeCollectionsTableData &&
+          other.recipeUuid == this.recipeUuid &&
+          other.collectionUuid == this.collectionUuid);
+}
+
+class RecipeCollectionsTableCompanion
+    extends UpdateCompanion<RecipeCollectionsTableData> {
+  final Value<String> recipeUuid;
+  final Value<String> collectionUuid;
+  final Value<int> rowid;
+  const RecipeCollectionsTableCompanion({
+    this.recipeUuid = const Value.absent(),
+    this.collectionUuid = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  RecipeCollectionsTableCompanion.insert({
+    required String recipeUuid,
+    required String collectionUuid,
+    this.rowid = const Value.absent(),
+  })  : recipeUuid = Value(recipeUuid),
+        collectionUuid = Value(collectionUuid);
+  static Insertable<RecipeCollectionsTableData> custom({
+    Expression<String>? recipeUuid,
+    Expression<String>? collectionUuid,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (recipeUuid != null) 'recipe_uuid': recipeUuid,
+      if (collectionUuid != null) 'collection_uuid': collectionUuid,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  RecipeCollectionsTableCompanion copyWith(
+      {Value<String>? recipeUuid,
+      Value<String>? collectionUuid,
+      Value<int>? rowid}) {
+    return RecipeCollectionsTableCompanion(
+      recipeUuid: recipeUuid ?? this.recipeUuid,
+      collectionUuid: collectionUuid ?? this.collectionUuid,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (recipeUuid.present) {
+      map['recipe_uuid'] = Variable<String>(recipeUuid.value);
+    }
+    if (collectionUuid.present) {
+      map['collection_uuid'] = Variable<String>(collectionUuid.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('RecipeCollectionsTableCompanion(')
+          ..write('recipeUuid: $recipeUuid, ')
+          ..write('collectionUuid: $collectionUuid, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$DriftAppDatabase extends GeneratedDatabase {
   _$DriftAppDatabase(QueryExecutor e) : super(e);
   $DriftAppDatabaseManager get managers => $DriftAppDatabaseManager(this);
@@ -1340,12 +1811,22 @@ abstract class _$DriftAppDatabase extends GeneratedDatabase {
   late final $CountTypeTableTable countTypeTable = $CountTypeTableTable(this);
   late final $IngredientTableTable ingredientTable =
       $IngredientTableTable(this);
+  late final $CollectionTableTable collectionTable =
+      $CollectionTableTable(this);
+  late final $RecipeCollectionsTableTable recipeCollectionsTable =
+      $RecipeCollectionsTableTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
-  List<DatabaseSchemaEntity> get allSchemaEntities =>
-      [recipeTable, cookingStepTable, countTypeTable, ingredientTable];
+  List<DatabaseSchemaEntity> get allSchemaEntities => [
+        recipeTable,
+        cookingStepTable,
+        countTypeTable,
+        ingredientTable,
+        collectionTable,
+        recipeCollectionsTable
+      ];
   @override
   StreamQueryUpdateRules get streamUpdateRules => const StreamQueryUpdateRules(
         [
@@ -1436,6 +1917,26 @@ final class $$RecipeTableTableReferences extends BaseReferences<
     return ProcessedTableManager(
         manager.$state.copyWith(prefetchedData: cache));
   }
+
+  static MultiTypedResultKey<$RecipeCollectionsTableTable,
+      List<RecipeCollectionsTableData>> _recipeCollectionsTableRefsTable(
+          _$DriftAppDatabase db) =>
+      MultiTypedResultKey.fromTable(db.recipeCollectionsTable,
+          aliasName: $_aliasNameGenerator(
+              db.recipeTable.uuid, db.recipeCollectionsTable.recipeUuid));
+
+  $$RecipeCollectionsTableTableProcessedTableManager
+      get recipeCollectionsTableRefs {
+    final manager = $$RecipeCollectionsTableTableTableManager(
+            $_db, $_db.recipeCollectionsTable)
+        .filter(
+            (f) => f.recipeUuid.uuid.sqlEquals($_itemColumn<String>('uuid')!));
+
+    final cache =
+        $_typedResult.readTableOrNull(_recipeCollectionsTableRefsTable($_db));
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: cache));
+  }
 }
 
 class $$RecipeTableTableFilterComposer
@@ -1513,6 +2014,29 @@ class $$RecipeTableTableFilterComposer
               $removeJoinBuilderFromRootComposer:
                   $removeJoinBuilderFromRootComposer,
             ));
+    return f(composer);
+  }
+
+  Expression<bool> recipeCollectionsTableRefs(
+      Expression<bool> Function($$RecipeCollectionsTableTableFilterComposer f)
+          f) {
+    final $$RecipeCollectionsTableTableFilterComposer composer =
+        $composerBuilder(
+            composer: this,
+            getCurrentColumn: (t) => t.uuid,
+            referencedTable: $db.recipeCollectionsTable,
+            getReferencedColumn: (t) => t.recipeUuid,
+            builder: (joinBuilder,
+                    {$addJoinBuilderToRootComposer,
+                    $removeJoinBuilderFromRootComposer}) =>
+                $$RecipeCollectionsTableTableFilterComposer(
+                  $db: $db,
+                  $table: $db.recipeCollectionsTable,
+                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                  joinBuilder: joinBuilder,
+                  $removeJoinBuilderFromRootComposer:
+                      $removeJoinBuilderFromRootComposer,
+                ));
     return f(composer);
   }
 }
@@ -1632,6 +2156,29 @@ class $$RecipeTableTableAnnotationComposer
             ));
     return f(composer);
   }
+
+  Expression<T> recipeCollectionsTableRefs<T extends Object>(
+      Expression<T> Function($$RecipeCollectionsTableTableAnnotationComposer a)
+          f) {
+    final $$RecipeCollectionsTableTableAnnotationComposer composer =
+        $composerBuilder(
+            composer: this,
+            getCurrentColumn: (t) => t.uuid,
+            referencedTable: $db.recipeCollectionsTable,
+            getReferencedColumn: (t) => t.recipeUuid,
+            builder: (joinBuilder,
+                    {$addJoinBuilderToRootComposer,
+                    $removeJoinBuilderFromRootComposer}) =>
+                $$RecipeCollectionsTableTableAnnotationComposer(
+                  $db: $db,
+                  $table: $db.recipeCollectionsTable,
+                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                  joinBuilder: joinBuilder,
+                  $removeJoinBuilderFromRootComposer:
+                      $removeJoinBuilderFromRootComposer,
+                ));
+    return f(composer);
+  }
 }
 
 class $$RecipeTableTableTableManager extends RootTableManager<
@@ -1646,7 +2193,9 @@ class $$RecipeTableTableTableManager extends RootTableManager<
     (RecipeTableData, $$RecipeTableTableReferences),
     RecipeTableData,
     PrefetchHooks Function(
-        {bool cookingStepTableRefs, bool ingredientTableRefs})> {
+        {bool cookingStepTableRefs,
+        bool ingredientTableRefs,
+        bool recipeCollectionsTableRefs})> {
   $$RecipeTableTableTableManager(_$DriftAppDatabase db, $RecipeTableTable table)
       : super(TableManagerState(
           db: db,
@@ -1708,12 +2257,15 @@ class $$RecipeTableTableTableManager extends RootTableManager<
                   ))
               .toList(),
           prefetchHooksCallback: (
-              {cookingStepTableRefs = false, ingredientTableRefs = false}) {
+              {cookingStepTableRefs = false,
+              ingredientTableRefs = false,
+              recipeCollectionsTableRefs = false}) {
             return PrefetchHooks(
               db: db,
               explicitlyWatchedTables: [
                 if (cookingStepTableRefs) db.cookingStepTable,
-                if (ingredientTableRefs) db.ingredientTable
+                if (ingredientTableRefs) db.ingredientTable,
+                if (recipeCollectionsTableRefs) db.recipeCollectionsTable
               ],
               addJoins: null,
               getPrefetchedDataCallback: (items) async {
@@ -1743,6 +2295,19 @@ class $$RecipeTableTableTableManager extends RootTableManager<
                         referencedItemsForCurrentItem: (item,
                                 referencedItems) =>
                             referencedItems.where((e) => e.recipeId == item.id),
+                        typedResults: items),
+                  if (recipeCollectionsTableRefs)
+                    await $_getPrefetchedData<RecipeTableData,
+                            $RecipeTableTable, RecipeCollectionsTableData>(
+                        currentTable: table,
+                        referencedTable: $$RecipeTableTableReferences
+                            ._recipeCollectionsTableRefsTable(db),
+                        managerFromTypedResult: (p0) =>
+                            $$RecipeTableTableReferences(db, table, p0)
+                                .recipeCollectionsTableRefs,
+                        referencedItemsForCurrentItem:
+                            (item, referencedItems) => referencedItems
+                                .where((e) => e.recipeUuid == item.uuid),
                         typedResults: items)
                 ];
               },
@@ -1763,7 +2328,9 @@ typedef $$RecipeTableTableProcessedTableManager = ProcessedTableManager<
     (RecipeTableData, $$RecipeTableTableReferences),
     RecipeTableData,
     PrefetchHooks Function(
-        {bool cookingStepTableRefs, bool ingredientTableRefs})>;
+        {bool cookingStepTableRefs,
+        bool ingredientTableRefs,
+        bool recipeCollectionsTableRefs})>;
 typedef $$CookingStepTableTableCreateCompanionBuilder
     = CookingStepTableCompanion Function({
   Value<int> id,
@@ -2623,6 +3190,571 @@ typedef $$IngredientTableTableProcessedTableManager = ProcessedTableManager<
     (IngredientTableData, $$IngredientTableTableReferences),
     IngredientTableData,
     PrefetchHooks Function({bool typeUuid, bool recipeId})>;
+typedef $$CollectionTableTableCreateCompanionBuilder = CollectionTableCompanion
+    Function({
+  Value<int> id,
+  Value<String> uuid,
+  Value<DateTime> createdAt,
+  required String title,
+});
+typedef $$CollectionTableTableUpdateCompanionBuilder = CollectionTableCompanion
+    Function({
+  Value<int> id,
+  Value<String> uuid,
+  Value<DateTime> createdAt,
+  Value<String> title,
+});
+
+final class $$CollectionTableTableReferences extends BaseReferences<
+    _$DriftAppDatabase, $CollectionTableTable, CollectionTableData> {
+  $$CollectionTableTableReferences(
+      super.$_db, super.$_table, super.$_typedResult);
+
+  static MultiTypedResultKey<$RecipeCollectionsTableTable,
+      List<RecipeCollectionsTableData>> _recipeCollectionsTableRefsTable(
+          _$DriftAppDatabase db) =>
+      MultiTypedResultKey.fromTable(db.recipeCollectionsTable,
+          aliasName: $_aliasNameGenerator(db.collectionTable.uuid,
+              db.recipeCollectionsTable.collectionUuid));
+
+  $$RecipeCollectionsTableTableProcessedTableManager
+      get recipeCollectionsTableRefs {
+    final manager = $$RecipeCollectionsTableTableTableManager(
+            $_db, $_db.recipeCollectionsTable)
+        .filter((f) =>
+            f.collectionUuid.uuid.sqlEquals($_itemColumn<String>('uuid')!));
+
+    final cache =
+        $_typedResult.readTableOrNull(_recipeCollectionsTableRefsTable($_db));
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: cache));
+  }
+}
+
+class $$CollectionTableTableFilterComposer
+    extends Composer<_$DriftAppDatabase, $CollectionTableTable> {
+  $$CollectionTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get uuid => $composableBuilder(
+      column: $table.uuid, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+      column: $table.createdAt, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get title => $composableBuilder(
+      column: $table.title, builder: (column) => ColumnFilters(column));
+
+  Expression<bool> recipeCollectionsTableRefs(
+      Expression<bool> Function($$RecipeCollectionsTableTableFilterComposer f)
+          f) {
+    final $$RecipeCollectionsTableTableFilterComposer composer =
+        $composerBuilder(
+            composer: this,
+            getCurrentColumn: (t) => t.uuid,
+            referencedTable: $db.recipeCollectionsTable,
+            getReferencedColumn: (t) => t.collectionUuid,
+            builder: (joinBuilder,
+                    {$addJoinBuilderToRootComposer,
+                    $removeJoinBuilderFromRootComposer}) =>
+                $$RecipeCollectionsTableTableFilterComposer(
+                  $db: $db,
+                  $table: $db.recipeCollectionsTable,
+                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                  joinBuilder: joinBuilder,
+                  $removeJoinBuilderFromRootComposer:
+                      $removeJoinBuilderFromRootComposer,
+                ));
+    return f(composer);
+  }
+}
+
+class $$CollectionTableTableOrderingComposer
+    extends Composer<_$DriftAppDatabase, $CollectionTableTable> {
+  $$CollectionTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get uuid => $composableBuilder(
+      column: $table.uuid, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+      column: $table.createdAt, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get title => $composableBuilder(
+      column: $table.title, builder: (column) => ColumnOrderings(column));
+}
+
+class $$CollectionTableTableAnnotationComposer
+    extends Composer<_$DriftAppDatabase, $CollectionTableTable> {
+  $$CollectionTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get uuid =>
+      $composableBuilder(column: $table.uuid, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  GeneratedColumn<String> get title =>
+      $composableBuilder(column: $table.title, builder: (column) => column);
+
+  Expression<T> recipeCollectionsTableRefs<T extends Object>(
+      Expression<T> Function($$RecipeCollectionsTableTableAnnotationComposer a)
+          f) {
+    final $$RecipeCollectionsTableTableAnnotationComposer composer =
+        $composerBuilder(
+            composer: this,
+            getCurrentColumn: (t) => t.uuid,
+            referencedTable: $db.recipeCollectionsTable,
+            getReferencedColumn: (t) => t.collectionUuid,
+            builder: (joinBuilder,
+                    {$addJoinBuilderToRootComposer,
+                    $removeJoinBuilderFromRootComposer}) =>
+                $$RecipeCollectionsTableTableAnnotationComposer(
+                  $db: $db,
+                  $table: $db.recipeCollectionsTable,
+                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                  joinBuilder: joinBuilder,
+                  $removeJoinBuilderFromRootComposer:
+                      $removeJoinBuilderFromRootComposer,
+                ));
+    return f(composer);
+  }
+}
+
+class $$CollectionTableTableTableManager extends RootTableManager<
+    _$DriftAppDatabase,
+    $CollectionTableTable,
+    CollectionTableData,
+    $$CollectionTableTableFilterComposer,
+    $$CollectionTableTableOrderingComposer,
+    $$CollectionTableTableAnnotationComposer,
+    $$CollectionTableTableCreateCompanionBuilder,
+    $$CollectionTableTableUpdateCompanionBuilder,
+    (CollectionTableData, $$CollectionTableTableReferences),
+    CollectionTableData,
+    PrefetchHooks Function({bool recipeCollectionsTableRefs})> {
+  $$CollectionTableTableTableManager(
+      _$DriftAppDatabase db, $CollectionTableTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$CollectionTableTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$CollectionTableTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$CollectionTableTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            Value<String> uuid = const Value.absent(),
+            Value<DateTime> createdAt = const Value.absent(),
+            Value<String> title = const Value.absent(),
+          }) =>
+              CollectionTableCompanion(
+            id: id,
+            uuid: uuid,
+            createdAt: createdAt,
+            title: title,
+          ),
+          createCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            Value<String> uuid = const Value.absent(),
+            Value<DateTime> createdAt = const Value.absent(),
+            required String title,
+          }) =>
+              CollectionTableCompanion.insert(
+            id: id,
+            uuid: uuid,
+            createdAt: createdAt,
+            title: title,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (
+                    e.readTable(table),
+                    $$CollectionTableTableReferences(db, table, e)
+                  ))
+              .toList(),
+          prefetchHooksCallback: ({recipeCollectionsTableRefs = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [
+                if (recipeCollectionsTableRefs) db.recipeCollectionsTable
+              ],
+              addJoins: null,
+              getPrefetchedDataCallback: (items) async {
+                return [
+                  if (recipeCollectionsTableRefs)
+                    await $_getPrefetchedData<CollectionTableData,
+                            $CollectionTableTable, RecipeCollectionsTableData>(
+                        currentTable: table,
+                        referencedTable: $$CollectionTableTableReferences
+                            ._recipeCollectionsTableRefsTable(db),
+                        managerFromTypedResult: (p0) =>
+                            $$CollectionTableTableReferences(db, table, p0)
+                                .recipeCollectionsTableRefs,
+                        referencedItemsForCurrentItem:
+                            (item, referencedItems) => referencedItems
+                                .where((e) => e.collectionUuid == item.uuid),
+                        typedResults: items)
+                ];
+              },
+            );
+          },
+        ));
+}
+
+typedef $$CollectionTableTableProcessedTableManager = ProcessedTableManager<
+    _$DriftAppDatabase,
+    $CollectionTableTable,
+    CollectionTableData,
+    $$CollectionTableTableFilterComposer,
+    $$CollectionTableTableOrderingComposer,
+    $$CollectionTableTableAnnotationComposer,
+    $$CollectionTableTableCreateCompanionBuilder,
+    $$CollectionTableTableUpdateCompanionBuilder,
+    (CollectionTableData, $$CollectionTableTableReferences),
+    CollectionTableData,
+    PrefetchHooks Function({bool recipeCollectionsTableRefs})>;
+typedef $$RecipeCollectionsTableTableCreateCompanionBuilder
+    = RecipeCollectionsTableCompanion Function({
+  required String recipeUuid,
+  required String collectionUuid,
+  Value<int> rowid,
+});
+typedef $$RecipeCollectionsTableTableUpdateCompanionBuilder
+    = RecipeCollectionsTableCompanion Function({
+  Value<String> recipeUuid,
+  Value<String> collectionUuid,
+  Value<int> rowid,
+});
+
+final class $$RecipeCollectionsTableTableReferences extends BaseReferences<
+    _$DriftAppDatabase,
+    $RecipeCollectionsTableTable,
+    RecipeCollectionsTableData> {
+  $$RecipeCollectionsTableTableReferences(
+      super.$_db, super.$_table, super.$_typedResult);
+
+  static $RecipeTableTable _recipeUuidTable(_$DriftAppDatabase db) =>
+      db.recipeTable.createAlias($_aliasNameGenerator(
+          db.recipeCollectionsTable.recipeUuid, db.recipeTable.uuid));
+
+  $$RecipeTableTableProcessedTableManager get recipeUuid {
+    final $_column = $_itemColumn<String>('recipe_uuid')!;
+
+    final manager = $$RecipeTableTableTableManager($_db, $_db.recipeTable)
+        .filter((f) => f.uuid.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_recipeUuidTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: [item]));
+  }
+
+  static $CollectionTableTable _collectionUuidTable(_$DriftAppDatabase db) =>
+      db.collectionTable.createAlias($_aliasNameGenerator(
+          db.recipeCollectionsTable.collectionUuid, db.collectionTable.uuid));
+
+  $$CollectionTableTableProcessedTableManager get collectionUuid {
+    final $_column = $_itemColumn<String>('collection_uuid')!;
+
+    final manager =
+        $$CollectionTableTableTableManager($_db, $_db.collectionTable)
+            .filter((f) => f.uuid.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_collectionUuidTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: [item]));
+  }
+}
+
+class $$RecipeCollectionsTableTableFilterComposer
+    extends Composer<_$DriftAppDatabase, $RecipeCollectionsTableTable> {
+  $$RecipeCollectionsTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  $$RecipeTableTableFilterComposer get recipeUuid {
+    final $$RecipeTableTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.recipeUuid,
+        referencedTable: $db.recipeTable,
+        getReferencedColumn: (t) => t.uuid,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$RecipeTableTableFilterComposer(
+              $db: $db,
+              $table: $db.recipeTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  $$CollectionTableTableFilterComposer get collectionUuid {
+    final $$CollectionTableTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.collectionUuid,
+        referencedTable: $db.collectionTable,
+        getReferencedColumn: (t) => t.uuid,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$CollectionTableTableFilterComposer(
+              $db: $db,
+              $table: $db.collectionTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$RecipeCollectionsTableTableOrderingComposer
+    extends Composer<_$DriftAppDatabase, $RecipeCollectionsTableTable> {
+  $$RecipeCollectionsTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  $$RecipeTableTableOrderingComposer get recipeUuid {
+    final $$RecipeTableTableOrderingComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.recipeUuid,
+        referencedTable: $db.recipeTable,
+        getReferencedColumn: (t) => t.uuid,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$RecipeTableTableOrderingComposer(
+              $db: $db,
+              $table: $db.recipeTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  $$CollectionTableTableOrderingComposer get collectionUuid {
+    final $$CollectionTableTableOrderingComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.collectionUuid,
+        referencedTable: $db.collectionTable,
+        getReferencedColumn: (t) => t.uuid,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$CollectionTableTableOrderingComposer(
+              $db: $db,
+              $table: $db.collectionTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$RecipeCollectionsTableTableAnnotationComposer
+    extends Composer<_$DriftAppDatabase, $RecipeCollectionsTableTable> {
+  $$RecipeCollectionsTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  $$RecipeTableTableAnnotationComposer get recipeUuid {
+    final $$RecipeTableTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.recipeUuid,
+        referencedTable: $db.recipeTable,
+        getReferencedColumn: (t) => t.uuid,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$RecipeTableTableAnnotationComposer(
+              $db: $db,
+              $table: $db.recipeTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  $$CollectionTableTableAnnotationComposer get collectionUuid {
+    final $$CollectionTableTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.collectionUuid,
+        referencedTable: $db.collectionTable,
+        getReferencedColumn: (t) => t.uuid,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$CollectionTableTableAnnotationComposer(
+              $db: $db,
+              $table: $db.collectionTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$RecipeCollectionsTableTableTableManager extends RootTableManager<
+    _$DriftAppDatabase,
+    $RecipeCollectionsTableTable,
+    RecipeCollectionsTableData,
+    $$RecipeCollectionsTableTableFilterComposer,
+    $$RecipeCollectionsTableTableOrderingComposer,
+    $$RecipeCollectionsTableTableAnnotationComposer,
+    $$RecipeCollectionsTableTableCreateCompanionBuilder,
+    $$RecipeCollectionsTableTableUpdateCompanionBuilder,
+    (RecipeCollectionsTableData, $$RecipeCollectionsTableTableReferences),
+    RecipeCollectionsTableData,
+    PrefetchHooks Function({bool recipeUuid, bool collectionUuid})> {
+  $$RecipeCollectionsTableTableTableManager(
+      _$DriftAppDatabase db, $RecipeCollectionsTableTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$RecipeCollectionsTableTableFilterComposer(
+                  $db: db, $table: table),
+          createOrderingComposer: () =>
+              $$RecipeCollectionsTableTableOrderingComposer(
+                  $db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$RecipeCollectionsTableTableAnnotationComposer(
+                  $db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<String> recipeUuid = const Value.absent(),
+            Value<String> collectionUuid = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              RecipeCollectionsTableCompanion(
+            recipeUuid: recipeUuid,
+            collectionUuid: collectionUuid,
+            rowid: rowid,
+          ),
+          createCompanionCallback: ({
+            required String recipeUuid,
+            required String collectionUuid,
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              RecipeCollectionsTableCompanion.insert(
+            recipeUuid: recipeUuid,
+            collectionUuid: collectionUuid,
+            rowid: rowid,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (
+                    e.readTable(table),
+                    $$RecipeCollectionsTableTableReferences(db, table, e)
+                  ))
+              .toList(),
+          prefetchHooksCallback: (
+              {recipeUuid = false, collectionUuid = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins: <
+                  T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic>>(state) {
+                if (recipeUuid) {
+                  state = state.withJoin(
+                    currentTable: table,
+                    currentColumn: table.recipeUuid,
+                    referencedTable: $$RecipeCollectionsTableTableReferences
+                        ._recipeUuidTable(db),
+                    referencedColumn: $$RecipeCollectionsTableTableReferences
+                        ._recipeUuidTable(db)
+                        .uuid,
+                  ) as T;
+                }
+                if (collectionUuid) {
+                  state = state.withJoin(
+                    currentTable: table,
+                    currentColumn: table.collectionUuid,
+                    referencedTable: $$RecipeCollectionsTableTableReferences
+                        ._collectionUuidTable(db),
+                    referencedColumn: $$RecipeCollectionsTableTableReferences
+                        ._collectionUuidTable(db)
+                        .uuid,
+                  ) as T;
+                }
+
+                return state;
+              },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ));
+}
+
+typedef $$RecipeCollectionsTableTableProcessedTableManager
+    = ProcessedTableManager<
+        _$DriftAppDatabase,
+        $RecipeCollectionsTableTable,
+        RecipeCollectionsTableData,
+        $$RecipeCollectionsTableTableFilterComposer,
+        $$RecipeCollectionsTableTableOrderingComposer,
+        $$RecipeCollectionsTableTableAnnotationComposer,
+        $$RecipeCollectionsTableTableCreateCompanionBuilder,
+        $$RecipeCollectionsTableTableUpdateCompanionBuilder,
+        (RecipeCollectionsTableData, $$RecipeCollectionsTableTableReferences),
+        RecipeCollectionsTableData,
+        PrefetchHooks Function({bool recipeUuid, bool collectionUuid})>;
 
 class $DriftAppDatabaseManager {
   final _$DriftAppDatabase _db;
@@ -2635,4 +3767,9 @@ class $DriftAppDatabaseManager {
       $$CountTypeTableTableTableManager(_db, _db.countTypeTable);
   $$IngredientTableTableTableManager get ingredientTable =>
       $$IngredientTableTableTableManager(_db, _db.ingredientTable);
+  $$CollectionTableTableTableManager get collectionTable =>
+      $$CollectionTableTableTableManager(_db, _db.collectionTable);
+  $$RecipeCollectionsTableTableTableManager get recipeCollectionsTable =>
+      $$RecipeCollectionsTableTableTableManager(
+          _db, _db.recipeCollectionsTable);
 }

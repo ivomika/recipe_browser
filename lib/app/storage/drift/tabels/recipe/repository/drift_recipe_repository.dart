@@ -142,8 +142,9 @@ class DriftRecipeRepository implements IRecipeRepository{
 
   @override
   FutureOr<Recipe> update(Recipe model) async {
-    final recipeId = await (_database.update(_database.recipeTable)..where((e) => e.uuid.equals(model.id)))
-    .write(RecipeTableCompanion.insert(
+    final recipeId = await (_database.update(_database.recipeTable)
+      ..where((e) => e.uuid.equals(model.id)))
+      .write(RecipeTableCompanion.insert(
         title: model.title,
         description: model.description,
         cookingTime: model.cookingTime,

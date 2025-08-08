@@ -19,6 +19,6 @@ class Collection extends BaseModel{
 
   @override
   String toString() {
-    return 'Set{id: $id, createdAt: $createdAt, title: $title, recipes: $recipes}';
+    return 'Collection{id: $id, createdAt: $createdAt, title: $title, recipes: $recipes}';
   }
 }
