@@ -4,7 +4,7 @@ import 'package:recipe_browser/entities/entities.dart';
 class CollectionConverter{
   static Collection toLocalModel(CollectionTableData data, List<Recipe> recipes){
     return Collection(
-        id: data.uuid,
+        id: data.id,
         createdAt: data.createdAt,
         title: data.title,
         recipes: recipes

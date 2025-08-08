@@ -22,7 +22,7 @@ class DriftRecipeRepository implements IRecipeRepository{
         .join([
           leftOuterJoin(
               _database.countTypeTable,
-              _database.ingredientTable.typeUuid.equalsExp(_database.countTypeTable.uuid)
+              _database.ingredientTable.typeId.equalsExp(_database.countTypeTable.id)
           )
         ])
         .get());
@@ -52,7 +52,7 @@ class DriftRecipeRepository implements IRecipeRepository{
   FutureOr<Recipe> byId(String id) async {
     final recipe = await (_database.select(
       _database.recipeTable
-    )..where((e) => e.uuid.equals(id)))
+    )..where((e) => e.id.equals(id)))
     .getSingle();
 
     final ingredients = (await (_database.select(_database.ingredientTable)
@@ -60,7 +60,7 @@ class DriftRecipeRepository implements IRecipeRepository{
       .join([
         leftOuterJoin(
             _database.countTypeTable,
-            _database.ingredientTable.typeUuid.equalsExp(_database.countTypeTable.uuid)
+            _database.ingredientTable.typeId.equalsExp(_database.countTypeTable.id)
         )
       ])
       .get())
@@ -89,7 +89,7 @@ class DriftRecipeRepository implements IRecipeRepository{
   FutureOr<List<Recipe>> byIds(List<String> ids) async {
     final recipe = await (_database
         .select(_database.recipeTable)
-        ..where((recipe) => recipe.uuid.isIn(ids)))
+        ..where((recipe) => recipe.id.isIn(ids)))
         .get();
 
     return recipe.map((e) => RecipeConverter.toLocalModel(e)).toList(growable: false);
@@ -114,7 +114,7 @@ class DriftRecipeRepository implements IRecipeRepository{
           model.ingredients.map((e) => IngredientTableCompanion.insert(
               name: e.name,
               count: e.count,
-              typeUuid: e.type.id,
+              typeId: e.type.id,
               recipeId: result.id
           )
         ).toList(growable: false)
@@ -130,21 +130,21 @@ class DriftRecipeRepository implements IRecipeRepository{
       );
     });
 
-    return await byId(result.uuid);
+    return await byId(result.id);
   }
 
   @override
   FutureOr<bool> delete(Recipe model) async {
-    await (_database.delete(_database.recipeTable)..where((e) => e.uuid.equals(model.id))).go();
+    await (_database.delete(_database.recipeTable)..where((e) => e.id.equals(model.id))).go();
 
     return true;
   }
 
   @override
   FutureOr<Recipe> update(Recipe model) async {
-    final recipeId = await (_database.update(_database.recipeTable)
-      ..where((e) => e.uuid.equals(model.id)))
-      .write(RecipeTableCompanion.insert(
+    await (_database.update(_database.recipeTable)
+      ..where((e) => e.id.equals(model.id)))
+      .writeReturning(RecipeTableCompanion.insert(
         title: model.title,
         description: model.description,
         cookingTime: model.cookingTime,
@@ -153,8 +153,8 @@ class DriftRecipeRepository implements IRecipeRepository{
         difficulty: model.difficulty
     ));
 
-    await (_database.delete(_database.ingredientTable)..where((e) => e.recipeId.equals(recipeId))).go();
-    await (_database.delete(_database.cookingStepTable)..where((e) => e.recipeId.equals(recipeId))).go();
+    await (_database.delete(_database.ingredientTable)..where((e) => e.recipeId.equals(model.id))).go();
+    await (_database.delete(_database.cookingStepTable)..where((e) => e.recipeId.equals(model.id))).go();
 
     await _database.batch((batch) async{
       batch.insertAll(
@@ -162,8 +162,8 @@ class DriftRecipeRepository implements IRecipeRepository{
           model.ingredients.map((e) => IngredientTableCompanion.insert(
               name: e.name,
               count: e.count,
-              typeUuid: e.type.id,
-              recipeId: recipeId
+              typeId: e.type.id,
+              recipeId: model.id
           )
           ).toList(growable: false)
       );
@@ -172,7 +172,7 @@ class DriftRecipeRepository implements IRecipeRepository{
           _database.cookingStepTable,
           model.cookingSteps.map((e) => CookingStepTableCompanion.insert(
               description: e.description,
-              recipeId: recipeId
+              recipeId: model.id
           )
           ).toList(growable: false)
       );

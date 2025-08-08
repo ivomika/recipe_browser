@@ -3,9 +3,9 @@ import 'package:recipe_browser/app/storage/drift/tabels/collection/model/collect
 import 'package:recipe_browser/app/storage/drift/tabels/recipe/model/recipe_table.dart';
 
 class RecipeCollectionsTable extends Table{
-  TextColumn get recipeUuid => text().references(RecipeTable, #uuid, onDelete: KeyAction.cascade)();
-  TextColumn get collectionUuid => text().references(CollectionTable, #uuid, onDelete: KeyAction.cascade)();
+  TextColumn get recipeId => text().references(RecipeTable, #id, onDelete: KeyAction.cascade)();
+  TextColumn get collectionId => text().references(CollectionTable, #id, onDelete: KeyAction.cascade)();
 
   @override
-  Set<Column> get primaryKey => {recipeUuid, collectionUuid};
+  Set<Column> get primaryKey => {recipeId, collectionId};
 }

@@ -4,7 +4,7 @@ import 'package:recipe_browser/entities/entities.dart';
 class CountTypeConverter{
   static CountType toLocalModel(CountTypeTableData data){
     return CountType(
-        id: data.uuid,
+        id: data.id,
         createdAt: data.createdAt,
         name: data.name
     );

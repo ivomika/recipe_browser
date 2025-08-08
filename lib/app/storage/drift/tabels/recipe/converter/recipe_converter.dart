@@ -4,7 +4,7 @@ import 'package:recipe_browser/entities/entities.dart';
 class RecipeConverter{
   static Recipe toLocalModel(RecipeTableData data,[List<Ingredient> ingredients = const [], List<CookingStep> cookingSteps = const [],]){
     return Recipe(
-        id: data.uuid,
+        id: data.id,
         createdAt: data.createdAt,
         title: data.title,
         description: data.description,

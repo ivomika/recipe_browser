@@ -22,7 +22,7 @@ class DriftCountTypeRepository implements ICountTypeRepository{
   FutureOr<CountType> byId(String id) async {
     final result = await (_database
         .select(_database.countTypeTable)
-        ..where((e) => e.uuid.equals(id)))
+        ..where((e) => e.id.equals(id)))
         .getSingle();
 
     return CountTypeConverter.toLocalModel(result);
@@ -32,7 +32,7 @@ class DriftCountTypeRepository implements ICountTypeRepository{
   FutureOr<List<CountType>> byIds(List<String> ids) async {
     final result = await (_database
         .select(_database.countTypeTable)
-        ..where((e) => e.uuid.isIn(ids)))
+        ..where((e) => e.id.isIn(ids)))
         .get();
 
     return result.map((e) => CountTypeConverter.toLocalModel(e)).toList(growable: false);
@@ -51,14 +51,14 @@ class DriftCountTypeRepository implements ICountTypeRepository{
 
   @override
   FutureOr<bool> delete(CountType model) async {
-    await (_database.delete(_database.countTypeTable)..where((e) => e.uuid.equals(model.id))).go();
+    await (_database.delete(_database.countTypeTable)..where((e) => e.id.equals(model.id))).go();
 
     return true;
   }
 
   @override
   FutureOr<CountType> update(CountType model) async {
-    await (_database.update(_database.countTypeTable)..where((e) => e.uuid.equals(model.id)))
+    await (_database.update(_database.countTypeTable)..where((e) => e.id.equals(model.id)))
         .write(
       CountTypeTableCompanion.insert(
           name: model.name

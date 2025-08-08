@@ -98,12 +98,12 @@ void main() {
                     2
                 );
                 expect(
-                    result.first.id,
-                    countType.id
+                    result,
+                    contains(countType)
                 );
                 expect(
-                    result.last.id,
-                    all.last.id
+                    result,
+                    contains(all.last)
                 );
             }
         );
@@ -430,12 +430,12 @@ void main() {
                     2
                 );
                 expect(
-                    result.first.id,
-                    all.first.id
+                    result,
+                    contains(all.first)
                 );
                 expect(
-                    result.last.id,
-                    all.last.id
+                    result,
+                    contains(all.last)
                 );
             }
         );

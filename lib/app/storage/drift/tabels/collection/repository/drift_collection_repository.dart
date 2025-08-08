@@ -20,11 +20,11 @@ class DriftCollectionRepository implements ICollectionRepository{
         .join([
             leftOuterJoin(
               _database.recipeCollectionsTable,
-              _database.recipeCollectionsTable.collectionUuid.equalsExp(_database.collectionTable.uuid)
+              _database.recipeCollectionsTable.collectionId.equalsExp(_database.collectionTable.id)
             ),
             leftOuterJoin(
               _database.recipeTable,
-              _database.recipeTable.uuid.equalsExp(_database.recipeCollectionsTable.recipeUuid)
+              _database.recipeTable.id.equalsExp(_database.recipeCollectionsTable.recipeId)
             ),
         ]))
         .get();
@@ -43,7 +43,7 @@ class DriftCollectionRepository implements ICollectionRepository{
         .join([
             leftOuterJoin(
                 _database.countTypeTable,
-                _database.countTypeTable.uuid.equalsExp(_database.ingredientTable.typeUuid)
+                _database.countTypeTable.id.equalsExp(_database.ingredientTable.typeId)
             )
         ])
         .get();
@@ -74,15 +74,15 @@ class DriftCollectionRepository implements ICollectionRepository{
   FutureOr<Collection> byId(String id) async {
     final collection = await (_database.select(
         _database.collectionTable
-    )..where((e) => e.uuid.equals(id)))
+    )..where((e) => e.id.equals(id)))
     .getSingle();
 
     final recipes = await (_database.select(_database.recipeCollectionsTable)
-      ..where((e) => e.collectionUuid.equals(collection.uuid)))
+      ..where((e) => e.collectionId.equals(collection.id)))
       .join([
         leftOuterJoin(
             _database.recipeTable,
-            _database.recipeTable.uuid.equalsExp(_database.recipeCollectionsTable.recipeUuid)
+            _database.recipeTable.id.equalsExp(_database.recipeCollectionsTable.recipeId)
         )
       ])
       .get();
@@ -94,7 +94,7 @@ class DriftCollectionRepository implements ICollectionRepository{
         .join([
       leftOuterJoin(
           _database.countTypeTable,
-          _database.ingredientTable.typeUuid.equalsExp(_database.countTypeTable.uuid)
+          _database.ingredientTable.typeId.equalsExp(_database.countTypeTable.id)
       )
     ])
         .get())
@@ -128,15 +128,15 @@ class DriftCollectionRepository implements ICollectionRepository{
   FutureOr<List<Collection>> byIds(List<String> ids) async {
     final collections = await ((_database
         .select(_database.collectionTable)
-        ..where((e) => e.uuid.isIn(ids)))
+        ..where((e) => e.id.isIn(ids)))
         .join([
       leftOuterJoin(
           _database.recipeCollectionsTable,
-          _database.recipeCollectionsTable.collectionUuid.equalsExp(_database.collectionTable.uuid)
+          _database.recipeCollectionsTable.collectionId.equalsExp(_database.collectionTable.id)
       ),
       leftOuterJoin(
           _database.recipeTable,
-          _database.recipeTable.uuid.equalsExp(_database.recipeCollectionsTable.recipeUuid)
+          _database.recipeTable.id.equalsExp(_database.recipeCollectionsTable.recipeId)
       ),
     ]))
         .get();
@@ -155,7 +155,7 @@ class DriftCollectionRepository implements ICollectionRepository{
         .join([
       leftOuterJoin(
           _database.countTypeTable,
-          _database.countTypeTable.uuid.equalsExp(_database.ingredientTable.typeUuid)
+          _database.countTypeTable.id.equalsExp(_database.ingredientTable.typeId)
       )
     ])
         .get();
@@ -192,18 +192,18 @@ class DriftCollectionRepository implements ICollectionRepository{
         batch.insertAll(
             _database.recipeCollectionsTable,
             model.recipes.map((e) => RecipeCollectionsTableCompanion.insert(
-                recipeUuid: e.id,
-                collectionUuid: collection.uuid,
+                recipeId: e.id,
+                collectionId: collection.id,
             )).toList(growable: false)
         );
     });
 
-    return await byId(collection.uuid);
+    return await byId(collection.id);
   }
 
   @override
   FutureOr<bool> delete(Collection model) async {
-    await (_database.delete(_database.collectionTable)..where((e) => e.uuid.equals(model.id))).go();
+    await (_database.delete(_database.collectionTable)..where((e) => e.id.equals(model.id))).go();
 
     return true;
   }
@@ -211,19 +211,19 @@ class DriftCollectionRepository implements ICollectionRepository{
   @override
   FutureOr<Collection> update(Collection model) async {
     await (_database.update(_database.collectionTable)
-      ..where((e) => e.uuid.equals(model.id)))
+      ..where((e) => e.id.equals(model.id)))
       .write(CollectionTableCompanion.insert(title: model.title));
 
     await (_database.delete(_database.recipeCollectionsTable)
-      ..where((e) => e.collectionUuid.equals(model.id)))
+      ..where((e) => e.collectionId.equals(model.id)))
       .go();
 
     await _database.batch((batch) async {
       batch.insertAll(
           _database.recipeCollectionsTable,
           model.recipes.map((e) => RecipeCollectionsTableCompanion.insert(
-            recipeUuid: e.id,
-            collectionUuid: model.id,
+            recipeId: e.id,
+            collectionId: model.id,
           )).toList(growable: false)
       );
     });
@@ -234,9 +234,9 @@ class DriftCollectionRepository implements ICollectionRepository{
   @override
   FutureOr<List<Collection>> byRecipeId(String id) async {
     final collections = (await (_database.select(_database.recipeCollectionsTable)
-      ..where((e) => e.recipeUuid.equals(id)))
+      ..where((e) => e.recipeId.equals(id)))
       .get())
-      .map((e) => e.collectionUuid)
+      .map((e) => e.collectionId)
       .toList(growable: false);
 
     return await byIds(collections);
