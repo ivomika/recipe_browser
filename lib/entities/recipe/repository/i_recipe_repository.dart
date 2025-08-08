@@ -4,6 +4,8 @@ import 'package:recipe_browser/entities/recipe/recipe.dart';
 abstract interface class IRecipeRepository {
   FutureOr<List<Recipe>> all();
 
+  FutureOr<List<Recipe>> find(String query);
+
   FutureOr<Recipe> byId(String id);
 
   FutureOr<List<Recipe>> byIds(List<String> ids);

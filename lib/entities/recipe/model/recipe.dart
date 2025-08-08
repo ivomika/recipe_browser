@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:recipe_browser/entities/base/base.dart';
 import 'package:recipe_browser/entities/recipe/recipe.dart';
 
@@ -43,6 +45,21 @@ class Recipe extends BaseModel{
     required this.ingredients,
     required this.cookingSteps,
   }) : super.create();
+
+  /// Only for test
+  factory Recipe.foo(){
+    final random = Random();
+    return Recipe.create(
+        title: random.nextInt(200).toString(),
+        description: random.nextInt(200).toString(),
+        cookingTime: random.nextInt(200),
+        kilocalories: random.nextInt(200),
+        servings: random.nextInt(200),
+        difficulty: random.nextInt(200).toString(),
+        ingredients: [],
+        cookingSteps: []
+    );
+  }
   
   @override
   List<Object?> get props => super.props..addAll([title, description, cookingTime, kilocalories, ingredients, cookingSteps]);

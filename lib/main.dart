@@ -1,3 +1,4 @@
+import 'package:drift/native.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:recipe_browser/app/theme/theme.dart';
@@ -22,7 +23,9 @@ class MyApp extends StatelessWidget {
     return MultiRepositoryProvider(
       providers: [
         RepositoryProvider(
-            create: (context) => DriftAppDatabase()
+            create: (context) => DriftAppDatabase(
+              NativeDatabase.memory()
+            )
         ),
         RepositoryProvider<IRecipeRepository>(
             create: (context) => DriftRecipeRepository(

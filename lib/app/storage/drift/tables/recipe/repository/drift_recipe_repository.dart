@@ -180,4 +180,13 @@ class DriftRecipeRepository implements IRecipeRepository{
 
     return await byId(model.id);
   }
+
+  @override
+  FutureOr<List<Recipe>> find(String query) async {
+    final result = await (_database.select(_database.recipeTable)..where((e) => e.title.contains(query))).get();
+
+    return byIds(
+      result.map((e) => e.id).toList(growable: false)
+    );
+  }
 }
