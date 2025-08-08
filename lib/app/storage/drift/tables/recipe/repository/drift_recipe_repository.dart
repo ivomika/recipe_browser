@@ -1,10 +1,10 @@
 import 'dart:async';
 import 'package:drift/drift.dart';
 import 'package:recipe_browser/app/storage/drift/database/drift_app_database.dart';
-import 'package:recipe_browser/app/storage/drift/tabels/cooking_step/converter/cooking_step_converter.dart';
-import 'package:recipe_browser/app/storage/drift/tabels/count_type/converter/count_type_converter.dart';
-import 'package:recipe_browser/app/storage/drift/tabels/ingredient/converter/ingredient_converter.dart';
-import 'package:recipe_browser/app/storage/drift/tabels/recipe/converter/recipe_converter.dart';
+import 'package:recipe_browser/app/storage/drift/tables/cooking_step/converter/cooking_step_converter.dart';
+import 'package:recipe_browser/app/storage/drift/tables/count_type/converter/count_type_converter.dart';
+import 'package:recipe_browser/app/storage/drift/tables/ingredient/converter/ingredient_converter.dart';
+import 'package:recipe_browser/app/storage/drift/tables/recipe/converter/recipe_converter.dart';
 import 'package:recipe_browser/entities/entities.dart';
 
 class DriftRecipeRepository implements IRecipeRepository{

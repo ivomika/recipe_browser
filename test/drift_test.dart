@@ -1,10 +1,7 @@
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:recipe_browser/app/storage/drift/database/drift_app_database.dart';
-import 'package:recipe_browser/app/storage/drift/tabels/collection/repository/drift_collection_repository.dart';
-import 'package:recipe_browser/app/storage/drift/tabels/count_type/repository/drift_count_type_repository.dart';
-import 'package:recipe_browser/app/storage/drift/tabels/recipe/repository/drift_recipe_repository.dart';
+import 'package:recipe_browser/app/storage/drift/drift.dart';
 import 'package:recipe_browser/entities/entities.dart';
 
 void main() {

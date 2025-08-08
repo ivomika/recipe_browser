@@ -1,12 +1,12 @@
 import 'package:drift/drift.dart';
 import 'package:drift_flutter/drift_flutter.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:recipe_browser/app/storage/drift/tabels/collection/model/collection_table.dart';
-import 'package:recipe_browser/app/storage/drift/tabels/cooking_step/model/cooking_step_table.dart';
-import 'package:recipe_browser/app/storage/drift/tabels/count_type/model/count_type_table.dart';
-import 'package:recipe_browser/app/storage/drift/tabels/ingredient/model/ingredient_table.dart';
-import 'package:recipe_browser/app/storage/drift/tabels/recipe/model/recipe_table.dart';
-import 'package:recipe_browser/app/storage/drift/tabels/recipe_collections/model/recipe_collections_table.dart';
+import 'package:recipe_browser/app/storage/drift/tables/collection/model/collection_table.dart';
+import 'package:recipe_browser/app/storage/drift/tables/cooking_step/model/cooking_step_table.dart';
+import 'package:recipe_browser/app/storage/drift/tables/count_type/model/count_type_table.dart';
+import 'package:recipe_browser/app/storage/drift/tables/ingredient/model/ingredient_table.dart';
+import 'package:recipe_browser/app/storage/drift/tables/recipe/model/recipe_table.dart';
+import 'package:recipe_browser/app/storage/drift/tables/recipe_collections/model/recipe_collections_table.dart';
 import 'package:uuid/uuid.dart';
 
 part 'drift_app_database.g.dart';

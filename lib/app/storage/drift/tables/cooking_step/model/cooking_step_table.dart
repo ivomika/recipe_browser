@@ -1,5 +1,5 @@
 import 'package:drift/drift.dart';
-import 'package:recipe_browser/app/storage/drift/tabels/recipe/model/recipe_table.dart';
+import 'package:recipe_browser/app/storage/drift/tables/recipe/model/recipe_table.dart';
 import 'package:uuid/uuid.dart';
 
 class CookingStepTable extends Table{

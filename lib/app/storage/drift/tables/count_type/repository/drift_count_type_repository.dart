@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:recipe_browser/app/storage/drift/database/drift_app_database.dart';
-import 'package:recipe_browser/app/storage/drift/tabels/count_type/converter/count_type_converter.dart';
+import 'package:recipe_browser/app/storage/drift/tables/count_type/converter/count_type_converter.dart';
 import 'package:recipe_browser/entities/count_type/count_type.dart';
 
 class DriftCountTypeRepository implements ICountTypeRepository{
