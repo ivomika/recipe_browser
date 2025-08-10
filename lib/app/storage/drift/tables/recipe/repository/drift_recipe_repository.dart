@@ -14,8 +14,9 @@ class DriftRecipeRepository implements IRecipeRepository{
 
   @override
   FutureOr<List<Recipe>> all() async {
-    final recipes = await _database
+    final recipes = await (_database
         .select(_database.recipeTable)
+        ..orderBy([(t) => OrderingTerm(expression: t.createdAt)]))
         .get();
 
     final ingredients = (await (_database.select(_database.ingredientTable))
@@ -87,9 +88,10 @@ class DriftRecipeRepository implements IRecipeRepository{
 
   @override
   FutureOr<List<Recipe>> byIds(List<String> ids) async {
-    final recipe = await (_database
+    final recipe = await ((_database
         .select(_database.recipeTable)
         ..where((recipe) => recipe.id.isIn(ids)))
+        ..orderBy([(t) => OrderingTerm(expression: t.createdAt)]))
         .get();
 
     return recipe.map((e) => RecipeConverter.toLocalModel(e)).toList(growable: false);

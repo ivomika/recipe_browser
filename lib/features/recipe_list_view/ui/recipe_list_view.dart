@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:recipe_browser/entities/entities.dart';
 import 'package:recipe_browser/features/recipe_list_view/bloc/recipe_list_bloc.dart';
+import 'package:recipe_browser/features/recipe_list_view/ui/recipe_list_tile.dart';
 import 'package:recipe_browser/shared/utils/utils.dart';
 
 class RecipeListView extends StatelessWidget {
@@ -25,12 +26,9 @@ class RecipeListView extends StatelessWidget {
               return SliverList.separated(
                 itemCount: recipes.length,
                 separatorBuilder: (context, index) => SizedBox(height: context.offset.normal),
-                itemBuilder: (context, index) => Card(
-                  margin: EdgeInsets.zero,
-                  child: ListTile(
-                    title: Text(recipes.elementAt(index).title),
-                  ),
-                ),
+                itemBuilder: (context, index) => RecipeListTile(
+                    title: recipes.elementAt(index).title
+                )
               );
             }
         ),

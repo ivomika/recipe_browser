@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:meta/meta.dart';
+import 'package:flutter/material.dart';
 import 'package:recipe_browser/entities/entities.dart';
 
 part 'recipe_list_event.dart';
@@ -16,7 +16,6 @@ class RecipeListBloc extends Bloc<RecipeListEvent, RecipeListState> {
   }
 
   FutureOr<void> _loadingRecipeList(LoadingRecipeList event, Emitter<RecipeListState> emit) async {
-    print(event.query);
     await _repository.create(Recipe.foo());
     emit(RecipeListLoading());
     try{
