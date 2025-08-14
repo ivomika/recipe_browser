@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:recipe_browser/widgets/search_recipe/ui/search_recipe.dart';
 
 class HomePage extends StatelessWidget {
@@ -9,6 +10,11 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+          child: Icon(Icons.add),
+          onPressed: () => GoRouter.of(context).go('/create-recipe')
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(16),

@@ -11,6 +11,14 @@ class Ingredient extends BaseSubModel{
     required this.type
   });
 
+
+  Ingredient copyWith({String? name, double? count, CountType? type}) =>
+      Ingredient(
+          name: name ?? this.name,
+          count: count ?? this.count,
+          type: type ?? this.type
+      );
+
   @override
   List<Object?> get props => [name, count, type];
 
