@@ -8,7 +8,7 @@ part 'state_form_state.dart';
 class StateFormCubit extends Cubit<StateFormState> {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final Map<String, dynamic> data = {};
-  final Function(Map<String, dynamic> data) onSaveForm;
+  final void Function(Map<String, dynamic> data) onSaveForm;
 
   StateFormCubit({required this.onSaveForm}) : super(StateFormInitial());
 

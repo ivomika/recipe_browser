@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:recipe_browser/pages/choice_create/choice_create.dart';
+import 'package:recipe_browser/pages/create_count_type/create_count_type.dart';
 import 'package:recipe_browser/pages/create_recipe/create_recipe.dart';
 import 'package:recipe_browser/pages/home_page/home_page.dart';
 
@@ -18,8 +20,18 @@ final appRouting = GoRouter(
                             path: '/',
                             routes: [
                               GoRoute(
-                                  path: 'create-recipe',
-                                  builder: (context, state) => CreateRecipe()
+                                  path: 'create',
+                                  builder: (context, state) => ChoiceCreate(),
+                                  routes: [
+                                    GoRoute(
+                                        path: 'count-type',
+                                        builder: (context, state) => CreateCountType()
+                                    ),
+                                    GoRoute(
+                                        path: 'recipe',
+                                        builder: (context, state) => CreateRecipe()
+                                    )
+                                  ]
                               )
                             ]
                         )

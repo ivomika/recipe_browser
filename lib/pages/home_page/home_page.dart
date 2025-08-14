@@ -12,7 +12,7 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
           child: Icon(Icons.add),
-          onPressed: () => GoRouter.of(context).go('/create-recipe')
+          onPressed: () => GoRouter.of(context).go('/create')
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       body: SafeArea(

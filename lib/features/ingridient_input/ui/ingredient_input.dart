@@ -10,12 +10,8 @@ class IngredientInput extends StatefulWidget {
   final String? Function(Ingredient? value)? validator;
   final void Function(Ingredient? value)? onChanged;
 
-  const IngredientInput({
-    super.key,
-    this.onSaved,
-    this.validator,
-    this.onChanged
-  });
+  const IngredientInput(
+      {super.key, this.onSaved, this.validator, this.onChanged});
 
   @override
   State<IngredientInput> createState() => _IngredientInputState();
@@ -34,110 +30,82 @@ class _IngredientInputState extends State<IngredientInput> {
 
   @override
   Widget build(BuildContext context) {
-    return FormField<Ingredient>(
-        initialValue: Ingredient(
-            name: '',
-            count: 0,
-            type: CountType.create(
-                name: ''
-            )
-        ),
-        onSaved: widget.onSaved,
-        validator: widget.validator,
-        builder: (state) {
-          return Column(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            spacing: context.offset.small,
-            children: [
-              TextField(
-                decoration: InputDecoration(
-                    labelText: 'Ингредиент',
-                    errorText: state.errorText
-                ),
-                onChanged: (text) {
-                  state.didChange(
-                      state.value!.copyWith(
-                          name: text
-                      )
-                  );
-                  widget.onChanged?.call(state.value);
-                },
+    return FutureBuilder(
+        future: _futureData,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+
+          return FormField<Ingredient>(
+              initialValue: Ingredient(
+                  name: '',
+                  count: 0,
+                  type: snapshot.data!.first
               ),
-              TextFormField(
-                initialValue: '0',
-                decoration: InputDecoration(
-                    labelText: 'Количество',
-                    errorText: state.errorText
-                ),
-                keyboardType: TextInputType.numberWithOptions(
-                  decimal: true
-                ),
-                inputFormatters: [
-                  FilteringTextInputFormatter.allow(
-                    RegExp(r'(^\d+\.?\d{0,3})'),
-                  ),
-                  IngredientCountTextFormatter()
-                ],
-                onChanged: (text) {
-                  state.didChange(
-                      state.value!.copyWith(
-                          count: double.parse(text)
-                      )
-                  );
-                  widget.onChanged?.call(state.value);
-                },
-              ),
-              FutureBuilder(
-                  future: _futureData,
-                  builder: (context, snapshot){
-                    if(snapshot.connectionState == ConnectionState.waiting){
-                      TextField(
-                        enabled: false,
-                        decoration: InputDecoration(
-                          labelText: 'Загрузка'
-                        ),
-                      );
-                    }
-
-
-                    if(snapshot.data == null || snapshot.data!.isEmpty){
-                      return TextField(
-                        enabled: false,
-                        decoration: InputDecoration(
-                            labelText: 'Нет данных'
-                        ),
-                      );
-                    }
-
-                    return DropdownButtonFormField<CountType>(
-                      forceErrorText: state.errorText,
+              onSaved: widget.onSaved,
+              validator: widget.validator,
+              builder: (state) {
+                return Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  spacing: context.offset.small,
+                  children: [
+                    TextFormField(
+                      initialValue: state.value!.name,
                       decoration: InputDecoration(
-                          labelText: 'Тип количество'
-                      ),
-                      value: snapshot.data!.first,
-                      items: snapshot.data!.map(
-                          (e) => DropdownMenuItem(
-                              value: e,
-                              child: Text(e.name)
-                          )
-                      ).toList(growable: false),
-                      onChanged: (value) {
-                        state.didChange(
-                            state.value!.copyWith(
-                                type: value
-                            )
-                        );
+                          labelText: 'Ингредиент', errorText: state.errorText),
+                      onChanged: (text) {
+                        state.didChange(state.value!.copyWith(name: text));
                         widget.onChanged?.call(state.value);
                       },
-                      borderRadius: BorderRadius.circular(context.offset.large),
-                    );
-                  }
-              )
-            ],
-          );
-        }
-    );
+                    ),
+                    TextFormField(
+                      initialValue: state.value!.count.toString(),
+                      decoration: InputDecoration(
+                          labelText: 'Количество', errorText: state.errorText),
+                      keyboardType:
+                          TextInputType.numberWithOptions(decimal: true),
+                      inputFormatters: [
+                        FilteringTextInputFormatter.allow(
+                          RegExp(r'(^\d+\.?\d{0,3})'),
+                        ),
+                        IngredientCountTextFormatter()
+                      ],
+                      onChanged: (text) {
+                        state.didChange(
+                            state.value!.copyWith(count: double.parse(text)));
+                        widget.onChanged?.call(state.value);
+                      },
+                    ),
+                    if (snapshot.data == null || snapshot.data!.isEmpty)
+                      TextField(
+                        enabled: false,
+                        decoration: InputDecoration(labelText: 'Нет данных'),
+                      )
+                    else
+                      DropdownButtonFormField<CountType>(
+                        forceErrorText: state.errorText,
+                        decoration:
+                            InputDecoration(labelText: 'Тип количество'),
+                        value: state.value!.type,
+                        items: snapshot.data!
+                            .map((e) =>
+                                DropdownMenuItem(value: e, child: Text(e.name)))
+                            .toList(growable: false),
+                        onChanged: (value) {
+                          state.didChange(state.value!.copyWith(type: value));
+                          widget.onChanged?.call(state.value);
+                        },
+                        borderRadius:
+                            BorderRadius.circular(context.offset.large),
+                      )
+                  ],
+                );
+              });
+        });
   }
 }

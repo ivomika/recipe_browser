@@ -13,6 +13,7 @@ class RecipeCreateCubit extends Cubit<RecipeCreateState> {
 
   Future<void> create(Recipe model) async {
     try{
+      print(model);
       await _repository.create(model);
       emit(RecipeCreateSuccess());
     }catch(e){

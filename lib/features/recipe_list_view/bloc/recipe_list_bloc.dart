@@ -16,7 +16,6 @@ class RecipeListBloc extends Bloc<RecipeListEvent, RecipeListState> {
   }
 
   FutureOr<void> _loadingRecipeList(LoadingRecipeList event, Emitter<RecipeListState> emit) async {
-    await _repository.create(Recipe.foo());
     emit(RecipeListLoading());
     try{
       final recipes = await _repository.find(event.query);

@@ -113,7 +113,7 @@ class _Info extends StatelessWidget {
               onSaved: (value) => bloc.addField
                 (
                   'cookingTime',
-                  value
+                  int.parse(value!)
               ),
             ),
             TextFormField(
@@ -130,7 +130,7 @@ class _Info extends StatelessWidget {
               onSaved: (value) => bloc.addField
                 (
                   'kilocalories',
-                  value
+                  int.parse(value!)
               ),
             ),
             TextFormField(
@@ -147,7 +147,7 @@ class _Info extends StatelessWidget {
               onSaved: (value) => bloc.addField
                 (
                   'servings',
-                  value
+                  int.parse(value!)
               ),
             ),
             TextFormField(
@@ -217,8 +217,8 @@ class _CookingSteps extends StatelessWidget {
             Text('Шаги приготовления'),
             CookingStepListInput(
               onSaved: (List<String> value) => context.read<StateFormCubit>().addField(
-                  'cookingStep',
-                  value
+                  'cookingSteps',
+                  value.map((e) => CookingStep(description: e)).toList(growable: false)
               ),
             )
           ],

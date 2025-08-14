@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:recipe_browser/entities/entities.dart';
 import 'package:recipe_browser/shared/utils/extensions/theme_context_extension.dart';
 import 'package:recipe_browser/widgets/recipe_create_form/bloc/recipe_create_cubit.dart';
@@ -25,7 +26,10 @@ class CreateRecipe extends StatelessWidget {
                         content: Text(state.error)
                     )
                   );
+                  return;
                 }
+
+                GoRouter.of(context).go('/');
               },
               builder: (context, state) {
                 return Padding(
@@ -34,8 +38,10 @@ class CreateRecipe extends StatelessWidget {
                     slivers: [
                       SliverToBoxAdapter(
                         child: RecipeCreateForm(
-                          onSave: (data) => context.read<RecipeCreateCubit>().create(
-                              Recipe.create(
+                          onSave: (data) {
+                            print(data);
+                            context.read<RecipeCreateCubit>().create(
+                                Recipe.create(
                                   title: data['title'],
                                   description: data['description'],
                                   cookingTime: data['cookingTime'],
@@ -44,8 +50,9 @@ class CreateRecipe extends StatelessWidget {
                                   difficulty: data['difficulty'],
                                   ingredients: data['ingredients'],
                                   cookingSteps: data['cookingSteps'],
-                              )
-                          ),
+                                )
+                            );
+                          },
                         ),
                       )
                     ],

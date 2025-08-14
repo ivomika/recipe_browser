@@ -9,4 +9,9 @@ class CookingStep extends BaseSubModel{
 
   @override
   List<Object?> get props => [description];
+
+  @override
+  String toString() {
+    return 'CookingStep{description: $description}';
+  }
 }
