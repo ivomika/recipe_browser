@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:recipe_browser/entities/entities.dart';
+import 'package:recipe_browser/features/ingridient_input/text_formatter/ingredient_count_text_formatter.dart';
 import 'package:recipe_browser/shared/utils/extensions/theme_context_extension.dart';
 
 class IngredientInput extends StatefulWidget {
@@ -63,11 +65,21 @@ class _IngredientInputState extends State<IngredientInput> {
                   widget.onChanged?.call(state.value);
                 },
               ),
-              TextField(
+              TextFormField(
+                initialValue: '0',
                 decoration: InputDecoration(
                     labelText: 'Количество',
                     errorText: state.errorText
                 ),
+                keyboardType: TextInputType.numberWithOptions(
+                  decimal: true
+                ),
+                inputFormatters: [
+                  FilteringTextInputFormatter.allow(
+                    RegExp(r'(^\d+\.?\d{0,3})'),
+                  ),
+                  IngredientCountTextFormatter()
+                ],
                 onChanged: (text) {
                   state.didChange(
                       state.value!.copyWith(
@@ -104,6 +116,7 @@ class _IngredientInputState extends State<IngredientInput> {
                       decoration: InputDecoration(
                           labelText: 'Тип количество'
                       ),
+                      value: snapshot.data!.first,
                       items: snapshot.data!.map(
                           (e) => DropdownMenuItem(
                               value: e,
