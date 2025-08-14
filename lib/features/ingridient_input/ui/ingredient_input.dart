@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:recipe_browser/entities/entities.dart';
 import 'package:recipe_browser/shared/utils/extensions/theme_context_extension.dart';
 
 class IngredientInput extends StatefulWidget {
-  final void Function(Ingredient value)? onSaved;
-  final String? Function(Ingredient value)? validator;
+  final void Function(Ingredient? value)? onSaved;
+  final String? Function(Ingredient? value)? validator;
+  final String? Function(Ingredient? value)? onChanged;
 
   const IngredientInput({
     super.key,
     required this.onSaved,
-    this.validator
+    this.validator,
+    this.onChanged
   });
 
   @override
@@ -17,26 +20,16 @@ class IngredientInput extends StatefulWidget {
 }
 
 class _IngredientInputState extends State<IngredientInput> {
-  late final TextEditingController _nameController;
-  late final TextEditingController _countController;
-  late String _countType;
+  late final ICountTypeRepository _countRepository;
+  late Future<List<CountType>> _futureData;
 
   @override
   void initState() {
     super.initState();
-
-    _nameController = TextEditingController();
-    _countController = TextEditingController(text: '0');
-    _countType = '';
+    _countRepository = context.read<ICountTypeRepository>();
+    _futureData = Future(() async => await _countRepository.all());
   }
 
-  @override
-  void dispose() {
-    _nameController.dispose();
-    _countController.dispose();
-
-    super.dispose();
-  }
   @override
   Widget build(BuildContext context) {
     return FormField<Ingredient>(
@@ -46,21 +39,9 @@ class _IngredientInputState extends State<IngredientInput> {
             type: CountType.create(
                 name: ''
             )
-        ) ,
-        onSaved: (_) => widget.onSaved?.call(
-          Ingredient(
-            name: _nameController.text,
-            count: double.parse(_countController.text),
-            type: CountType.create(name: _countType)
-          )
         ),
-        validator: (_) => widget.validator?.call(
-            Ingredient(
-                name: _nameController.text,
-                count: double.parse(_countController.text),
-                type: CountType.create(name: _countType)
-            )
-        ),
+        onSaved: widget.onSaved,
+        validator: widget.validator,
         builder: (state) {
           return Column(
             mainAxisSize: MainAxisSize.min,
@@ -69,43 +50,78 @@ class _IngredientInputState extends State<IngredientInput> {
             spacing: context.offset.small,
             children: [
               TextField(
-                controller: _nameController,
                 decoration: InputDecoration(
                     labelText: 'Ингредиент',
                     errorText: state.errorText
                 ),
-                onChanged: (text) => state.didChange(
-                  state.value!.copyWith(
-                    name: text
-                  )
-                ),
+                onChanged: (text) {
+                  state.didChange(
+                      state.value!.copyWith(
+                          name: text
+                      )
+                  );
+                  widget.onChanged?.call(state.value);
+                },
               ),
               TextField(
-                controller: _countController,
                 decoration: InputDecoration(
                     labelText: 'Количество',
                     errorText: state.errorText
                 ),
-                onChanged: (text) => state.didChange(
-                    state.value!.copyWith(
-                        count: double.parse(text)
-                    )
-                ),
+                onChanged: (text) {
+                  state.didChange(
+                      state.value!.copyWith(
+                          count: double.parse(text)
+                      )
+                  );
+                  widget.onChanged?.call(state.value);
+                },
               ),
-              DropdownButtonFormField<String>(
-                forceErrorText: state.errorText,
-                decoration: InputDecoration(
-                  labelText: 'Тип количество'
-                ),
-                items: [
-                  DropdownMenuItem(
-                      value: '1',
-                      child: Text('data')
-                  )
-                ],
-                onChanged: (value) => _countType = value ?? '',
-                borderRadius: BorderRadius.circular(context.offset.large),
-              ),
+              FutureBuilder(
+                  future: _futureData,
+                  builder: (context, snapshot){
+                    if(snapshot.connectionState == ConnectionState.waiting){
+                      TextField(
+                        enabled: false,
+                        decoration: InputDecoration(
+                          labelText: 'Загрузка'
+                        ),
+                      );
+                    }
+
+
+                    if(snapshot.data == null || snapshot.data!.isEmpty){
+                      return TextField(
+                        enabled: false,
+                        decoration: InputDecoration(
+                            labelText: 'Нет данных'
+                        ),
+                      );
+                    }
+
+                    return DropdownButtonFormField<CountType>(
+                      forceErrorText: state.errorText,
+                      decoration: InputDecoration(
+                          labelText: 'Тип количество'
+                      ),
+                      items: snapshot.data!.map(
+                          (e) => DropdownMenuItem(
+                              value: e,
+                              child: Text(e.name)
+                          )
+                      ).toList(growable: false),
+                      onChanged: (value) {
+                        state.didChange(
+                            state.value!.copyWith(
+                                type: value
+                            )
+                        );
+                        widget.onChanged?.call(state.value);
+                      },
+                      borderRadius: BorderRadius.circular(context.offset.large),
+                    );
+                  }
+              )
             ],
           );
         }

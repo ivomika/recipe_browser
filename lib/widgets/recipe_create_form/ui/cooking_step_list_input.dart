@@ -1,45 +1,57 @@
 import 'package:flutter/material.dart';
 import 'package:recipe_browser/features/cooking_step_input/ui/cooking_step_input.dart';
 import 'package:recipe_browser/shared/utils/utils.dart';
+import 'package:recipe_browser/widgets/recipe_create_form/model/list_model.dart';
 
 class CookingStepListInput extends StatefulWidget {
-  const CookingStepListInput({super.key});
+  final Function(List<String> value) onSaved;
+
+  const CookingStepListInput({
+    super.key,
+    required this.onSaved
+  });
 
   @override
   State<CookingStepListInput> createState() => _CookingStepListInputState();
 }
 
 class _CookingStepListInputState extends State<CookingStepListInput> {
-  final List<int> _indexes = [];
-  int _lastIndex = 0;
+  final ListModel<String> _models = ListModel(
+      initIndex: 0,
+      initValue: []
+  );
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      spacing: context.offset.normal,
-      children: [
-        ...List.generate(
-            _indexes.length,
-                (index){
-              return _CookingStepTile(
-                index: index,
-                key: ValueKey(_indexes.elementAt(index)),
-                onDelete: () => setState(() => _indexes.removeAt(index)),
-              );
-            }),
-        FilledButton.tonal(
-            onPressed: (){
-              _indexes.add(_lastIndex);
-              setState(() {
-                _lastIndex++;
-              });
-            },
-            child: Text('Добавить шаг')
-        )
-      ],
+    return FormField(
+        onSaved: (_) => widget.onSaved(_models.values.toList(growable: false)),
+        builder: (state){
+          return Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            spacing: context.offset.normal,
+            children: [
+              ...List.generate(
+                  _models.length,
+                      (index){
+                    return _CookingStepTile(
+                      index: index,
+                      key: ValueKey(_models.indexes.elementAt(index)),
+                      onDelete: () => setState(() => _models.removeAt(index)),
+                      onChanged: (value) => _models.update(
+                          _models.elementAt(index).key,
+                          value!
+                      ),
+                    );
+                  }),
+              FilledButton.tonal(
+                  onPressed: () => setState(() => _models.insert('')),
+                  child: Text('Добавить шаг')
+              )
+            ],
+          );
+        }
     );
   }
 }
@@ -48,11 +60,13 @@ class _CookingStepListInputState extends State<CookingStepListInput> {
 class _CookingStepTile extends StatelessWidget {
   final int index;
   final Function() onDelete;
+  final Function(String? value) onChanged;
 
   const _CookingStepTile({
     super.key,
     required this.index,
     required this.onDelete,
+    required this.onChanged,
   });
 
   @override
@@ -75,9 +89,7 @@ class _CookingStepTile extends StatelessWidget {
 
                 return null;
               },
-              onSaved: (description) {
-                print(description);
-              }
+              onChanged: onChanged
           ),
         )
       ],

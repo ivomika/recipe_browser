@@ -3,7 +3,7 @@ class ListModel<T extends Object>{
   late final Map<int, T> _models;
 
   Iterable<int> get indexes => _models.keys;
-  Iterable<T> get models => _models.values;
+  Iterable<T> get values => _models.values;
   int get length => _models.length;
 
 
@@ -20,7 +20,15 @@ class ListModel<T extends Object>{
   }
 
   void removeAt(int index){
-    final element = _models.entries.elementAt(index);
+    final element = elementAt(index);
     _models.remove(element.key);
+  }
+
+  void update(int key, T value){
+    _models[key] = value;
+  }
+
+  MapEntry<int, T> elementAt(int index){
+    return _models.entries.elementAt(index);
   }
 }

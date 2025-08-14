@@ -4,12 +4,14 @@ class CookingStepInput extends StatelessWidget {
   final int index;
   final String? Function(String? value)? validator;
   final void Function(String? value)? onSaved;
+  final void Function(String? value)? onChanged;
 
   const CookingStepInput({
     super.key,
     required this.index,
-    required this.validator,
-    required this.onSaved
+    this.validator,
+    this.onSaved,
+    this.onChanged
   });
 
   @override
@@ -20,6 +22,7 @@ class CookingStepInput extends StatelessWidget {
       ),
       validator: validator,
       onSaved: onSaved,
+      onChanged: onChanged,
     );
   }
 }

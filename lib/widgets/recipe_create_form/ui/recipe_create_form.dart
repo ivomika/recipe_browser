@@ -6,6 +6,8 @@ import 'package:recipe_browser/shared/utils/extensions/theme_context_extension.d
 import 'package:recipe_browser/widgets/recipe_create_form/ui/cooking_step_list_input.dart';
 import 'package:recipe_browser/widgets/recipe_create_form/ui/ingredient_list_input.dart';
 
+import '../../../entities/entities.dart';
+
 class RecipeCreateForm extends StatelessWidget {
   final Function(Map<String, dynamic> data) onSave;
 
@@ -186,7 +188,12 @@ class _Ingredients extends StatelessWidget {
           spacing: context.offset.normal,
           children: [
             Text('Ингредиенты'),
-            IngredientListInput()
+            IngredientListInput(
+              onSaved: (List<Ingredient> value) => context.read<StateFormCubit>().addField(
+                  'ingredients',
+                  value
+              ),
+            )
           ],
         ),
       ),
@@ -208,7 +215,12 @@ class _CookingSteps extends StatelessWidget {
           spacing: context.offset.normal,
           children: [
             Text('Шаги приготовления'),
-            CookingStepListInput()
+            CookingStepListInput(
+              onSaved: (List<String> value) => context.read<StateFormCubit>().addField(
+                  'cookingStep',
+                  value
+              ),
+            )
           ],
         ),
       ),
