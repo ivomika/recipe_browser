@@ -40,6 +40,13 @@ class _IngredientInputState extends State<IngredientInput> {
   @override
   Widget build(BuildContext context) {
     return FormField<Ingredient>(
+        initialValue: Ingredient(
+            name: '',
+            count: 0,
+            type: CountType.create(
+                name: ''
+            )
+        ) ,
         onSaved: (_) => widget.onSaved?.call(
           Ingredient(
             name: _nameController.text,
