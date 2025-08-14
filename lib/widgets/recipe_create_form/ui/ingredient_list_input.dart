@@ -61,8 +61,8 @@ class _IngredientListInputState extends State<IngredientListInput> {
 }
 
 class _IngredientTile extends StatelessWidget {
-  final Function() onDelete;
-  final Function(Ingredient? value) onChanged;
+  final void Function() onDelete;
+  final void Function(Ingredient? value) onChanged;
 
   const _IngredientTile({
     super.key,
@@ -89,7 +89,7 @@ class _IngredientTile extends StatelessWidget {
 
                 return null;
               },
-              onSaved: onChanged
+              onChanged: onChanged
           ),
         )
       ],

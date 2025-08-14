@@ -6,11 +6,11 @@ import 'package:recipe_browser/shared/utils/extensions/theme_context_extension.d
 class IngredientInput extends StatefulWidget {
   final void Function(Ingredient? value)? onSaved;
   final String? Function(Ingredient? value)? validator;
-  final String? Function(Ingredient? value)? onChanged;
+  final void Function(Ingredient? value)? onChanged;
 
   const IngredientInput({
     super.key,
-    required this.onSaved,
+    this.onSaved,
     this.validator,
     this.onChanged
   });
