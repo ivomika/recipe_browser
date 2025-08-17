@@ -39,6 +39,13 @@ class _IngredientInputState extends State<IngredientInput> {
             );
           }
 
+          if (snapshot.data == null || snapshot.data!.isEmpty){
+            return TextField(
+              enabled: false,
+              decoration: InputDecoration(labelText: 'Нет данных'),
+            );
+          }
+
           return FormField<Ingredient>(
               initialValue: Ingredient(
                   name: '',
@@ -81,28 +88,22 @@ class _IngredientInputState extends State<IngredientInput> {
                         widget.onChanged?.call(state.value);
                       },
                     ),
-                    if (snapshot.data == null || snapshot.data!.isEmpty)
-                      TextField(
-                        enabled: false,
-                        decoration: InputDecoration(labelText: 'Нет данных'),
-                      )
-                    else
-                      DropdownButtonFormField<CountType>(
-                        forceErrorText: state.errorText,
-                        decoration:
-                            InputDecoration(labelText: 'Тип количество'),
-                        value: state.value!.type,
-                        items: snapshot.data!
-                            .map((e) =>
-                                DropdownMenuItem(value: e, child: Text(e.name)))
-                            .toList(growable: false),
-                        onChanged: (value) {
-                          state.didChange(state.value!.copyWith(type: value));
-                          widget.onChanged?.call(state.value);
-                        },
-                        borderRadius:
-                            BorderRadius.circular(context.offset.large),
-                      )
+                    DropdownButtonFormField<CountType>(
+                      forceErrorText: state.errorText,
+                      decoration:
+                          InputDecoration(labelText: 'Тип количество'),
+                      value: state.value!.type,
+                      items: snapshot.data!
+                          .map((e) =>
+                              DropdownMenuItem(value: e, child: Text(e.name)))
+                          .toList(growable: false),
+                      onChanged: (value) {
+                        state.didChange(state.value!.copyWith(type: value));
+                        widget.onChanged?.call(state.value);
+                      },
+                      borderRadius:
+                          BorderRadius.circular(context.offset.large),
+                    )
                   ],
                 );
               });

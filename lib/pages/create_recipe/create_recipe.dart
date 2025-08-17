@@ -38,21 +38,18 @@ class CreateRecipe extends StatelessWidget {
                     slivers: [
                       SliverToBoxAdapter(
                         child: RecipeCreateForm(
-                          onSave: (data) {
-                            print(data);
-                            context.read<RecipeCreateCubit>().create(
-                                Recipe.create(
-                                  title: data['title'],
-                                  description: data['description'],
-                                  cookingTime: data['cookingTime'],
-                                  kilocalories: data['kilocalories'],
-                                  servings: data['servings'],
-                                  difficulty: data['difficulty'],
-                                  ingredients: data['ingredients'],
-                                  cookingSteps: data['cookingSteps'],
-                                )
-                            );
-                          },
+                          onSave: (data) => context.read<RecipeCreateCubit>().create(
+                              Recipe.create(
+                                title: data['title'],
+                                description: data['description'],
+                                cookingTime: data['cookingTime'],
+                                kilocalories: data['kilocalories'],
+                                servings: data['servings'],
+                                difficulty: data['difficulty'],
+                                ingredients: data['ingredients'],
+                                cookingSteps: data['cookingSteps'],
+                              )
+                          ),
                         ),
                       )
                     ],
