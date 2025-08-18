@@ -2,17 +2,19 @@ part of 'recipe_list_bloc.dart';
 
 @immutable
 sealed class RecipeListState extends Equatable {
+  final String query;
   final List<Recipe> recipes;
 
-  const RecipeListState({this.recipes = const []});
+  const RecipeListState({this.query = '', this.recipes = const []});
 
   @override
-  List<Object?> get props => [recipes];
+  List<Object?> get props => [recipes, query];
 }
 
 final class RecipeListInitial extends RecipeListState {
   const RecipeListInitial({
-    super.recipes = const []
+    super.recipes = const [],
+    super.query
   });
 
   @override
@@ -28,7 +30,8 @@ final class RecipeListLoading extends RecipeListState {
 
 final class RecipeListLoaded extends RecipeListState {
   const RecipeListLoaded({
-    required super.recipes
+    required super.recipes,
+    super.query
   });
 
   @override
@@ -40,7 +43,8 @@ final class RecipeListError extends RecipeListState {
 
   const RecipeListError({
     required super.recipes,
-    required this.error
+    required this.error,
+    super.query
   });
 
   @override

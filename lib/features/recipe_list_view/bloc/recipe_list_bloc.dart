@@ -19,11 +19,12 @@ class RecipeListBloc extends Bloc<RecipeListEvent, RecipeListState> {
     emit(RecipeListLoading());
     try{
       final recipes = await _repository.find(event.query);
-      emit(RecipeListLoaded(recipes: recipes));
+      emit(RecipeListLoaded(recipes: recipes, query: event.query));
     }catch(e){
       emit(
         RecipeListError(
             recipes: state.recipes,
+            query: event.query,
             error: e.toString()
         )
       );

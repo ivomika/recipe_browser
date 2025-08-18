@@ -25,20 +25,24 @@ class _CustomScrollView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CustomScrollView(
-      slivers: [
-        SliverToBoxAdapter(
-          child: SearchField(
-            onSubmitted: (text) =>
-            context.read<RecipeListBloc>()
-              ..add(LoadingRecipeList(query: text)),
+    final bloc = context.read<RecipeListBloc>();
+
+    return RefreshIndicator(
+      onRefresh: () => Future(() => bloc.add(LoadingRecipeList(query: bloc.state.query))),
+      child: CustomScrollView(
+        slivers: [
+          SliverToBoxAdapter(
+            child: SearchField(
+              onSubmitted: (text) =>
+              context.read<RecipeListBloc>().add(LoadingRecipeList(query: text)),
+            ),
           ),
-        ),
-        SliverToBoxAdapter(
-          child: SizedBox(height: context.offset.normal),
-        ),
-        RecipeListView()
-      ],
+          SliverToBoxAdapter(
+            child: SizedBox(height: context.offset.normal),
+          ),
+          RecipeListView()
+        ],
+      ),
     );
   }
 }
